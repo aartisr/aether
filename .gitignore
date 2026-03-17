@@ -1,0 +1,65 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# Build output
+dist/
+build/
+.next/
+out/
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+
+# Logs
+*.log
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Monorepo/Workspace
+apps/*/node_modules/
+packages/*/node_modules/
+apps/*/dist/
+apps/*/build/
+apps/*/.next/
+packages/*/dist/
+packages/*/build/
+
+# Misc
+*.local
+*.cache
+.cache/
+
+# Test
+coverage/
+
+# Public
+public/*.tmp
+public/*.log
+
+# Mac system files
+Icon?
+
+# Optional: lockfiles in subfolders (keep only root lockfile)
+apps/*/package-lock.json
+apps/*/yarn.lock
+apps/*/pnpm-lock.yaml
+packages/*/package-lock.json
+packages/*/yarn.lock
+packages/*/pnpm-lock.yaml
