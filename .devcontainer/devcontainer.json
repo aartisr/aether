@@ -1,0 +1,25 @@
+{
+  "name": "Aether DevContainer",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true,
+        "eslint.enable": true,
+        "prettier.enable": true
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-azuretools.vscode-docker",
+        "orta.vscode-jest",
+        "storybook.vscode-storybook"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install"
+}
