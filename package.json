@@ -2,6 +2,7 @@
   "name": "aether",
   "private": true,
   "version": "1.0.0",
+  "author": "Aarti Sri Ravikumar",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -9,6 +10,24 @@
   "scripts": {
     "dev": "npm --workspace=apps/frontend run dev",
     "build": "npm --workspace=apps/frontend run build",
-    "start": "npm --workspace=apps/frontend run start"
+    "start": "npm --workspace=apps/frontend run start",
+    "lint": "npm --workspace=apps/frontend run lint",
+    "test": "npm --workspace=apps/frontend run test"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/jest": "^29.5.14",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "eslint-config-next": "14.2.35",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.37.5",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-jest": "^29.3.2"
+  },
+  "overrides": {
+    "typescript": "5.4.5"
   }
 }

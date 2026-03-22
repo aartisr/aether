@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-family: 'Inter', 'Nunito', 'Open Sans', ui-sans-serif, system-ui, sans-serif;
+  background: #F7FAFC;
+  color: #22223b;
+}
+
+body {
+  background: linear-gradient(120deg, #f0f4ff 0%, #e6f0fa 100%);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+button, input, select, textarea {
+  border-radius: 1.25rem;
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+
+a {
+  color: #4F8FCB;
+  text-decoration: underline;
+  transition: color 0.2s ease-in-out;
+}
+a:hover, a:focus {
+  color: #6D28D9;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: #f0f4ff;
+}
+::-webkit-scrollbar-thumb {
+  background: #e6f0fa;
+  border-radius: 8px;
+}
