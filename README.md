@@ -3,7 +3,7 @@
 # Aether: The Student Resiliency Ecosystem
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/placeholder/aether-architecture-diagram.svg" alt="Aether Architecture Diagram" width="600"/>
+  <img src="docs/assets/aether-architecture-diagram.svg" alt="Aether Architecture Diagram" width="900"/>
 </p>
 
 <p align="center">
