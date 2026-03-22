@@ -27,12 +27,12 @@
 
 ```mermaid
 graph TD
-  A[Frontend (Next.js, Tailwind)] -->|UI| B[Shared UI Components]
-  B -->|Config| C[Site Config]
-  A -->|API| D[Backend (Node.js, AI, Peer Matching)]
-  D -->|Federated Learning| E[Privacy Layer]
-  D -->|Peer Support| F[Peer-Navigator]
-  D -->|AI Triage| G[Sentiment & Crisis Detection]
+  A["Frontend: Next.js + Tailwind"] -->|"UI"| B["Shared UI Components"]
+  B -->|"Config"| C["Site Config"]
+  A -->|"API"| D["Backend: Node.js, AI, Peer Matching"]
+  D -->|"Federated Learning"| E["Privacy Layer"]
+  D -->|"Peer Support"| F["Peer-Navigator"]
+  D -->|"AI Triage"| G["Sentiment and Crisis Detection"]
 ```
 
 ---
