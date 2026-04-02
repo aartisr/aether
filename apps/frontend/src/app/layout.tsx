@@ -80,7 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <footer className="w-full py-6 text-center text-gray-500 text-xs bg-surface/60 mt-12 rounded-t-2xl shadow-soft" role="contentinfo">
           &copy; {new Date().getFullYear()} Aether. Research-driven. Privacy-first.
           <p className="mt-1 text-[11px] text-gray-400">
-            Crafted by{' '}
+            &quot;Dedicated to PCSS II Students&quot; -{' '}
             <a
               href="https://artisr.foreverlotus.com"
               target="_blank"
