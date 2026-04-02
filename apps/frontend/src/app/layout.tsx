@@ -3,7 +3,23 @@ import React from 'react';
 import Link from 'next/link';
 import type { Metadata, Viewport } from 'next';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://aether.example.com';
+const fallbackSiteUrl = 'https://aether.example.com';
+
+function normalizeSiteUrl(input?: string): string {
+  if (!input) {
+    return fallbackSiteUrl;
+  }
+
+  const candidate = input.startsWith('http://') || input.startsWith('https://') ? input : `https://${input}`;
+
+  try {
+    return new URL(candidate).toString().replace(/\/$/, '');
+  } catch {
+    return fallbackSiteUrl;
+  }
+}
+
+const siteUrl = normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
