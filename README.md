@@ -208,4 +208,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## Author
 
-Aarti Sri Ravikumar
+Dedicated to PCSS II Students - Aarti S Ravikumar

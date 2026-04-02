@@ -39,4 +39,4 @@ We are committed to fostering a welcoming and inclusive environment. Please read
 Thank you for helping us make Aether better for students everywhere!
 
 ## Author
-Aarti Sri Ravikumar
+Aarti S Ravikumar
