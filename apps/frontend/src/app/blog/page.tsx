@@ -12,37 +12,33 @@ export default async function BlogIndexPage() {
   const posts = await getAllBlogPosts();
 
   return (
-    <section className="mx-auto max-w-4xl space-y-8">
-      <header className="space-y-3">
-        <p className="text-sm uppercase tracking-[0.2em] text-indigo-700">Aether Journal</p>
-        <h1 className="text-3xl font-bold text-indigo-900 md:text-4xl">Static Blog</h1>
-        <p className="text-gray-700">
-          Product updates, resilience research synthesis, and implementation notes from the Aether roadmap.
+    <section className="blog-index max-w-4xl space-y-8">
+      <header className="blog-hero">
+        <p className="blog-hero-kicker">Aether Journal</p>
+        <h1>Practical Resilience Library</h1>
+        <p>
+          Short, evidence-informed writing for students. Built to be scannable, calming, and easy to discuss with your peers.
         </p>
       </header>
 
       {posts.length === 0 ? (
-        <article className="rounded-2xl border border-indigo-100 bg-white/80 p-6 shadow-soft">
-          <h2 className="text-xl font-semibold text-indigo-900">No posts yet</h2>
-          <p className="mt-2 text-gray-600">Add markdown files to content/blog to publish the first article.</p>
+        <article className="blog-card">
+          <h2>No posts yet</h2>
+          <p className="blog-card-excerpt">Add markdown files to content/blog to publish the first article.</p>
         </article>
       ) : (
-        <div className="space-y-4">
+        <div className="blog-cards">
           {posts.map((post) => (
-            <article key={post.slug} className="rounded-2xl border border-indigo-100 bg-white/90 p-6 shadow-soft">
-              <p className="text-xs font-medium uppercase tracking-wide text-indigo-600">{post.date}</p>
-              <h2 className="mt-1 text-2xl font-semibold text-indigo-900">
-                <Link href={`/blog/${post.slug}`} className="no-underline hover:underline">
-                  {post.title}
-                </Link>
+            <article key={post.slug} className="blog-card">
+              <p className="blog-date">{post.date}</p>
+              <h2>
+                <Link href={`/blog/${post.slug}`}>{post.title}</Link>
               </h2>
-              <p className="mt-3 text-gray-700">{post.excerpt}</p>
+              <p className="blog-card-excerpt">{post.excerpt}</p>
               {post.tags.length > 0 ? (
-                <ul className="mt-4 flex flex-wrap gap-2">
+                <ul className="blog-tags">
                   {post.tags.map((tag) => (
-                    <li key={`${post.slug}-${tag}`} className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700">
-                      {tag}
-                    </li>
+                    <li key={`${post.slug}-${tag}`}>{tag}</li>
                   ))}
                 </ul>
               ) : null}

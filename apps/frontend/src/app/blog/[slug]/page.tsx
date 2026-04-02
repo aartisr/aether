@@ -42,25 +42,22 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const html = markdownToHtml(post.content);
 
   return (
-    <article className="mx-auto max-w-3xl space-y-8">
-      <header className="space-y-3">
-        <Link href="/blog" className="text-sm text-indigo-700 no-underline hover:underline">
+    <article className="blog-post max-w-3xl space-y-8">
+      <header className="blog-post-header">
+        <Link href="/blog" className="blog-post-back">
           Back to blog
         </Link>
-        <p className="text-xs uppercase tracking-[0.2em] text-indigo-700">{post.date}</p>
-        <h1 className="text-3xl font-bold text-indigo-900 md:text-4xl">{post.title}</h1>
-        <p className="text-gray-700">{post.excerpt}</p>
+        <p className="blog-date">{post.date}</p>
+        <h1>{post.title}</h1>
+        <p>{post.excerpt}</p>
       </header>
 
-      <section
-        className="prose prose-indigo max-w-none rounded-2xl border border-indigo-100 bg-white/90 p-6 shadow-soft"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      <section className="blog-article" dangerouslySetInnerHTML={{ __html: html }} />
 
-      <section className="space-y-3 rounded-2xl border border-indigo-100 bg-white/90 p-6 shadow-soft">
-        <h2 className="text-xl font-semibold text-indigo-900">Discussion</h2>
-        <p className="text-sm text-gray-600">
-          Comments are powered by Giscus and synced with GitHub Discussions.
+      <section className="blog-discussion">
+        <h2>Discussion</h2>
+        <p className="blog-discussion-note">
+          Share what worked for you, ask for practical tweaks, and support peers with concrete next steps.
         </p>
         <GiscusComments />
       </section>

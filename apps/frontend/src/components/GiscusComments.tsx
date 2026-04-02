@@ -36,7 +36,7 @@ function readGiscusConfig(): GiscusConfig | null {
     reactionsEnabled: process.env.NEXT_PUBLIC_GISCUS_REACTIONS_ENABLED || '1',
     emitMetadata: process.env.NEXT_PUBLIC_GISCUS_EMIT_METADATA || '0',
     inputPosition: process.env.NEXT_PUBLIC_GISCUS_INPUT_POSITION || 'bottom',
-    theme: process.env.NEXT_PUBLIC_GISCUS_THEME || 'preferred_color_scheme',
+    theme: process.env.NEXT_PUBLIC_GISCUS_THEME || 'light_high_contrast',
     lang: process.env.NEXT_PUBLIC_GISCUS_LANG || 'en',
   };
 }
@@ -74,11 +74,15 @@ export default function GiscusComments() {
 
   if (!config) {
     return (
-      <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-800">
+      <div className="giscus-warning">
         Giscus is not configured. Add NEXT_PUBLIC_GISCUS_* variables to enable comments.
       </div>
     );
   }
 
-  return <div ref={ref} className="giscus" />;
+  return (
+    <div className="giscus-shell">
+      <div ref={ref} className="giscus" />
+    </div>
+  );
 }
