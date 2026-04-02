@@ -12,6 +12,6 @@
   "author": "Aarti Sri Ravikumar",
   "license": "MIT",
   "engines": {
-    "node": ">=20.0.0"
+    "node": "20.x"
   }
 }
