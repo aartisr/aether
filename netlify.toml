@@ -1,0 +1,11 @@
+[build]
+command = "npm run build"
+publish = "apps/frontend/.next"
+
+[build.environment]
+NODE_VERSION = "20"
+NEXT_TELEMETRY_DISABLED = "1"
+NPM_FLAGS = "--registry=https://registry.npmjs.org/ --package-lock=false"
+
+[[plugins]]
+package = "@netlify/plugin-nextjs"

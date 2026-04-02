@@ -1,12 +1,17 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Minimal production backend surface for health checks and future APIs.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "test": "node --test"
   },
   "keywords": [],
   "author": "Aarti Sri Ravikumar",
-  "license": "ISC"
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0"
+  }
 }

@@ -3,12 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "author": "Aarti Sri Ravikumar",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src --ext .ts,.tsx",
-    "test": "jest --config ../../jest.config.js --runInBand"
+    "lint": "next lint",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "test": "jest --config ../../jest.config.js --runInBand",
+    "test:ci": "jest --config ../../jest.config.js --ci --coverage --runInBand"
   },
   "dependencies": {
     "autoprefixer": "^10.4.27",

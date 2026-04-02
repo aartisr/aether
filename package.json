@@ -3,6 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "author": "Aarti Sri Ravikumar",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -12,7 +17,10 @@
     "build": "npm --workspace=apps/frontend run build",
     "start": "npm --workspace=apps/frontend run start",
     "lint": "npm --workspace=apps/frontend run lint",
-    "test": "npm --workspace=apps/frontend run test"
+    "typecheck": "npm --workspace=apps/frontend run typecheck",
+    "test": "npm --workspace=apps/frontend run test && npm --workspace=apps/backend run test",
+    "test:ci": "npm --workspace=apps/frontend run test:ci",
+    "check": "npm run lint && npm run typecheck && npm run test"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",

@@ -50,6 +50,79 @@ graph TD
 3. **Open the app**
    Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
+### Environment Variables
+
+Set these for production deployments:
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://your-domain.example
+NODE_ENV=production
+PORT=3000
+HOSTNAME=0.0.0.0
+BACKEND_PORT=8080
+```
+
+---
+
+## ✅ Quality Gates
+
+Run these before opening a pull request:
+
+```bash
+npm run lint
+npm run typecheck
+npm run test:ci
+npm run build
+```
+
+Or run a local verification bundle:
+
+```bash
+npm run check
+```
+
+---
+
+## 🚀 Deployment
+
+### Vercel
+
+1. Import this repository in Vercel.
+2. Use the repository root as the project root.
+3. Set `NEXT_PUBLIC_SITE_URL` to your production URL.
+4. Deploy using the included [vercel.json](vercel.json).
+5. Vercel is configured to install from the public npm registry and ignore the checked-in lockfile during its hosted install step.
+
+### Netlify
+
+1. Import this repository in Netlify.
+2. Keep the base directory as repository root.
+3. Netlify uses [netlify.toml](netlify.toml) to build and run Next.js.
+4. Set `NEXT_PUBLIC_SITE_URL` in Netlify environment variables.
+5. Netlify is configured to override npm install flags so hosted installs use the public registry instead of the corporate `.npmrc`.
+
+### Other Providers
+
+The frontend app is standard Next.js 14 and can be deployed to any provider that supports Node.js 20+ and the `next build` + `next start` flow.
+
+### Corporate Network Note
+
+Local installs continue to use the corporate registry defined in [.npmrc](.npmrc). Hosted deployments override that behavior explicitly in [vercel.json](vercel.json) and [netlify.toml](netlify.toml).
+
+### Docker
+
+Build and run the production container:
+
+```bash
+docker build -t aether .
+docker run --rm -p 3000:3000 --env-file .env.example aether
+```
+
+### Health Checks
+
+- Frontend: `/api/health`
+- Backend: `/health`
+
 ---
 
 ## 🛠️ Core Features
@@ -105,10 +178,13 @@ A: Yes. The UI is fully WCAG-compliant and mobile-first.
 ---
 
 ## 🤝 Contributing
+
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## 📝 License
+
 [MIT](LICENSE)
 
 ## Author
+
 Aarti Sri Ravikumar

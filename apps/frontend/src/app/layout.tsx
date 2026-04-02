@@ -1,18 +1,52 @@
 import './globals.css';
 import React from 'react';
 import Link from 'next/link';
+import type { Metadata, Viewport } from 'next';
 
-export const metadata = {
-  title: 'Aether: Student Resiliency Ecosystem',
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://aether.example.com';
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'Aether: Student Resiliency Ecosystem',
+    template: '%s | Aether',
+  },
   description: 'A research-driven, privacy-first platform for student mental health resilience.',
+  applicationName: 'Aether',
+  keywords: ['student wellbeing', 'mental health', 'resilience', 'peer support', 'privacy-first'],
   authors: [{ name: 'Aarti S Ravikumar' }],
-  creator: 'Aarti S Ravikumar'
+  creator: 'Aarti S Ravikumar',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    url: '/',
+    title: 'Aether: Student Resiliency Ecosystem',
+    description: 'Privacy-first, research-driven resilience support for students.',
+    siteName: 'Aether',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Aether: Student Resiliency Ecosystem',
+    description: 'Privacy-first, research-driven resilience support for students.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#2B5D8C',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen font-sans bg-background-soft text-gray-900">
+      <body className="min-h-screen font-sans bg-background-soft text-gray-900 antialiased">
         {/* Skip link for keyboard users */}
         <a href="#main-content" className="sr-only focus:not-sr-only absolute top-2 left-2 bg-indigo-700 text-white px-4 py-2 rounded z-50">Skip to main content</a>
         <header className="w-full py-4 px-6 flex justify-between items-center bg-surface/80 shadow-soft sticky top-0 z-50 rounded-b-2xl backdrop-blur-md" role="banner">
