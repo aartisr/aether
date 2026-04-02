@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "installCommand": "npm install --registry=https://registry.npmjs.org/ --package-lock=false",
+  "installCommand": "npm install --include=dev --registry=https://registry.npmjs.org/ --package-lock=false",
   "buildCommand": "npm run build",
   "devCommand": "npm run dev"
 }

@@ -36,6 +36,8 @@
     "ts-jest": "^29.3.2"
   },
   "overrides": {
-    "typescript": "5.4.5"
+    "typescript": "5.4.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   }
 }
