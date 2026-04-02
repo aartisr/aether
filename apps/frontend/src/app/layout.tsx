@@ -74,6 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/resilience-pathway" className="px-3 py-1.5 rounded-xl text-sm md:text-base text-primary-dark hover:bg-accent-light focus:bg-accent-light transition">Resilience Pathway</Link>
             <Link href="/privacy" className="px-3 py-1.5 rounded-xl text-sm md:text-base text-primary-dark hover:bg-accent-light focus:bg-accent-light transition">Privacy</Link>
             <Link href="/about" className="px-3 py-1.5 rounded-xl text-sm md:text-base text-primary-dark hover:bg-accent-light focus:bg-accent-light transition">About</Link>
+            <Link href="/blog" className="px-3 py-1.5 rounded-xl text-sm md:text-base text-primary-dark hover:bg-accent-light focus:bg-accent-light transition">Blog</Link>
           </nav>
         </header>
         <main id="main-content" className="max-w-7xl mx-auto w-full px-3 sm:px-4 md:px-8 py-6 md:py-12" tabIndex={-1}>{children}</main>

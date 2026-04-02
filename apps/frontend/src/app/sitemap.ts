@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { getAllBlogSlugs } from '../lib/blog';
 
 const fallbackSiteUrl = 'https://aether.example.com';
 
@@ -16,11 +17,14 @@ function normalizeSiteUrl(input?: string): string {
   }
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
-  const routes = ['', '/about', '/accessibility', '/echo', '/peer-navigator', '/privacy', '/resilience-pathway'];
+  const routes = ['', '/about', '/accessibility', '/echo', '/peer-navigator', '/privacy', '/resilience-pathway', '/blog'];
+  const blogSlugs = await getAllBlogSlugs();
+  const blogRoutes = blogSlugs.map((slug) => `/blog/${slug}`);
+  const allRoutes = [...routes, ...blogRoutes];
 
-  return routes.map((route) => ({
+  return allRoutes.map((route) => ({
     url: `${siteUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: route === '' ? 'weekly' : 'monthly',

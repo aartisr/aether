@@ -81,6 +81,67 @@ Or run a local verification bundle:
 npm run check
 ```
 
+## 📝 Static Blog + Giscus
+
+Aether now includes a static blog at /blog with markdown-backed posts and optional Giscus comments.
+
+### Local markdown mode (default)
+
+1. Add markdown files in content/blog.
+2. Use this front matter shape:
+
+```md
+---
+title: Your post title
+date: 2026-04-02
+excerpt: One-line summary
+tags: product, updates, resilience
+---
+```
+
+### Plug-and-play source switching
+
+The blog loader supports source adapters via environment variables:
+
+- BLOG_SOURCE=local-markdown (default)
+- BLOG_SOURCE=remote-json
+- BLOG_REMOTE_JSON_URL=https://example.com/posts.json
+- BLOG_CONTENT_DIR=content/blog (optional override)
+
+When remote-json is enabled, the endpoint should return an array like:
+
+```json
+[
+  {
+    "slug": "my-post",
+    "title": "My Post",
+    "date": "2026-04-02",
+    "excerpt": "Summary",
+    "tags": ["updates"],
+    "content": "## Markdown body"
+  }
+]
+```
+
+### Giscus comments setup
+
+Set these variables to enable comments on blog posts:
+
+- NEXT_PUBLIC_GISCUS_REPO
+- NEXT_PUBLIC_GISCUS_REPO_ID
+- NEXT_PUBLIC_GISCUS_CATEGORY
+- NEXT_PUBLIC_GISCUS_CATEGORY_ID
+
+Optional:
+
+- NEXT_PUBLIC_GISCUS_MAPPING (default: pathname)
+- NEXT_PUBLIC_GISCUS_STRICT (default: 0)
+- NEXT_PUBLIC_GISCUS_REACTIONS_ENABLED (default: 1)
+- NEXT_PUBLIC_GISCUS_EMIT_METADATA (default: 0)
+- NEXT_PUBLIC_GISCUS_INPUT_POSITION (default: bottom)
+- NEXT_PUBLIC_GISCUS_THEME (default: preferred_color_scheme)
+- NEXT_PUBLIC_GISCUS_LANG (default: en)
+
 ---
 
 ## 🚀 Deployment
