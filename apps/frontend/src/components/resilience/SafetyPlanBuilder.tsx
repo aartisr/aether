@@ -51,11 +51,11 @@ export default function SafetyPlanBuilder() {
   };
 
   return (
-    <section id="safety-plan" className="rounded-2xl bg-white p-6 shadow-soft border border-indigo-100">
-      <h2 className="text-2xl font-bold text-indigo-800">Safety Plan Builder</h2>
+    <section id="safety-plan" className="rounded-2xl bg-white p-4 sm:p-6 shadow-soft border border-indigo-100">
+      <h2 className="text-xl sm:text-2xl font-bold text-indigo-800">Safety Plan Builder</h2>
       <p className="mt-2 text-sm text-gray-600">Create a practical plan before stress peaks. Saved locally in your browser.</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-6">
         <PlanField
           label="My warning signs"
           value={plan.warningSigns}
@@ -91,14 +91,14 @@ export default function SafetyPlanBuilder() {
         />
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-3">
-        <button type="button" onClick={savePlan} className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700">
+      <div className="mt-4 flex flex-col sm:flex-row sm:flex-wrap gap-3">
+        <button type="button" onClick={savePlan} className="w-full sm:w-auto px-4 py-2.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700">
           Save Locally
         </button>
-        <button type="button" onClick={exportPlan} className="px-4 py-2 rounded-lg border border-indigo-300 text-indigo-700 font-semibold hover:bg-indigo-50">
+        <button type="button" onClick={exportPlan} className="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-indigo-300 text-indigo-700 font-semibold hover:bg-indigo-50">
           Copy as JSON
         </button>
-        <a href="https://988lifeline.org/" target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold no-underline hover:bg-red-700">
+        <a href="https://988lifeline.org/" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto text-center px-4 py-2.5 rounded-lg bg-red-600 text-white font-semibold no-underline hover:bg-red-700">
           24/7 Crisis Support
         </a>
       </div>

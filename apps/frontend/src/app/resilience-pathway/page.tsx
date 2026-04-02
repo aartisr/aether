@@ -32,23 +32,23 @@ const pathwayStages = [
 
 export default function ResiliencePathway() {
   return (
-    <section className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50 p-4 md:p-8">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <header className="rounded-2xl bg-white/90 p-6 md:p-8 shadow-soft border border-indigo-100">
-          <h1 className="text-3xl md:text-5xl font-extrabold text-indigo-900">Aether Resilience Hub</h1>
-          <p className="mt-3 text-gray-700 max-w-3xl">
+    <section className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50 p-2 sm:p-4 md:p-8">
+      <div className="max-w-6xl mx-auto space-y-5 md:space-y-8">
+        <header className="rounded-2xl bg-white/90 p-4 sm:p-6 md:p-8 shadow-soft border border-indigo-100">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-indigo-900 leading-tight">Aether Resilience Hub</h1>
+          <p className="mt-3 text-sm sm:text-base text-gray-700 max-w-3xl">
             A complete, modular student resiliency ecosystem grounded in real-world institute and platform models.
             This implementation is generic by design, so campuses can swap resources, questions, and programs without rewriting UI.
           </p>
         </header>
 
-        <section className="rounded-2xl bg-white p-6 shadow-soft border border-indigo-100">
-          <h2 className="text-2xl font-bold text-indigo-800">Intervention Pathway</h2>
-          <ol className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <section className="rounded-2xl bg-white p-4 sm:p-6 shadow-soft border border-indigo-100">
+          <h2 className="text-xl sm:text-2xl font-bold text-indigo-800">Intervention Pathway</h2>
+          <ol className="mt-4 md:mt-5 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             {pathwayStages.map((stage, index) => (
               <li key={stage.title} className="rounded-xl border border-indigo-100 p-4 bg-indigo-50/40">
                 <p className="text-xs font-semibold uppercase text-indigo-700">Step {index + 1}</p>
-                <h3 className="text-lg font-semibold text-indigo-900 mt-1">{stage.title}</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-indigo-900 mt-1">{stage.title}</h3>
                 <p className="text-sm text-gray-700 mt-2">{stage.desc}</p>
               </li>
             ))}
@@ -61,12 +61,12 @@ export default function ResiliencePathway() {
         <PeerCircleMatcher />
         <HabitPlanner />
 
-        <section className="rounded-2xl bg-white p-6 shadow-soft border border-indigo-100">
-          <h2 className="text-2xl font-bold text-indigo-800">Research and Benchmark Inputs (20)</h2>
+        <section className="rounded-2xl bg-white p-4 sm:p-6 shadow-soft border border-indigo-100">
+          <h2 className="text-xl sm:text-2xl font-bold text-indigo-800">Research and Benchmark Inputs (20)</h2>
           <p className="mt-2 text-sm text-gray-600">
             These references informed feature selection, safety pathways, and resilience intervention patterns.
           </p>
-          <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mt-4 md:mt-5 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
             {researchReferences.map((reference) => (
               <article key={reference.name} className="rounded-xl border border-indigo-100 p-4 bg-indigo-50/30">
                 <p className="text-xs uppercase tracking-wide text-indigo-700 font-semibold">{reference.category}</p>
