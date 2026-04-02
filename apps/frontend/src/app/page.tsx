@@ -20,13 +20,19 @@ export default function Home() {
             Try Echo Chamber
           </Link>
           <Link
+            href="/resilience-pathway"
+            className="px-6 py-3 bg-teal-600 text-white rounded-lg font-semibold shadow hover:bg-teal-700 transition"
+          >
+            Open Resilience Hub
+          </Link>
+          <Link
             href="/about"
             className="px-6 py-3 bg-white border border-indigo-600 text-indigo-700 rounded-lg font-semibold shadow hover:bg-indigo-50 transition"
           >
             Learn More
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-left mt-8">
           <article className="bg-white/80 rounded-xl p-4 shadow-soft border border-indigo-100">
             <h2 className="text-indigo-800 font-semibold">Privacy by Default</h2>
             <p className="text-sm text-gray-600 mt-2">Local-first processing and explicit consent patterns.</p>
@@ -38,6 +44,10 @@ export default function Home() {
           <article className="bg-white/80 rounded-xl p-4 shadow-soft border border-indigo-100">
             <h2 className="text-indigo-800 font-semibold">Accessible Experience</h2>
             <p className="text-sm text-gray-600 mt-2">Keyboard-friendly, readable, and responsive across devices.</p>
+          </article>
+          <article className="bg-white/80 rounded-xl p-4 shadow-soft border border-indigo-100">
+            <h2 className="text-indigo-800 font-semibold">Evidence-Based Pathways</h2>
+            <p className="text-sm text-gray-600 mt-2">Integrated check-in, safety planning, and care navigation patterns grounded in leading student wellbeing programs.</p>
           </article>
         </div>
       </section>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Aether_Journal_Scientific_Report</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<h1
+id="aether-a-configurable-student-resiliency-ecosystem-for-safety-critical-institution-scale-wellbeing-support">Aether:
+A Configurable Student Resiliency Ecosystem for Safety-Critical,
+Institution-Scale Wellbeing Support</h1>
+<h2 id="abstract">Abstract</h2>
+<h3 id="background">Background</h3>
+<p>Post-secondary mental health systems face an implementation
+bottleneck: institutions can detect rising distress prevalence, yet
+often lack deployable intervention stacks that simultaneously satisfy
+safety, accessibility, and maintainability requirements [1-12].</p>
+<h3 id="objective">Objective</h3>
+<p>To design and implement a production-ready, generic resiliency
+platform that unifies early signal capture, crisis-adjacent safety
+workflows, peer and self-guided support pathways, and
+institution-customizable service routing.</p>
+<h3 id="methods">Methods</h3>
+<p>We translated evidence signals from 20 benchmark sources across youth
+mental health institutes, campus surveillance frameworks, crisis
+systems, and digital support platforms into a typed intervention
+architecture and modular web implementation [1-20].</p>
+<h3 id="results">Results</h3>
+<p>The resulting Aether revision introduces a complete Resilience Hub
+with five integrated modules: weekly check-in scoring, local-first
+safety planning, need-tag resource navigation, peer-circle matching, and
+habit-based micro-interventions. System quality gates passed across
+lint, unit tests (frontend and backend), and production build
+workflows.</p>
+<h3 id="conclusions">Conclusions</h3>
+<p>Aether demonstrates a practical bridge between evidence-informed
+design and operational deployment constraints. Its typed, config-first
+architecture enables institution-specific adaptation without rewiring
+core UX and safety primitives.</p>
+<h2 id="introduction">1. Introduction</h2>
+<h3 id="rationale">1.1 Rationale</h3>
+<p>Student populations experience persistent stress, social isolation,
+sleep disruption, and care-access friction. Existing digital tooling
+frequently fragments support into isolated products, increasing
+cognitive load and reducing completion during periods of peak distress
+[1-6, 10-14].</p>
+<h3 id="research-gap">1.2 Research Gap</h3>
+<p>Most implementations optimize either user engagement or safety
+governance, but not both. A second gap is engineering debt: intervention
+logic is commonly embedded in page-level code rather than reusable
+domain models, degrading long-term maintainability.</p>
+<h3 id="contribution-statement">1.3 Contribution Statement</h3>
+<p>This work contributes: 1. A safety-oriented, modular intervention
+architecture. 2. A typed and generic implementation pattern for campus
+customization. 3. A reproducibility-oriented manuscript documenting
+model logic, feature mapping, and validation workflow.</p>
+<h2 id="aims-and-design-principles">2. Aims and Design Principles</h2>
+<p>The system is designed around five principles: 1. Safety-first
+routing with immediate crisis pathways [5,6]. 2. Local-first handling
+for sensitive user-authored planning content. 3. Configurable
+intervention catalogs decoupled from UI rendering. 4. Multi-level
+support pathways (self-guided, peer, campus, urgent). 5. Deployment
+resilience under CI/CD and static-generation constraints.</p>
+<h2 id="methods-1">3. Methods</h2>
+<h3 id="evidence-to-feature-translation-workflow">3.1
+Evidence-to-Feature Translation Workflow</h3>
+<p>We conducted an applied benchmarking synthesis over 20 sources
+selected for one or more of: population relevance to students,
+operational maturity, evidence-oriented program design, or
+platform-level scalability [1-20].</p>
+<p>Each source was mapped to one or more implementation signals: -
+crisis escalation semantics, - low-stigma engagement affordances, - peer
+and community support patterns, - campus-level outcome measurement
+patterns, - adherence-oriented intervention formats.</p>
+<h3 id="system-architecture">3.2 System Architecture</h3>
+<p>Implementation stack: - Next.js 14 App Router (frontend runtime) -
+TypeScript (typed intervention contracts) - Tailwind CSS (tokenized UI
+consistency) - Jest (logic and regression tests)</p>
+<p>Intervention logic is encoded in typed domain structures, including:
+- CheckInQuestion - SupportResource - HabitTemplate - PeerCircle -
+ResearchReference</p>
+<h3 id="implemented-intervention-modules">3.3 Implemented Intervention
+Modules</h3>
+<h4 id="weekly-resilience-check-in">3.3.1 Weekly Resilience
+Check-In</h4>
+<p>Structured prompts score distress load and protective support factors
+into ordinal risk tiers (low, moderate, high, critical).</p>
+<h4 id="safety-plan-builder">3.3.2 Safety Plan Builder</h4>
+<p>Captures warning signs, coping actions, trusted contacts,
+professional links, and immediate protective anchors. Plans persist
+locally and can be exported.</p>
+<h4 id="resource-navigator">3.3.3 Resource Navigator</h4>
+<p>Resource matching by need tags (for example stress, belonging,
+crisis, campus) reduces decision latency under cognitive overload.</p>
+<h4 id="peer-circle-matcher">3.3.4 Peer Circle Matcher</h4>
+<p>Focus-aligned cohort recommendations increase belonging and reduce
+isolation risk.</p>
+<h4 id="habit-planner">3.3.5 Habit Planner</h4>
+<p>Low-burden routines operationalize daily resilience practices to
+improve adherence probability.</p>
+<h3 id="validation-protocol">3.4 Validation Protocol</h3>
+<p>Pipeline checks: 1. Linting (static style and quality gates). 2. Unit
+tests for scoring and module behavior. 3. Production build and static
+route generation.</p>
+<h2 id="results-1">4. Results</h2>
+<h3 id="functional-outcomes">4.1 Functional Outcomes</h3>
+<p>The revised system delivers end-to-end intervention flow on a single
+pathway page: 1. Detect 2. Stabilize 3. Route 4. Connect 5. Sustain</p>
+<h3 id="engineering-outcomes">4.2 Engineering Outcomes</h3>
+<ul>
+<li>All quality gates passed in the working branch at validation
+time.</li>
+<li>Resilience pathway route builds as static content.</li>
+<li>Risk scoring logic is test-covered and regression-resistant.</li>
+</ul>
+<h3 id="maintainability-outcomes">4.3 Maintainability Outcomes</h3>
+<p>The intervention catalog can be replaced institution-by-institution
+through typed data updates rather than structural UI rewrites.</p>
+<h2 id="discussion">5. Discussion</h2>
+<h3 id="interpretation">5.1 Interpretation</h3>
+<p>This implementation indicates that safety-sensitive student wellbeing
+systems can be both pragmatic and maintainable when architecture centers
+on typed configuration rather than page-specific branching.</p>
+<h3 id="safety-and-governance-position">5.2 Safety and Governance
+Position</h3>
+<p>Aether does not function as a diagnostic or emergency replacement
+system. Acute-risk states route users to established crisis channels
+[5,6], preserving role clarity.</p>
+<h3 id="external-validity-considerations">5.3 External Validity
+Considerations</h3>
+<p>The architecture is generalizable, but institution-specific efficacy
+requires local implementation quality, content stewardship, and
+governance readiness.</p>
+<h3 id="limitations">5.4 Limitations</h3>
+<ol type="1">
+<li>No longitudinal efficacy trial is presented here.</li>
+<li>Outcome claims remain implementation-level, not causal.</li>
+<li>Institutional integrations (EHR, student systems, analytics
+warehouses) are not yet included.</li>
+</ol>
+<h2 id="future-work">6. Future Work</h2>
+<ol type="1">
+<li>Multi-campus prospective pilot with pre-registered analysis
+plan.</li>
+<li>Subgroup fairness and differential impact analysis.</li>
+<li>Reliability calibration and transparent model card publication.</li>
+<li>Federated analytics and privacy-preserving institutional
+benchmarking.</li>
+</ol>
+<h2 id="conclusion">7. Conclusion</h2>
+<p>Aether advances from conceptual resilience UX to an
+implementation-grade, evidence-informed ecosystem suited for
+institutional deployment. The project demonstrates that safety routing,
+peer pathways, and behaviorally realistic daily interventions can
+coexist in a maintainable, generic architecture.</p>
+<h2 id="reproducibility-appendix-methods-detail">8. Reproducibility
+Appendix (Methods Detail)</h2>
+<h3 id="code-level-artifacts">8.1 Code-Level Artifacts</h3>
+<p>Core intervention model and scoring logic are implemented in: -
+apps/frontend/src/lib/resilience-model.ts -
+apps/frontend/src/lib/checkin.ts -
+apps/frontend/src/lib/checkin.test.ts</p>
+<p>UI module composition is implemented in: -
+apps/frontend/src/components/resilience/ -
+apps/frontend/src/app/resilience-pathway/page.tsx</p>
+<h3 id="build-reproduction-steps">8.2 Build Reproduction Steps</h3>
+<ol type="1">
+<li>Install dependencies.</li>
+<li>Run lint.</li>
+<li>Run unit tests.</li>
+<li>Run production build.</li>
+</ol>
+<h3 id="statistical-evaluation-blueprint-for-future-trial">8.3
+Statistical Evaluation Blueprint for Future Trial</h3>
+<p>Recommended primary outcomes: - perceived distress score change, -
+belonging score change, - support utilization latency, -
+retention/academic continuity proxy.</p>
+<p>Recommended design: - cluster or stepped-wedge deployment, -
+pre-registered hypotheses, - mixed-effects modeling for campus-level
+clustering.</p>
+<h3 id="ethics-and-safety-controls">8.4 Ethics and Safety Controls</h3>
+<ol type="1">
+<li>Explicit crisis escalation links in high/critical states.</li>
+<li>Local-first storage of user-authored safety plans.</li>
+<li>Clear non-clinical role labeling.</li>
+</ol>
+<h2 id="references">References</h2>
+<ol type="1">
+<li>The Jed Foundation. https://jedfoundation.org/</li>
+<li>Active Minds. https://activeminds.org/</li>
+<li>NAMI. https://www.nami.org/</li>
+<li>Mental Health America. https://mhanational.org/</li>
+<li>SAMHSA 988. https://www.samhsa.gov/find-help/988</li>
+<li>988 Lifeline. https://988lifeline.org/</li>
+<li>WHO Mental Health.
+https://www.who.int/health-topics/mental-health</li>
+<li>APA Resilience. https://www.apa.org/topics/resilience</li>
+<li>NIMH Child and Adolescent Mental Health.
+https://www.nimh.nih.gov/health/topics/child-and-adolescent-mental-health</li>
+<li>CDC Mental Health. https://www.cdc.gov/mental-health/index.html</li>
+<li>Healthy Minds Network. https://healthymindsnetwork.org/</li>
+<li>ACHA National College Health Assessment.
+https://www.acha.org/NCHA</li>
+<li>SOS Signs of Suicide. https://sossignsofsuicide.org/</li>
+<li>Togetherall. https://togetherall.com/</li>
+<li>Kooth. https://www.kooth.com/</li>
+<li>Sonar Mental Health. https://www.sonarmentalhealth.com/</li>
+<li>SilverCloud by Amwell. https://silvercloud.amwell.com/</li>
+<li>Headspace. https://www.headspace.com/</li>
+<li>Calm. https://www.calm.com/</li>
+<li>Befrienders Worldwide. https://www.befrienders.org/</li>
+</ol>
+</body>
+</html>

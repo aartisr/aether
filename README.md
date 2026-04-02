@@ -130,6 +130,7 @@ docker run --rm -p 3000:3000 --env-file .env.example aether
 - **Echo Chamber:** Voice-enabled journaling, NLP-based crisis detection, and total anonymity.
 - **AI-Triage & Sentiment Mapping:** Real-time analysis of text/voice for wellness mapping and escalation.
 - **Peer-Navigator Network:** Peer matching, culturally responsive support, and quality feedback.
+- **Resilience Hub:** Weekly check-in scoring, local-first safety planning, resource navigation, peer circle matching, and habit planning.
 - **Privacy & Data Ethics:** Federated learning, zero-knowledge proofs, and SAFE-AI compliance.
 - **Resilience Pathway:** Guided user journey, progress tracking, and personalized resources.
 - **Accessibility:** WCAG-compliant UI, mobile-first, ethical and explainable AI.
@@ -174,6 +175,26 @@ A: Yes. The UI is fully WCAG-compliant and mobile-first.
 - Huntsman Mental Health Institute (2026): Scalable Agile Framework for Execution in AI (SAFE AI).
 - Pennebaker, J.W. (1997): Writing about emotional experiences as a therapeutic process.
 - Frontiers in Medicine (2025): Validating GenAI feedback in suicide prevention training.
+- The Jed Foundation: https://jedfoundation.org/
+- Active Minds: https://activeminds.org/
+- NAMI: https://www.nami.org/
+- Mental Health America: https://mhanational.org/
+- 988 Lifeline: https://988lifeline.org/
+- SAMHSA 988: https://www.samhsa.gov/find-help/988
+- WHO Mental Health: https://www.who.int/health-topics/mental-health
+- APA Resilience: https://www.apa.org/topics/resilience
+- NIMH Child and Adolescent Mental Health: https://www.nimh.nih.gov/health/topics/child-and-adolescent-mental-health
+- CDC Mental Health: https://www.cdc.gov/mental-health/index.html
+- Healthy Minds Network: https://healthymindsnetwork.org/
+- ACHA NCHA: https://www.acha.org/NCHA
+- SOS Signs of Suicide: https://sossignsofsuicide.org/
+- Togetherall: https://togetherall.com/
+- Kooth: https://www.kooth.com/
+- Sonar Mental Health: https://www.sonarmentalhealth.com/
+- SilverCloud: https://silvercloud.amwell.com/
+- Headspace: https://www.headspace.com/
+- Calm: https://www.calm.com/
+- Befrienders Worldwide: https://www.befrienders.org/
 
 ---
 
