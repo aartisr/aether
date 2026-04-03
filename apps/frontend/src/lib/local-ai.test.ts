@@ -41,4 +41,45 @@ describe('local-ai', () => {
       safety: { label: 'high' },
     });
   });
+
+  it('uses negation and contrast to avoid false negatives', async () => {
+    await expect(
+      analyzeLocalEchoTranscript("I was anxious earlier, but I'm not hopeless anymore. I feel calmer and supported now."),
+    ).resolves.toMatchObject({
+      sentiment: { label: 'Positive' },
+      safety: { label: 'low' },
+    });
+  });
+
+  it('raises intensity for amplified distress language', async () => {
+    const result = await analyzeLocalEchoTranscript('I feel VERY overwhelmed and incredibly trapped!!!');
+
+    expect(result.sentiment.label).toBe('Negative');
+    expect(result.sentiment.score).toBeGreaterThan(0.55);
+  });
+
+  it('credits protective context when distress is present', async () => {
+    await expect(
+      analyzeLocalEchoTranscript("I had a panic attack, but I'm safe with my roommate and texted my counselor."),
+    ).resolves.toMatchObject({
+      safety: { label: 'low' },
+    });
+  });
+
+  it('does not treat negated self-harm denial as active high risk', async () => {
+    await expect(
+      analyzeLocalEchoTranscript("I'm not suicidal and I don't want to hurt myself. I just need sleep."),
+    ).resolves.toMatchObject({
+      safety: { label: 'low' },
+    });
+  });
+
+  it('prioritizes explicit crisis language over protective context', async () => {
+    await expect(
+      analyzeLocalEchoTranscript("I'm with a friend right now, but I want to kill myself tonight."),
+    ).resolves.toMatchObject({
+      safety: { label: 'high' },
+      escalation: { urgency: 'immediate' },
+    });
+  });
 });

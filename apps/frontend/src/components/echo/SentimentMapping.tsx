@@ -104,6 +104,7 @@ export default function SentimentMapping({
   const [previousValence, setPreviousValence] = useState<number | null>(null);
   const [showEmotionMap, setShowEmotionMap] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
   const [hasAnalyzedOnce, setHasAnalyzedOnce] = useState(false);
   const [showWarmupHint, setShowWarmupHint] = useState(false);
   const warmupTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -133,6 +134,7 @@ export default function SentimentMapping({
   const handleAnalyze = async () => {
     if (!canAnalyze) return;
     setLoading(true);
+    setAnalysisError(null);
     setShowWarmupHint(false);
 
     if (!hasAnalyzedOnce) {
@@ -142,19 +144,31 @@ export default function SentimentMapping({
     }
 
     setResult(null);
-    const res = await analyzeSentiment({ audio, transcript: editableTranscript });
 
-    if (warmupTimerRef.current) {
-      clearTimeout(warmupTimerRef.current);
-      warmupTimerRef.current = null;
+    try {
+      const res = await analyzeSentiment({ audio, transcript: editableTranscript });
+
+      if (warmupTimerRef.current) {
+        clearTimeout(warmupTimerRef.current);
+        warmupTimerRef.current = null;
+      }
+
+      setPreviousValence(result ? toValence(result.sentiment) : null);
+      setResult(res);
+      setShowEmotionMap(false);
+      setHasAnalyzedOnce(true);
+      setShowWarmupHint(false);
+      setLoading(false);
+    } catch {
+      if (warmupTimerRef.current) {
+        clearTimeout(warmupTimerRef.current);
+        warmupTimerRef.current = null;
+      }
+
+      setShowWarmupHint(false);
+      setLoading(false);
+      setAnalysisError('Local analysis is unavailable right now. Please try again.');
     }
-
-    setPreviousValence(result ? toValence(result.sentiment) : null);
-    setResult(res);
-    setShowEmotionMap(false);
-    setHasAnalyzedOnce(true);
-    setShowWarmupHint(false);
-    setLoading(false);
   };
 
   const valence = result ? toValence(result.sentiment) : 0;
@@ -195,6 +209,11 @@ export default function SentimentMapping({
       <p className="w-full max-w-xl text-left text-xs text-slate-500" aria-live="polite">
         {loading ? (showWarmupHint ? 'Model warming up locally...' : 'Analyzing check-in locally...') : transcriptStatus}
       </p>
+      {analysisError && (
+        <p className="w-full max-w-xl text-left text-xs text-amber-700" aria-live="polite">
+          {analysisError}
+        </p>
+      )}
       {result && (
         <div className="mt-2 w-full max-w-xl rounded-xl border border-indigo-100 bg-white p-4 shadow-sm" aria-live="polite">
           {(result.safety.label === 'medium' || result.safety.label === 'high') && (

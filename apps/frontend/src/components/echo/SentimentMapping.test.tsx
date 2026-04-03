@@ -286,4 +286,23 @@ describe('SentimentMapping', () => {
       expect(screen.getByText(/safety signal:/i)).toHaveTextContent('medium');
     });
   });
+
+  it('clears loading state and shows an error if analysis fails', async () => {
+    const analyzeSentiment = jest.fn().mockRejectedValue(new Error('network failure'));
+
+    render(
+      <SentimentMapping
+        audio={null}
+        transcript="I feel overwhelmed and stuck"
+        analyzeSentiment={analyzeSentiment}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /analyze check-in/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/local analysis is unavailable right now/i)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /analyze check-in/i })).toBeEnabled();
+    });
+  });
 });
