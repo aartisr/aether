@@ -32,6 +32,7 @@ export type LocalEchoAnalysis = {
     }>;
   };
   analysisEngine: string;
+  analysisEngineNote?: string;
 };
 
 type RuleSet<TLabel extends string> = Record<TLabel, string[]>;
@@ -112,12 +113,18 @@ type RuntimeProvider = {
   classifySafety(input: string): Promise<LabelScore<SafetyLevel>>;
 };
 
+type SentimentResultItem = {
+  label?: unknown;
+  score?: unknown;
+};
+
 type ZeroShotResult = {
   labels?: unknown;
   scores?: unknown;
 };
 
 type ZeroShotPipeline = (input: string, labels: string[]) => Promise<ZeroShotResult>;
+type SentimentPipeline = (input: string) => Promise<SentimentResultItem[] | SentimentResultItem>;
 
 type TransformersModule = {
   pipeline?: (task: string, model: string) => Promise<ZeroShotPipeline>;
@@ -128,14 +135,33 @@ function isTransformersModule(value: unknown): value is TransformersModule {
 }
 
 let runtimeProviderPromise: Promise<RuntimeProvider | null> | null = null;
+let runtimeProviderInitError: string | null = null;
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+
+function formatRuntimeError(err: unknown) {
+  if (err instanceof Error) {
+    const compact = err.message.trim();
+    return compact.length > 180 ? `${compact.slice(0, 177)}...` : compact;
+  }
+  return 'Unknown initialization error.';
+}
+
+function buildEngineFallbackNote() {
+  if (!runtimeProviderInitError) {
+    return 'Browser-local model not active yet; using rules fallback.';
+  }
+
+  if (IS_PRODUCTION) {
+    return 'Browser-local model unavailable; using rules fallback.';
+  }
+
+  return `Browser-local model unavailable; using rules fallback. Reason: ${runtimeProviderInitError}`;
+}
 
 async function tryCreateTransformersRuntimeProvider(): Promise<RuntimeProvider | null> {
-  const dynamicImport = new Function('moduleName', 'return import(moduleName)') as (
-    moduleName: string,
-  ) => Promise<unknown>;
-
   try {
-    const importedModule = await dynamicImport('@xenova/transformers');
+    runtimeProviderInitError = null;
+    const importedModule = await import('@xenova/transformers/dist/transformers.min.js');
     if (!isTransformersModule(importedModule)) {
       return null;
     }
@@ -147,39 +173,65 @@ async function tryCreateTransformersRuntimeProvider(): Promise<RuntimeProvider |
     }
 
     const zeroShot = await createPipeline('zero-shot-classification', 'Xenova/distilbert-base-uncased-mnli');
+    const sentimentPipeline = (await createPipeline(
+      'sentiment-analysis',
+      'Xenova/distilbert-base-uncased-finetuned-sst-2-english',
+    )) as unknown as SentimentPipeline;
+
+    const safetyLabels = [
+      'immediate self-harm risk',
+      'high emotional danger',
+      'moderate emotional distress',
+      'low emotional risk',
+    ];
+
+    const mapSentiment = (item: SentimentResultItem): LabelScore<SentimentLabel> => {
+      const rawLabel = typeof item.label === 'string' ? item.label.toLowerCase() : '';
+      const rawScore = typeof item.score === 'number' ? item.score : 0;
+
+      if (rawLabel.includes('negative')) {
+        return { label: 'Negative', score: rawScore, matchedTerms: [] };
+      }
+
+      if (rawLabel.includes('positive')) {
+        return { label: 'Positive', score: rawScore, matchedTerms: [] };
+      }
+
+      return { label: 'Neutral', score: rawScore, matchedTerms: [] };
+    };
+
+    const mapSafety = (labels: unknown[], scores: unknown[]): LabelScore<SafetyLevel> => {
+      const topLabel = typeof labels[0] === 'string' ? labels[0].toLowerCase() : '';
+      const topScore = typeof scores[0] === 'number' ? scores[0] : 0;
+
+      if (topLabel.includes('immediate') || topLabel.includes('high')) {
+        return { label: 'high', score: topScore, matchedTerms: [] };
+      }
+
+      if (topLabel.includes('moderate')) {
+        return { label: 'medium', score: topScore, matchedTerms: [] };
+      }
+
+      return { label: 'low', score: topScore, matchedTerms: [] };
+    };
 
     return {
-      id: 'transformers-zero-shot',
+      id: 'transformers-local-hybrid',
       async classifySentiment(input: string) {
-        const labels: SentimentLabel[] = ['Positive', 'Neutral', 'Negative'];
-        const result = await zeroShot(input, labels);
-        const predictedLabels = Array.isArray(result?.labels) ? result.labels : [];
-        const scores = Array.isArray(result?.scores) ? result.scores : [];
-        const topLabel = (predictedLabels[0] as SentimentLabel | undefined) || 'Neutral';
-        const topScore = typeof scores[0] === 'number' ? scores[0] : 0;
-
-        return {
-          label: topLabel,
-          score: topScore,
-          matchedTerms: [],
-        };
+        const raw = await sentimentPipeline(input);
+        const first = Array.isArray(raw) ? raw[0] : raw;
+        return mapSentiment(first ?? {});
       },
       async classifySafety(input: string) {
-        const labels: SafetyLevel[] = ['high', 'medium', 'low'];
-        const result = await zeroShot(input, labels);
+        const result = await zeroShot(input, safetyLabels);
         const predictedLabels = Array.isArray(result?.labels) ? result.labels : [];
         const scores = Array.isArray(result?.scores) ? result.scores : [];
-        const topLabel = (predictedLabels[0] as SafetyLevel | undefined) || 'low';
-        const topScore = typeof scores[0] === 'number' ? scores[0] : 0;
 
-        return {
-          label: topLabel,
-          score: topScore,
-          matchedTerms: [],
-        };
+        return mapSafety(predictedLabels, scores);
       },
     };
-  } catch {
+  } catch (error) {
+    runtimeProviderInitError = formatRuntimeError(error);
     return null;
   }
 }
@@ -361,6 +413,7 @@ export async function analyzeLocalEchoTranscript(transcript: string): Promise<Lo
         resources: [resourceCatalog.peer],
       },
       analysisEngine: 'rules-keyword',
+      analysisEngineNote: buildEngineFallbackNote(),
     };
   }
 
@@ -395,6 +448,7 @@ export async function analyzeLocalEchoTranscript(transcript: string): Promise<Lo
       recommendations: buildRecommendations(sentiment.label, safety.label, escalation.urgency),
       escalation,
       analysisEngine: runtimeProvider ? runtimeProvider.id : 'rules-keyword',
+      analysisEngineNote: runtimeProvider ? undefined : buildEngineFallbackNote(),
     };
   }
 
@@ -413,6 +467,7 @@ export async function analyzeLocalEchoTranscript(transcript: string): Promise<Lo
       recommendations: buildRecommendations(sentiment.label, 'medium', escalation.urgency),
       escalation,
       analysisEngine: runtimeProvider ? runtimeProvider.id : 'rules-keyword',
+      analysisEngineNote: runtimeProvider ? undefined : buildEngineFallbackNote(),
     };
   }
 
@@ -425,5 +480,6 @@ export async function analyzeLocalEchoTranscript(transcript: string): Promise<Lo
     recommendations: buildRecommendations(sentiment.label, safety.label, escalation.urgency),
     escalation,
     analysisEngine: runtimeProvider ? runtimeProvider.id : 'rules-keyword',
+    analysisEngineNote: runtimeProvider ? undefined : buildEngineFallbackNote(),
   };
 }

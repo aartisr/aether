@@ -19,16 +19,13 @@ export default function EchoChamber() {
         <p className="text-lg text-gray-600">An anonymized, voice-enabled outlet for catharsis. Speak your thoughts freely and review a private, on-device transcript with local sentiment and safety signals.</p>
         <div className="mt-8">
           <VoiceRecorder
-            onRecordingComplete={(audio) => {
-              setCapture((current) => ({
-                audio,
-                transcript: current?.transcript || '',
-                transcriptSource: current?.transcriptSource || 'unavailable',
-              }));
-            }}
             onCaptureComplete={setCapture}
           />
-          <SentimentMapping audio={capture?.audio ?? null} transcript={capture?.transcript ?? ''} />
+          <SentimentMapping
+            audio={capture?.audio ?? null}
+            transcript={capture?.transcript ?? ''}
+            transcriptSource={capture?.transcriptSource ?? 'unavailable'}
+          />
         </div>
         <p className="text-xs text-gray-400 mt-4">Your privacy is protected. Audio, transcript, and classification remain on-device in this implementation.</p>
       </div>

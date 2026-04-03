@@ -28,6 +28,15 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   productionBrowserSourceMaps: false,
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve = config.resolve || {};
+      config.resolve.alias = config.resolve.alias || {};
+      config.resolve.alias['onnxruntime-node'] = false;
+    }
+
+    return config;
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
   },

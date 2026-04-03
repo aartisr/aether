@@ -30,7 +30,8 @@ export default function VoiceRecorder({
   const [error, setError] = useState<string | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [transcript, setTranscript] = useState('');
-  const [transcriptSource, setTranscriptSource] = useState<TranscriptSource>('unavailable');
+  const latestTranscriptRef = useRef('');
+  const latestTranscriptSourceRef = useRef<TranscriptSource>('unavailable');
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -45,7 +46,11 @@ export default function VoiceRecorder({
 
   const stopSpeechRecognition = () => {
     if (recognitionRef.current) {
-      recognitionRef.current.stop();
+      try {
+        recognitionRef.current.stop();
+      } catch {
+        // Ignore stop races from browser speech engines.
+      }
       recognitionRef.current = null;
     }
   };
@@ -57,7 +62,7 @@ export default function VoiceRecorder({
         : undefined;
 
     if (!SpeechRecognitionCtor) {
-      setTranscriptSource('unavailable');
+      latestTranscriptSourceRef.current = 'unavailable';
       return;
     }
 
@@ -70,11 +75,13 @@ export default function VoiceRecorder({
       for (let index = 0; index < event.results.length; index += 1) {
         nextTranscript += `${event.results[index][0].transcript} `;
       }
-      setTranscript(nextTranscript.trim());
-      setTranscriptSource('speech-recognition');
+      const finalizedTranscript = nextTranscript.trim();
+      setTranscript(finalizedTranscript);
+      latestTranscriptRef.current = finalizedTranscript;
+      latestTranscriptSourceRef.current = 'speech-recognition';
     };
     recognition.onerror = () => {
-      setTranscriptSource('unavailable');
+      latestTranscriptSourceRef.current = 'unavailable';
     };
     recognitionRef.current = recognition;
     recognition.start();
@@ -85,7 +92,8 @@ export default function VoiceRecorder({
     setAudioURL(null);
     setElapsed(0);
     setTranscript('');
-    setTranscriptSource('unavailable');
+    latestTranscriptRef.current = '';
+    latestTranscriptSourceRef.current = 'unavailable';
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new window.MediaRecorder(stream);
@@ -101,8 +109,8 @@ export default function VoiceRecorder({
         if (onCaptureComplete) {
           onCaptureComplete({
             audio: blob,
-            transcript,
-            transcriptSource,
+            transcript: latestTranscriptRef.current,
+            transcriptSource: latestTranscriptSourceRef.current,
           });
         }
         stream.getTracks().forEach((track) => track.stop());

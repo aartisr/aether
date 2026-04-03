@@ -1,7 +1,13 @@
 "use client";
 import React, { useState } from 'react';
 
-import { analyzeLocalEchoTranscript, type LocalEchoAnalysis } from '../../lib/local-ai';
+import { analyzeLocalEchoTranscript, type LocalEchoAnalysis, type TranscriptSource } from '../../lib/local-ai';
+
+const MIN_TRANSCRIPT_WORDS = 3;
+
+function countWords(input: string) {
+  return input.trim().split(/\s+/).filter(Boolean).length;
+}
 
 /**
  * SentimentMapping
@@ -19,12 +25,14 @@ function defaultAnalyzeSentiment(input: { audio: Blob | null; transcript: string
 export default function SentimentMapping({
   audio,
   transcript = '',
+  transcriptSource = 'unavailable',
   analyzeLabel = 'Analyze Check-In',
   className = '',
   analyzeSentiment = defaultAnalyzeSentiment,
 }: {
   audio: Blob | null;
   transcript?: string;
+  transcriptSource?: TranscriptSource;
   analyzeLabel?: string;
   className?: string;
   analyzeSentiment?: (input: { audio: Blob | null; transcript: string }) => Promise<LocalEchoAnalysis>;
@@ -32,17 +40,54 @@ export default function SentimentMapping({
   const [editableTranscript, setEditableTranscript] = useState(transcript);
   const [result, setResult] = useState<LocalEchoAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
+  const [hasAnalyzedOnce, setHasAnalyzedOnce] = useState(false);
+  const [showWarmupHint, setShowWarmupHint] = useState(false);
+  const warmupTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const wordCount = countWords(editableTranscript);
+  const wordsNeeded = Math.max(0, MIN_TRANSCRIPT_WORDS - wordCount);
+  const canAnalyze = wordsNeeded === 0;
+
+  const transcriptStatus = canAnalyze
+    ? 'Transcript ready. You can analyze this check-in.'
+    : audio && transcriptSource === 'unavailable' && wordCount === 0
+      ? `No transcript was detected from recording. Type at least ${MIN_TRANSCRIPT_WORDS} words to continue.`
+      : wordCount > 0
+        ? `Add ${wordsNeeded} more word${wordsNeeded === 1 ? '' : 's'} to enable analysis.`
+        : `Record or type at least ${MIN_TRANSCRIPT_WORDS} words to enable analysis.`;
 
   React.useEffect(() => {
     setEditableTranscript(transcript);
   }, [transcript]);
 
+  React.useEffect(() => () => {
+    if (warmupTimerRef.current) {
+      clearTimeout(warmupTimerRef.current);
+    }
+  }, []);
+
   const handleAnalyze = async () => {
-    if (!editableTranscript.trim()) return;
+    if (!canAnalyze) return;
     setLoading(true);
+    setShowWarmupHint(false);
+
+    if (!hasAnalyzedOnce) {
+      warmupTimerRef.current = setTimeout(() => {
+        setShowWarmupHint(true);
+      }, 1200);
+    }
+
     setResult(null);
     const res = await analyzeSentiment({ audio, transcript: editableTranscript });
+
+    if (warmupTimerRef.current) {
+      clearTimeout(warmupTimerRef.current);
+      warmupTimerRef.current = null;
+    }
+
     setResult(res);
+    setHasAnalyzedOnce(true);
+    setShowWarmupHint(false);
     setLoading(false);
   };
 
@@ -61,7 +106,7 @@ export default function SentimentMapping({
       <button
         className="px-4 py-2 bg-indigo-400 text-white rounded shadow hover:bg-indigo-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
         onClick={handleAnalyze}
-        disabled={!editableTranscript.trim() || loading}
+        disabled={!canAnalyze || loading}
         aria-label={analyzeLabel}
       >
         {loading ? (
@@ -70,6 +115,9 @@ export default function SentimentMapping({
           analyzeLabel
         )}
       </button>
+      <p className="w-full max-w-xl text-left text-xs text-slate-500" aria-live="polite">
+        {loading ? (showWarmupHint ? 'Model warming up locally...' : 'Analyzing check-in locally...') : transcriptStatus}
+      </p>
       {result && (
         <div className="mt-2 w-full max-w-xl rounded-xl border border-indigo-100 bg-white p-4 shadow-sm" aria-live="polite">
           <div className="text-lg font-semibold text-indigo-700">
@@ -87,6 +135,11 @@ export default function SentimentMapping({
           <div className="mt-2 text-xs text-slate-500">
             Engine: {result.analysisEngine}
           </div>
+          {result.analysisEngineNote && (
+            <div className="mt-1 text-xs text-amber-700">
+              {result.analysisEngineNote}
+            </div>
+          )}
           <ul className="mt-3 space-y-2 text-sm text-slate-700">
             {result.recommendations.map((recommendation) => (
               <li key={recommendation} className="rounded-md bg-slate-50 px-3 py-2">

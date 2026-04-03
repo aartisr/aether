@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import SentimentMapping from './SentimentMapping';
 
 describe('SentimentMapping', () => {
@@ -10,6 +10,20 @@ describe('SentimentMapping', () => {
     render(<SentimentMapping audio={null} />);
     const button = screen.getByRole('button', { name: /analyze check-in/i });
     expect(button).toBeDisabled();
+    expect(screen.getByText(/record or type at least 3 words to enable analysis/i)).toBeInTheDocument();
+  });
+
+  it('enforces a 3-word minimum transcript threshold', () => {
+    render(<SentimentMapping audio={null} transcript="I feel" />);
+    const button = screen.getByRole('button', { name: /analyze check-in/i });
+    expect(button).toBeDisabled();
+    expect(screen.getByText(/add 1 more word to enable analysis/i)).toBeInTheDocument();
+  });
+
+  it('shows no-transcript fallback guidance after a recording with unavailable speech recognition', () => {
+    const audio = new Blob(['sample'], { type: 'audio/webm' });
+    render(<SentimentMapping audio={audio} transcript="" transcriptSource="unavailable" />);
+    expect(screen.getByText(/no transcript was detected from recording/i)).toBeInTheDocument();
   });
 
   it('runs analysis and renders sentiment and safety results', async () => {
@@ -127,6 +141,97 @@ describe('SentimentMapping', () => {
     await waitFor(() => {
       expect(screen.getByText(/sentiment:/i)).toHaveTextContent('Negative');
     });
+  });
+
+  it('shows warm-up status if first local analysis takes longer', async () => {
+    jest.useFakeTimers();
+
+    try {
+      const audio = new Blob(['sample'], { type: 'audio/webm' });
+      let resolveAnalysis:
+        | ((value: {
+            transcript: string;
+            sentiment: { score: number; label: 'Neutral'; matchedTerms: string[] };
+            safety: { score: number; label: 'low'; matchedTerms: string[] };
+            recommendations: string[];
+            escalation: {
+              urgency: 'routine';
+              rationale: string[];
+              resources: Array<{
+                id: string;
+                title: string;
+                availability: string;
+                actionLabel: string;
+                actionHref: string;
+              }>;
+            };
+            analysisEngine: string;
+          }) => void)
+        | undefined;
+
+      const analyzeSentiment = jest.fn(
+        () =>
+          new Promise<{
+            transcript: string;
+            sentiment: { score: number; label: 'Neutral'; matchedTerms: string[] };
+            safety: { score: number; label: 'low'; matchedTerms: string[] };
+            recommendations: string[];
+            escalation: {
+              urgency: 'routine';
+              rationale: string[];
+              resources: Array<{
+                id: string;
+                title: string;
+                availability: string;
+                actionLabel: string;
+                actionHref: string;
+              }>;
+            };
+            analysisEngine: string;
+          }>((resolve) => {
+            resolveAnalysis = resolve;
+          }),
+      );
+
+      render(<SentimentMapping audio={audio} transcript="I feel calm and okay" analyzeSentiment={analyzeSentiment} />);
+
+      fireEvent.click(screen.getByRole('button', { name: /analyze check-in/i }));
+
+      expect(screen.getByText(/analyzing check-in locally/i)).toBeInTheDocument();
+
+      act(() => {
+        jest.advanceTimersByTime(1300);
+      });
+
+      expect(screen.getByText(/model warming up locally/i)).toBeInTheDocument();
+
+      resolveAnalysis?.({
+        transcript: 'I feel calm and okay',
+        sentiment: { score: 0.51, label: 'Neutral', matchedTerms: ['okay'] },
+        safety: { score: 0.1, label: 'low', matchedTerms: [] },
+        recommendations: ['Keep doing what helps you stay steady.'],
+        escalation: {
+          urgency: 'routine',
+          rationale: ['No urgent risk markers detected in this transcript.'],
+          resources: [
+            {
+              id: 'peer-circle',
+              title: 'Peer Support Circle',
+              availability: 'Daily sessions',
+              actionLabel: 'Open Peer Navigator',
+              actionHref: '/peer-navigator',
+            },
+          ],
+        },
+        analysisEngine: 'transformers-local-hybrid',
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByText(/model warming up locally/i)).not.toBeInTheDocument();
+      });
+    } finally {
+      jest.useRealTimers();
+    }
   });
 
   it('supports manual transcript edits before analysis', async () => {
