@@ -72,7 +72,6 @@ export default function FairnessAuditDashboard({
 }: FairnessAuditDashboardProps) {
   const [selectedCohort, setSelectedCohort] = useState<string | null>(null);
   const [showAuditDetail, setShowAuditDetail] = useState(false);
-  const [filterCohort, setFilterCohort] = useState<string | null>(null);
 
   // Calculate policy compliance
   const parityCompliant = metrics.filter(
@@ -86,8 +85,8 @@ export default function FairnessAuditDashboard({
   const qualityComplianceRate = (qualityCompliant / metrics.length) * 100;
 
   // Filter audit log
-  const filteredAuditLog = filterCohort
-    ? auditLog.filter((entry) => entry.cohortA === filterCohort || entry.cohortB === filterCohort)
+  const filteredAuditLog = selectedCohort
+    ? auditLog.filter((entry) => entry.cohortA === selectedCohort || entry.cohortB === selectedCohort)
     : auditLog;
 
   return (
@@ -172,12 +171,12 @@ export default function FairnessAuditDashboard({
                 </tr>
               </thead>
               <tbody>
-                {metrics.map((m, idx) => {
+                {metrics.map((m) => {
                   const isSelected = selectedCohort === m.cohort;
                   const parityOk = Math.abs(m.exposureParity) <= policy.exposureParityBand;
                   return (
                     <tr
-                      key={idx}
+                      key={m.cohort}
                       onClick={() => setSelectedCohort(isSelected ? null : m.cohort)}
                       className={`border-b border-gray-100 cursor-pointer transition ${
                         isSelected ? 'bg-amber-50' : 'hover:bg-gray-50'
@@ -338,7 +337,7 @@ export function generateMockFairnessData() {
     'Disability Community',
   ];
 
-  const metrics: FairnessMetrics[] = cohorts.map((cohort, idx) => ({
+  const metrics: FairnessMetrics[] = cohorts.map((cohort) => ({
     cohort,
     populationShare: 1 / cohorts.length + (Math.random() - 0.5) * 0.05,
     candidateExposure: 1 / cohorts.length + (Math.random() - 0.5) * 0.08,

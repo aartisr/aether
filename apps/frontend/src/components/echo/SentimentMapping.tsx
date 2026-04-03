@@ -9,10 +9,6 @@ function countWords(input: string) {
   return input.trim().split(/\s+/).filter(Boolean).length;
 }
 
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
-
 function formatConfidence(confidence: number) {
   if (confidence >= 0.75) return 'High confidence';
   if (confidence >= 0.5) return 'Moderate confidence';
@@ -181,11 +177,12 @@ export default function SentimentMapping({
   const valencePercent = ((valence + 1) / 2) * 100;
   const previousValencePercent = previousValence === null ? null : ((previousValence + 1) / 2) * 100;
   const energyPercentFromTop = (1 - energy) * 100;
-  const quadrantName = emotionProfile?.zone ?? '';
+  const quadrantName = emotionProfile?.zone;
   const trendLabel = result ? formatTrend(previousValence, valence) : '';
   const confidenceBandRadius = 11 - confidence * 6;
   const confidenceBandOpacity = 0.18 + confidence * 0.16;
-  const zoneGuidance = result ? getZoneGuidance(quadrantName, confidence) : null;
+  const zoneGuidance = emotionProfile ? getZoneGuidance(emotionProfile.zone, confidence) : null;
+  const quadrantAriaLabel = (quadrantName ?? 'this').toLowerCase();
   const summaryLine = result
     ? `${formatValenceTone(valence)} and ${formatEnergyTone(energy).toLowerCase()}. ${formatConfidence(confidence)}.`
     : '';
@@ -312,7 +309,7 @@ export default function SentimentMapping({
                   viewBox="0 0 100 100"
                   className="h-52 w-52"
                   role="img"
-                  aria-label={`Emotion compass in ${quadrantName.toLowerCase()} zone`}
+                  aria-label={`Emotion compass in ${quadrantAriaLabel} zone`}
                 >
                   <rect x="2" y="2" width="48" height="48" rx="18" fill="#f0f9ff" />
                   <rect x="50" y="2" width="48" height="48" rx="18" fill="#fffbeb" />
@@ -371,7 +368,7 @@ export default function SentimentMapping({
             </div>
           )}
           <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-600">
-            Recommended next steps for {quadrantName || 'this'} zone
+            Recommended next steps for {quadrantName ?? 'this'} zone
           </div>
           <ul className="mt-3 space-y-2 text-sm text-slate-700">
             {result.recommendations.map((recommendation) => (
