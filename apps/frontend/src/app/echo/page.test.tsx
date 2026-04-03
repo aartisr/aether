@@ -1,7 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import SentimentMapping from '../../components/echo/SentimentMapping';
-import type { VoiceCapture } from '../../lib/local-ai';
 
 // Mock local AI analysis
 jest.mock('../../lib/local-ai', () => ({
@@ -98,11 +97,11 @@ describe('Echo Sentiment Visualization Integration Tests', () => {
     const analyzeButton = screen.getByRole('button', { name: /Analyze Check-In/i });
     fireEvent.click(analyzeButton);
 
-    await waitFor(() => {
-      expect(screen.getByTestId('sentiment-rail')).toBeInTheDocument();
-    });
+    // Wait for rail to appear
+    const rail = await screen.findByTestId('sentiment-rail');
+    expect(rail).toBeInTheDocument();
 
-    let compass = screen.queryByTestId('emotion-compass');
+    const compass = screen.queryByTestId('emotion-compass');
     expect(compass).not.toBeInTheDocument();
   });
 
