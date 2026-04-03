@@ -40,17 +40,51 @@ function formatQuadrantName(valence: number, energy: number) {
   return 'Drained';
 }
 
+function formatTrend(previous: number | null, current: number) {
+  if (previous === null) return 'First reading';
+  const delta = current - previous;
+  if (Math.abs(delta) < 0.08) return 'Holding steady';
+  return delta > 0 ? 'Shifting more positive' : 'Shifting more negative';
+}
+
 function toValence(signal: LocalEchoAnalysis['sentiment']) {
   const signedScore = signal.label === 'Positive' ? signal.score : signal.label === 'Negative' ? -signal.score : 0;
   return clamp(signedScore, -1, 1);
 }
 
+function estimateValence(result: LocalEchoAnalysis) {
+  const baseline = toValence(result.sentiment);
+  const normalized = result.transcript.toLowerCase();
+  const positiveSettledLanguage = /(steady|grounded|supported|hopeful|relieved|calm|safe|clear|okay|coping|manageable)/.test(normalized);
+  const positiveActivatedLanguage = /(motivated|ready|energized|excited|confident|encouraged|capable|focused)/.test(normalized);
+  const negativeSettledLanguage = /(drained|numb|empty|tired|exhausted|shutdown|shut down|flat)/.test(normalized);
+  const negativeActivatedLanguage = /(panic|panicked|racing|urgent|spiraling|overwhelmed|trapped|on edge|can't breathe)/.test(normalized);
+
+  let adjustment = 0;
+
+  if (result.sentiment.label === 'Neutral') {
+    if (positiveSettledLanguage) adjustment += 0.14;
+    if (positiveActivatedLanguage) adjustment += 0.2;
+    if (negativeSettledLanguage) adjustment -= 0.16;
+    if (negativeActivatedLanguage) adjustment -= 0.22;
+  }
+
+  if (result.safety.label === 'medium') adjustment -= 0.08;
+  if (result.safety.label === 'high') adjustment -= 0.16;
+  if (result.escalation.urgency === 'immediate') adjustment -= 0.08;
+
+  return clamp(baseline + adjustment, -1, 1);
+}
+
 function estimateEnergy(result: LocalEchoAnalysis) {
   const normalized = result.transcript.toLowerCase();
-  const highEnergyLanguage = /(panic|racing|right now|urgent|overwhelmed|can't breathe|spiraling)/.test(normalized);
-  const lowEnergyLanguage = /(drained|numb|tired|exhausted|empty|shutdown|shut down)/.test(normalized);
+  const highEnergyDistressLanguage = /(panic|racing|right now|urgent|overwhelmed|can't breathe|spiraling|on edge|trapped)/.test(normalized);
+  const highEnergyPositiveLanguage = /(excited|motivated|ready|energized|determined|focused|hopeful now)/.test(normalized);
+  const lowEnergyLanguage = /(drained|numb|tired|exhausted|empty|shutdown|shut down|flat|heavy)/.test(normalized);
+  const calmingLanguage = /(grounded|steady|calm|safe right now|breathing|relieved|settled)/.test(normalized);
+  const exclamationCount = (result.transcript.match(/!/g) ?? []).length;
 
-  let energy = 0.45;
+  let energy = 0.42;
 
   if (result.escalation.urgency === 'same-day') energy += 0.12;
   if (result.escalation.urgency === 'immediate') energy += 0.24;
@@ -58,8 +92,14 @@ function estimateEnergy(result: LocalEchoAnalysis) {
   if (result.safety.label === 'medium') energy += 0.12;
   if (result.safety.label === 'high') energy += 0.22;
 
-  if (highEnergyLanguage) energy += 0.16;
+  if (result.sentiment.label === 'Negative' && result.sentiment.score > 0.55) energy += 0.06;
+  if (result.sentiment.label === 'Positive' && result.sentiment.score > 0.55) energy += 0.03;
+
+  if (highEnergyDistressLanguage) energy += 0.18;
+  if (highEnergyPositiveLanguage) energy += 0.12;
   if (lowEnergyLanguage) energy -= 0.16;
+  if (calmingLanguage) energy -= 0.1;
+  energy += Math.min(exclamationCount, 3) * 0.03;
 
   return clamp(energy, 0, 1);
 }
@@ -171,13 +211,14 @@ export default function SentimentMapping({
     }
   };
 
-  const valence = result ? toValence(result.sentiment) : 0;
+  const valence = result ? estimateValence(result) : 0;
   const energy = result ? estimateEnergy(result) : 0;
   const confidence = result ? estimateConfidence(result) : 0;
   const valencePercent = ((valence + 1) / 2) * 100;
   const previousValencePercent = previousValence === null ? null : ((previousValence + 1) / 2) * 100;
   const energyPercentFromTop = (1 - energy) * 100;
   const quadrantName = result ? formatQuadrantName(valence, energy) : '';
+  const trendLabel = result ? formatTrend(previousValence, valence) : '';
   const summaryLine = result
     ? `${formatValenceTone(valence)} and ${formatEnergyTone(energy).toLowerCase()}. ${formatConfidence(confidence)}.`
     : '';
@@ -226,33 +267,45 @@ export default function SentimentMapping({
             Sentiment Rail
           </div>
 
-          <div className="mt-3" role="img" aria-label={`Sentiment rail showing ${formatValenceTone(valence).toLowerCase()}`} data-testid="sentiment-rail">
-            <svg viewBox="0 0 100 20" className="h-6 w-full" aria-hidden="true">
+          <div
+            className="mt-3 rounded-xl border border-slate-100 bg-slate-50/80 p-3"
+            role="img"
+            aria-label={`Sentiment rail showing ${formatValenceTone(valence).toLowerCase()}`}
+            data-testid="sentiment-rail"
+          >
+            <svg viewBox="0 0 100 28" className="h-12 w-full overflow-visible" aria-hidden="true">
               <defs>
                 <linearGradient id="echoSentimentRailGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#0369a1" />
+                  <stop offset="0%" stopColor="#0f766e" />
                   <stop offset="50%" stopColor="#cbd5e1" />
-                  <stop offset="100%" stopColor="#d97706" />
+                  <stop offset="100%" stopColor="#f97316" />
                 </linearGradient>
               </defs>
-              <line x1="1" y1="10" x2="99" y2="10" stroke="url(#echoSentimentRailGradient)" strokeWidth="4" strokeLinecap="round" />
-              <line x1="50" y1="4" x2="50" y2="16" stroke="#475569" strokeWidth="1" />
+              <line x1="6" y1="14" x2="94" y2="14" stroke="#e2e8f0" strokeWidth="8" strokeLinecap="round" />
+              <line x1="6" y1="14" x2="94" y2="14" stroke="url(#echoSentimentRailGradient)" strokeWidth="8" strokeLinecap="round" />
+              <line x1="50" y1="5" x2="50" y2="23" stroke="#475569" strokeWidth="1.2" strokeDasharray="2 2" />
+              <line x1="6" y1="9" x2="6" y2="19" stroke="#94a3b8" strokeWidth="1" />
+              <line x1="94" y1="9" x2="94" y2="19" stroke="#94a3b8" strokeWidth="1" />
               {previousValencePercent !== null && (
-                <circle cx={previousValencePercent} cy="10" r="2.4" fill="#ffffff" stroke="#64748b" strokeWidth="1" />
+                <circle cx={6 + (previousValencePercent * 0.88)} cy="14" r="3.2" fill="#ffffff" stroke="#64748b" strokeWidth="1.2" />
               )}
               <circle
-                cx={valencePercent}
-                cy="10"
-                r="3"
+                cx={6 + (valencePercent * 0.88)}
+                cy="14"
+                r="4.6"
                 fill={confidence < 0.5 ? '#ffffff' : '#c7d2fe'}
                 stroke={confidence < 0.5 ? '#64748b' : '#4338ca'}
-                strokeWidth="1.4"
+                strokeWidth="1.8"
               />
             </svg>
-            <div className="mt-2 flex justify-between text-xs text-slate-600">
+            <div className="mt-2 flex items-center justify-between text-xs text-slate-600">
               <span>Negative</span>
-              <span>Neutral</span>
+              <span className="rounded-full bg-white px-2 py-0.5 text-slate-500 shadow-sm">Neutral</span>
               <span>Positive</span>
+            </div>
+            <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
+              <span>{formatValenceTone(valence)}</span>
+              <span>{trendLabel}</span>
             </div>
           </div>
 
@@ -282,26 +335,38 @@ export default function SentimentMapping({
             <div className="mt-3 rounded-lg border border-slate-200 p-3" data-testid="emotion-compass">
               <div className="text-sm font-semibold text-slate-700">Emotion Compass</div>
               <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-slate-600">
-                <div className="rounded bg-amber-50 px-2 py-1">Energized</div>
                 <div className="rounded bg-sky-50 px-2 py-1">Overwhelmed</div>
-                <div className="rounded bg-emerald-50 px-2 py-1">Grounded</div>
+                <div className="rounded bg-amber-50 px-2 py-1">Energized</div>
                 <div className="rounded bg-slate-100 px-2 py-1">Drained</div>
+                <div className="rounded bg-emerald-50 px-2 py-1">Grounded</div>
               </div>
               <div className="mt-3 flex justify-center">
                 <svg
                   viewBox="0 0 100 100"
-                  className="h-44 w-44"
+                  className="h-52 w-52"
                   role="img"
                   aria-label={`Emotion compass in ${quadrantName.toLowerCase()} zone`}
                 >
-                  <circle cx="50" cy="50" r="48" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1" />
-                  <line x1="50" y1="2" x2="50" y2="98" stroke="#e2e8f0" strokeWidth="1" />
-                  <line x1="2" y1="50" x2="98" y2="50" stroke="#e2e8f0" strokeWidth="1" />
-                  <circle cx={valencePercent} cy={energyPercentFromTop} r="4" fill="#a5b4fc" stroke="#4338ca" strokeWidth="1.4" />
+                  <rect x="2" y="2" width="48" height="48" rx="18" fill="#f0f9ff" />
+                  <rect x="50" y="2" width="48" height="48" rx="18" fill="#fffbeb" />
+                  <rect x="2" y="50" width="48" height="48" rx="18" fill="#f8fafc" />
+                  <rect x="50" y="50" width="48" height="48" rx="18" fill="#ecfdf5" />
+                  <circle cx="50" cy="50" r="48" fill="none" stroke="#cbd5e1" strokeWidth="1" />
+                  <line x1="50" y1="2" x2="50" y2="98" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3" />
+                  <line x1="2" y1="50" x2="98" y2="50" stroke="#94a3b8" strokeWidth="1" strokeDasharray="3 3" />
+                  <text x="50" y="9" textAnchor="middle" fontSize="4.2" fill="#64748b">High energy</text>
+                  <text x="50" y="96" textAnchor="middle" fontSize="4.2" fill="#64748b">Low energy</text>
+                  <text x="6" y="54" textAnchor="start" fontSize="4.2" fill="#64748b">Negative</text>
+                  <text x="94" y="54" textAnchor="end" fontSize="4.2" fill="#64748b">Positive</text>
+                  <circle cx={valencePercent} cy={energyPercentFromTop} r="5.2" fill="#ffffff" stroke="#4338ca" strokeWidth="1.4" />
+                  <circle cx={valencePercent} cy={energyPercentFromTop} r="2.6" fill="#818cf8" />
                 </svg>
               </div>
               <div className="mt-2 text-center text-sm text-slate-700">
                 Current zone: <span className="font-semibold">{quadrantName}</span>
+              </div>
+              <div className="mt-1 text-center text-xs text-slate-500">
+                {formatValenceTone(valence)} • {formatEnergyTone(energy)}
               </div>
             </div>
           )}

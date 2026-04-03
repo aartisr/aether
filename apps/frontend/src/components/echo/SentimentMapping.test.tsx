@@ -305,4 +305,109 @@ describe('SentimentMapping', () => {
       expect(screen.getByRole('button', { name: /analyze check-in/i })).toBeEnabled();
     });
   });
+
+  it('maps calm supported language into the grounded zone', async () => {
+    const analyzeSentiment = jest.fn().mockResolvedValue({
+      transcript: 'I feel calm, supported, and grounded.',
+      sentiment: { score: 0.62, label: 'Positive', matchedTerms: ['calm', 'supported', 'grounded'] },
+      safety: { score: 0.08, label: 'low', matchedTerms: [] },
+      recommendations: ['Notice what helped you feel more steady today.'],
+      escalation: {
+        urgency: 'routine',
+        rationale: ['No urgent risk markers detected in this transcript.'],
+        resources: [
+          {
+            id: 'peer-circle',
+            title: 'Peer Support Circle',
+            availability: 'Daily sessions',
+            actionLabel: 'Open Peer Navigator',
+            actionHref: '/peer-navigator',
+          },
+        ],
+      },
+      analysisEngine: 'rules-keyword',
+    });
+
+    render(<SentimentMapping audio={null} transcript="I feel calm, supported, and grounded." analyzeSentiment={analyzeSentiment} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /analyze check-in/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/leaning positive and low energy/i)).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /show emotional map/i }));
+
+    expect(screen.getByText(/current zone:/i)).toHaveTextContent('Grounded');
+  });
+
+  it('maps activated positive language into the energized zone', async () => {
+    const analyzeSentiment = jest.fn().mockResolvedValue({
+      transcript: 'I feel ready, motivated, and focused.',
+      sentiment: { score: 0.74, label: 'Positive', matchedTerms: ['ready', 'motivated', 'focused'] },
+      safety: { score: 0.05, label: 'low', matchedTerms: [] },
+      recommendations: ['Save one supportive habit so you can repeat it later.'],
+      escalation: {
+        urgency: 'routine',
+        rationale: ['No urgent risk markers detected in this transcript.'],
+        resources: [
+          {
+            id: 'peer-circle',
+            title: 'Peer Support Circle',
+            availability: 'Daily sessions',
+            actionLabel: 'Open Peer Navigator',
+            actionHref: '/peer-navigator',
+          },
+        ],
+      },
+      analysisEngine: 'rules-keyword',
+    });
+
+    render(<SentimentMapping audio={null} transcript="I feel ready, motivated, and focused." analyzeSentiment={analyzeSentiment} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /analyze check-in/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/strongly positive and moderate energy|leaning positive and moderate energy|strongly positive and high energy/i)).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /show emotional map/i }));
+
+    expect(screen.getByText(/current zone:/i)).toHaveTextContent('Energized');
+  });
+
+  it('maps depleted language into the drained zone', async () => {
+    const analyzeSentiment = jest.fn().mockResolvedValue({
+      transcript: 'I feel exhausted, flat, and heavy.',
+      sentiment: { score: 0.68, label: 'Negative', matchedTerms: ['exhausted', 'flat', 'heavy'] },
+      safety: { score: 0.07, label: 'low', matchedTerms: [] },
+      recommendations: ['Choose one supportive action you can finish in 10 minutes.'],
+      escalation: {
+        urgency: 'routine',
+        rationale: ['No urgent risk markers detected in this transcript.'],
+        resources: [
+          {
+            id: 'peer-circle',
+            title: 'Peer Support Circle',
+            availability: 'Daily sessions',
+            actionLabel: 'Open Peer Navigator',
+            actionHref: '/peer-navigator',
+          },
+        ],
+      },
+      analysisEngine: 'rules-keyword',
+    });
+
+    render(<SentimentMapping audio={null} transcript="I feel exhausted, flat, and heavy." analyzeSentiment={analyzeSentiment} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /analyze check-in/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/negative and low energy|strongly negative and low energy|leaning negative and low energy/i)).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /show emotional map/i }));
+
+    expect(screen.getByText(/current zone:/i)).toHaveTextContent('Drained');
+  });
 });

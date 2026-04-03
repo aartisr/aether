@@ -128,6 +128,11 @@ const sentimentLexicon: WeightedLexiconEntry[] = [
   },
   {
     kind: 'positive',
+    weight: 2.3,
+    terms: ['motivated', 'ready', 'energized', 'determined', 'focused', 'encouraged', 'settled', 'capable'],
+  },
+  {
+    kind: 'positive',
     weight: 1.7,
     terms: ['good', 'fine', 'proud', 'confident', 'encouraged', 'rested', 'clear'],
   },
@@ -159,6 +164,10 @@ const sentimentLexicon: WeightedLexiconEntry[] = [
       'numb',
       'disconnected',
       'exhausted',
+      'flat',
+      'heavy',
+      'shutdown',
+      'shut down',
       'burned out',
       'burnt out',
       'on edge',
@@ -757,6 +766,7 @@ function buildRecommendations(sentiment: SentimentLabel, safety: SafetyLevel, ur
   if (sentiment === 'Positive') {
     return [
       'Notice what helped you feel more steady today.',
+      'If your energy feels usable, turn it into one concrete next step.',
       'Save one supportive habit so you can repeat it later.',
     ];
   }

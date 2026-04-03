@@ -1,3 +1,5 @@
+import { describe, expect, it } from '@jest/globals';
+
 import { analyzeLocalEchoTranscript, KeywordRuleClassifier } from './local-ai';
 
 describe('local-ai', () => {
@@ -80,6 +82,33 @@ describe('local-ai', () => {
     ).resolves.toMatchObject({
       safety: { label: 'high' },
       escalation: { urgency: 'immediate' },
+    });
+  });
+
+  it('classifies calm supported language as positive rather than flat neutral', async () => {
+    await expect(
+      analyzeLocalEchoTranscript('I feel calm, supported, and more grounded now.'),
+    ).resolves.toMatchObject({
+      sentiment: { label: 'Positive' },
+      safety: { label: 'low' },
+    });
+  });
+
+  it('classifies depleted language as negative even without crisis phrases', async () => {
+    await expect(
+      analyzeLocalEchoTranscript('I feel exhausted, flat, and heavy today.'),
+    ).resolves.toMatchObject({
+      sentiment: { label: 'Negative' },
+      safety: { label: 'low' },
+    });
+  });
+
+  it('recognizes activated positive language as positive', async () => {
+    await expect(
+      analyzeLocalEchoTranscript('I feel ready, motivated, and focused to handle this.'),
+    ).resolves.toMatchObject({
+      sentiment: { label: 'Positive' },
+      safety: { label: 'low' },
     });
   });
 });
