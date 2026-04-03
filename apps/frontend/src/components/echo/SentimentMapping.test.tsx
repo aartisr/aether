@@ -58,8 +58,8 @@ describe('SentimentMapping', () => {
 
     await waitFor(() => {
       expect(analyzeSentiment).toHaveBeenCalledWith({ audio, transcript: 'I feel steady' });
-      expect(screen.getByText(/sentiment:/i)).toHaveTextContent('Positive');
-      expect(screen.getByText(/sentiment:/i)).toHaveTextContent('(0.42)');
+      expect(screen.getByText(/sentiment rail/i)).toBeInTheDocument();
+      expect(screen.getByText(/leaning positive and moderate energy/i)).toBeInTheDocument();
       expect(screen.getByText(/safety signal:/i)).toHaveTextContent('low');
     });
   });
@@ -139,8 +139,47 @@ describe('SentimentMapping', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText(/sentiment:/i)).toHaveTextContent('Negative');
+      expect(screen.getByText(/negative and high energy/i)).toBeInTheDocument();
     });
+  });
+
+  it('shows and hides the emotion compass on demand', async () => {
+    const audio = new Blob(['sample'], { type: 'audio/webm' });
+    const analyzeSentiment = jest.fn().mockResolvedValue({
+      transcript: 'I feel steady',
+      sentiment: { score: 0.42, label: 'Positive', matchedTerms: ['steady'] },
+      safety: { score: 0.1, label: 'low', matchedTerms: [] },
+      recommendations: ['Notice what helped you feel more steady today.'],
+      escalation: {
+        urgency: 'routine',
+        rationale: ['No urgent risk markers detected in this transcript.'],
+        resources: [
+          {
+            id: 'peer-circle',
+            title: 'Peer Support Circle',
+            availability: 'Daily sessions',
+            actionLabel: 'Open Peer Navigator',
+            actionHref: '/peer-navigator',
+          },
+        ],
+      },
+      analysisEngine: 'rules-keyword',
+    });
+
+    render(<SentimentMapping audio={audio} transcript="I feel steady" analyzeSentiment={analyzeSentiment} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /analyze check-in/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /show emotional map/i })).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /show emotional map/i }));
+    expect(screen.getByText(/emotion compass/i)).toBeInTheDocument();
+    expect(screen.getByText(/current zone:/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /hide emotional map/i }));
+    expect(screen.queryByText(/emotion compass/i)).not.toBeInTheDocument();
   });
 
   it('shows warm-up status if first local analysis takes longer', async () => {
@@ -243,7 +282,7 @@ describe('SentimentMapping', () => {
     fireEvent.click(screen.getByRole('button', { name: /analyze check-in/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/sentiment:/i)).toHaveTextContent('Negative');
+      expect(screen.getByText(/negative and high energy/i)).toBeInTheDocument();
       expect(screen.getByText(/safety signal:/i)).toHaveTextContent('medium');
     });
   });
