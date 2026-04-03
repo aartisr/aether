@@ -207,7 +207,7 @@ export default function SentimentMapping({
             Sentiment Rail
           </div>
 
-          <div className="mt-3" role="img" aria-label={`Sentiment rail showing ${formatValenceTone(valence).toLowerCase()}`}>
+          <div className="mt-3" role="img" aria-label={`Sentiment rail showing ${formatValenceTone(valence).toLowerCase()}`} data-testid="sentiment-rail">
             <svg viewBox="0 0 100 20" className="h-6 w-full" aria-hidden="true">
               <defs>
                 <linearGradient id="echoSentimentRailGradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -260,7 +260,7 @@ export default function SentimentMapping({
           </div>
 
           {showEmotionMap && (
-            <div className="mt-3 rounded-lg border border-slate-200 p-3">
+            <div className="mt-3 rounded-lg border border-slate-200 p-3" data-testid="emotion-compass">
               <div className="text-sm font-semibold text-slate-700">Emotion Compass</div>
               <div className="mt-2 grid grid-cols-2 gap-2 text-xs text-slate-600">
                 <div className="rounded bg-amber-50 px-2 py-1">Energized</div>
