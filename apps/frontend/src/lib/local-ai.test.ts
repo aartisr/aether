@@ -1,5 +1,3 @@
-import { describe, expect, it } from '@jest/globals';
-
 import { analyzeLocalEchoTranscript, KeywordRuleClassifier } from './local-ai';
 
 describe('local-ai', () => {
