@@ -88,7 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <p className="mt-1 text-[11px] text-gray-400">
             &quot;Dedicated to PCSS II Students&quot; -{' '}
             <a
-              href="https://artisr.foreverlotus.com"
+              href="https://aartisr.foreverlotus.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary-dark hover:text-accentDark"
