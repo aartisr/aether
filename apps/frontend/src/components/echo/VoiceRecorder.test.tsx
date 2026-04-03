@@ -60,8 +60,9 @@ describe('VoiceRecorder', () => {
     const stream = { getTracks: () => [track] } as unknown as MediaStream;
     getUserMedia.mockResolvedValue(stream);
     const onRecordingComplete = jest.fn();
+    const onCaptureComplete = jest.fn();
 
-    render(<VoiceRecorder onRecordingComplete={onRecordingComplete} />);
+    render(<VoiceRecorder onRecordingComplete={onRecordingComplete} onCaptureComplete={onCaptureComplete} />);
 
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
@@ -79,6 +80,7 @@ describe('VoiceRecorder', () => {
 
     await waitFor(() => {
       expect(onRecordingComplete).toHaveBeenCalledTimes(1);
+      expect(onCaptureComplete).toHaveBeenCalledTimes(1);
       expect(createObjectURL).toHaveBeenCalledTimes(1);
       expect(track.stop).toHaveBeenCalledTimes(1);
       expect(screen.getByLabelText(/playback recorded audio/i)).toBeInTheDocument();

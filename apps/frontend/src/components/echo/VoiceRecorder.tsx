@@ -1,6 +1,8 @@
 "use client";
 import React, { useRef, useState } from 'react';
 
+import type { TranscriptSource, VoiceCapture } from '../../lib/local-ai';
+
 /**
  * VoiceRecorder
  * A generic, accessible, and privacy-first audio recorder React component.
@@ -12,11 +14,13 @@ import React, { useRef, useState } from 'react';
  */
 export default function VoiceRecorder({
   onRecordingComplete,
+  onCaptureComplete,
   recordButtonLabel = 'Start Recording',
   stopButtonLabel = 'Stop Recording',
   className = '',
 }: {
   onRecordingComplete?: (audio: Blob) => void;
+  onCaptureComplete?: (capture: VoiceCapture) => void;
   recordButtonLabel?: string;
   stopButtonLabel?: string;
   className?: string;
@@ -25,8 +29,11 @@ export default function VoiceRecorder({
   const [audioURL, setAudioURL] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [elapsed, setElapsed] = useState(0);
+  const [transcript, setTranscript] = useState('');
+  const [transcriptSource, setTranscriptSource] = useState<TranscriptSource>('unavailable');
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
   const chunks = useRef<Blob[]>([]);
 
   // Utility to format time as mm:ss
@@ -36,10 +43,49 @@ export default function VoiceRecorder({
     return `${m}:${s}`;
   }
 
+  const stopSpeechRecognition = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+      recognitionRef.current = null;
+    }
+  };
+
+  const startSpeechRecognition = () => {
+    const SpeechRecognitionCtor =
+      typeof window !== 'undefined'
+        ? (window.SpeechRecognition || window.webkitSpeechRecognition)
+        : undefined;
+
+    if (!SpeechRecognitionCtor) {
+      setTranscriptSource('unavailable');
+      return;
+    }
+
+    const recognition = new SpeechRecognitionCtor();
+    recognition.lang = 'en-US';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      let nextTranscript = '';
+      for (let index = 0; index < event.results.length; index += 1) {
+        nextTranscript += `${event.results[index][0].transcript} `;
+      }
+      setTranscript(nextTranscript.trim());
+      setTranscriptSource('speech-recognition');
+    };
+    recognition.onerror = () => {
+      setTranscriptSource('unavailable');
+    };
+    recognitionRef.current = recognition;
+    recognition.start();
+  };
+
   const startRecording = async () => {
     setError(null);
     setAudioURL(null);
     setElapsed(0);
+    setTranscript('');
+    setTranscriptSource('unavailable');
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new window.MediaRecorder(stream);
@@ -52,11 +98,19 @@ export default function VoiceRecorder({
         const blob = new Blob(chunks.current, { type: 'audio/webm' });
         setAudioURL(URL.createObjectURL(blob));
         if (onRecordingComplete) onRecordingComplete(blob);
+        if (onCaptureComplete) {
+          onCaptureComplete({
+            audio: blob,
+            transcript,
+            transcriptSource,
+          });
+        }
         stream.getTracks().forEach((track) => track.stop());
       };
       mediaRecorder.start();
       setRecording(true);
       timerRef.current = setInterval(() => setElapsed((t) => t + 1), 1000);
+      startSpeechRecognition();
     } catch (err) {
       setError('Microphone access denied or unavailable.');
     }
@@ -64,6 +118,7 @@ export default function VoiceRecorder({
 
   const stopRecording = () => {
     if (mediaRecorderRef.current && recording) {
+      stopSpeechRecognition();
       mediaRecorderRef.current.stop();
       setRecording(false);
       if (timerRef.current) clearInterval(timerRef.current);
@@ -85,10 +140,45 @@ export default function VoiceRecorder({
       {audioURL && (
         <audio controls src={audioURL} className="w-full mt-2" aria-label="Playback recorded audio" />
       )}
+      {transcript && (
+        <div className="w-full rounded-lg border border-indigo-100 bg-indigo-50/80 p-3 text-left text-sm text-slate-700">
+          <div className="font-semibold text-indigo-700">Transcript Preview</div>
+          <p className="mt-1 whitespace-pre-wrap">{transcript}</p>
+        </div>
+      )}
       {error && <div className="text-red-500 text-sm" role="alert">{error}</div>}
       <div className="text-xs text-gray-400 mt-2 text-center max-w-xs">
         <span role="img" aria-label="lock">🔒</span> Your voice is never sent to a server. All processing is local for privacy and anonymization.
       </div>
     </div>
   );
+}
+
+declare global {
+  interface Window {
+    SpeechRecognition?: {
+      new (): SpeechRecognition;
+    };
+    webkitSpeechRecognition?: {
+      new (): SpeechRecognition;
+    };
+  }
+
+  interface SpeechRecognition {
+    continuous: boolean;
+    interimResults: boolean;
+    lang: string;
+    onresult: ((event: SpeechRecognitionEvent) => void) | null;
+    onerror: (() => void) | null;
+    start(): void;
+    stop(): void;
+  }
+
+  interface SpeechRecognitionEvent {
+    results: ArrayLike<{
+      0: {
+        transcript: string;
+      };
+    }>;
+  }
 }
