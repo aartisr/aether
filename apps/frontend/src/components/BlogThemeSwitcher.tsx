@@ -55,13 +55,13 @@ export default function BlogThemeSwitcher() {
   }
 
   return (
-    <div className="blog-theme-switcher" role="menubar" aria-label="Blog theme selector">
+    <div className="blog-theme-switcher" role="group" aria-label="Blog theme selector">
       {(Object.keys(THEME_CONFIG) as ThemeOption[]).map((theme) => (
         <button
           key={theme}
           onClick={() => handleThemeChange(theme)}
+          type="button"
           className={`blog-theme-btn ${currentTheme === theme ? 'active' : ''}`}
-          aria-pressed={currentTheme === theme}
           title={THEME_CONFIG[theme].ariaLabel}
           aria-label={THEME_CONFIG[theme].ariaLabel}
         >

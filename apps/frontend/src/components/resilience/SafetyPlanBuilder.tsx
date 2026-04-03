@@ -57,21 +57,25 @@ export default function SafetyPlanBuilder() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mt-6">
         <PlanField
+          id="warningSigns"
           label="My warning signs"
           value={plan.warningSigns}
           onChange={(value) => setPlan((prev) => ({ ...prev, warningSigns: value }))}
         />
         <PlanField
+          id="copingSteps"
           label="My coping steps"
           value={plan.copingSteps}
           onChange={(value) => setPlan((prev) => ({ ...prev, copingSteps: value }))}
         />
         <PlanField
+          id="trustedPeople"
           label="Trusted people I will contact"
           value={plan.trustedPeople}
           onChange={(value) => setPlan((prev) => ({ ...prev, trustedPeople: value }))}
         />
         <PlanField
+          id="professionalSupport"
           label="Professional or campus support"
           value={plan.professionalSupport}
           onChange={(value) => setPlan((prev) => ({ ...prev, professionalSupport: value }))}
@@ -107,11 +111,22 @@ export default function SafetyPlanBuilder() {
   );
 }
 
-function PlanField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
+function PlanField({
+  id,
+  label,
+  value,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
   return (
     <div>
-      <label className="block text-sm font-medium text-indigo-900">{label}</label>
+      <label className="block text-sm font-medium text-indigo-900" htmlFor={id}>{label}</label>
       <textarea
+        id={id}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         rows={4}

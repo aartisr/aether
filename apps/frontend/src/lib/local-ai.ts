@@ -445,7 +445,6 @@ function isTransformersModule(value: unknown): value is TransformersModule {
 
 let runtimeProviderPromise: Promise<RuntimeProvider | null> | null = null;
 let runtimeProviderInitError: string | null = null;
-const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 const ENABLE_BROWSER_LOCAL_MODELS = process.env.NEXT_PUBLIC_ECHO_ENABLE_BROWSER_MODELS === 'true';
 
 function formatRuntimeError(err: unknown) {
@@ -457,16 +456,12 @@ function formatRuntimeError(err: unknown) {
 }
 
 function buildEngineFallbackNote() {
-  if (IS_PRODUCTION && !ENABLE_BROWSER_LOCAL_MODELS) {
-    return 'Using weighted on-device fallback analysis in production.';
+  if (!ENABLE_BROWSER_LOCAL_MODELS) {
+    return 'Using weighted on-device fallback analysis. Set NEXT_PUBLIC_ECHO_ENABLE_BROWSER_MODELS=true to enable browser model loading.';
   }
 
   if (!runtimeProviderInitError) {
     return 'Browser-local model not active yet; using weighted rules fallback.';
-  }
-
-  if (IS_PRODUCTION) {
-    return 'Browser-local model unavailable; using weighted rules fallback.';
   }
 
   return `Browser-local model unavailable; using weighted rules fallback. Reason: ${runtimeProviderInitError}`;
@@ -551,7 +546,7 @@ async function tryCreateTransformersRuntimeProvider(): Promise<RuntimeProvider |
 }
 
 async function getRuntimeProvider() {
-  if (IS_PRODUCTION && !ENABLE_BROWSER_LOCAL_MODELS) {
+  if (!ENABLE_BROWSER_LOCAL_MODELS) {
     return null;
   }
 

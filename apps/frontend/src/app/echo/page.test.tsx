@@ -50,7 +50,7 @@ describe('Echo Sentiment Visualization Integration Tests', () => {
       <SentimentMapping
         audio={mockAudio}
         transcript="I feel really overwhelmed and panicked about everything"
-        transcriptSource="local-whisper"
+        transcriptSource="speech-recognition"
       />
     );
 
@@ -68,7 +68,7 @@ describe('Echo Sentiment Visualization Integration Tests', () => {
       <SentimentMapping
         audio={mockAudio}
         transcript="I feel really overwhelmed and panicked about everything"
-        transcriptSource="local-whisper"
+        transcriptSource="speech-recognition"
       />
     );
 
@@ -90,7 +90,7 @@ describe('Echo Sentiment Visualization Integration Tests', () => {
       <SentimentMapping
         audio={mockAudio}
         transcript="I feel really overwhelmed and panicked about everything"
-        transcriptSource="local-whisper"
+        transcriptSource="speech-recognition"
       />
     );
 
@@ -110,7 +110,7 @@ describe('Echo Sentiment Visualization Integration Tests', () => {
       <SentimentMapping
         audio={mockAudio}
         transcript="I feel really overwhelmed and panicked about everything"
-        transcriptSource="local-whisper"
+        transcriptSource="speech-recognition"
       />
     );
 
@@ -136,7 +136,7 @@ describe('Echo Sentiment Visualization Integration Tests', () => {
       <SentimentMapping
         audio={mockAudio}
         transcript="I feel really overwhelmed and panicked about everything"
-        transcriptSource="local-whisper"
+        transcriptSource="speech-recognition"
       />
     );
 
@@ -158,7 +158,7 @@ describe('Echo Sentiment Visualization Integration Tests', () => {
       <SentimentMapping
         audio={mockAudio}
         transcript="I feel really overwhelmed and panicked about everything"
-        transcriptSource="local-whisper"
+        transcriptSource="speech-recognition"
       />
     );
 
@@ -179,7 +179,7 @@ describe('Echo Sentiment Visualization Integration Tests', () => {
       <SentimentMapping
         audio={mockAudio}
         transcript="I feel really overwhelmed and panicked about everything"
-        transcriptSource="local-whisper"
+        transcriptSource="speech-recognition"
       />
     );
 
@@ -201,7 +201,7 @@ describe('Echo Sentiment Visualization Integration Tests', () => {
       <SentimentMapping
         audio={mockAudio}
         transcript="I feel really overwhelmed and panicked about everything. I can barely sleep."
-        transcriptSource="local-whisper"
+        transcriptSource="speech-recognition"
       />
     );
 
@@ -235,7 +235,7 @@ describe('Echo Sentiment Visualization Integration Tests', () => {
       <SentimentMapping
         audio={mockAudio}
         transcript="I feel really overwhelmed and panicked about everything"
-        transcriptSource="local-whisper"
+        transcriptSource="speech-recognition"
       />
     );
 
