@@ -14,6 +14,7 @@ export type VoiceCapture = {
 
 export type SentimentLabel = 'Positive' | 'Neutral' | 'Negative';
 export type SafetyLevel = 'low' | 'medium' | 'high';
+export type EmotionalZone = 'Grounded' | 'Energized' | 'Overwhelmed' | 'Drained';
 
 export type LocalEchoAnalysis = {
   transcript: string;
@@ -63,8 +64,6 @@ type WeightedHit = {
   baseWeight: number;
   adjustedWeight: number;
 };
-
-type EmotionalZone = 'Grounded' | 'Energized' | 'Overwhelmed' | 'Drained';
 
 type RuleSet<TLabel extends string> = Record<TLabel, string[]>;
 
@@ -292,6 +291,87 @@ function collectMatches(text: string, terms: string[]) {
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
+}
+
+function toValence(signal: LabelScore<SentimentLabel>) {
+  const signedScore = signal.label === 'Positive' ? signal.score : signal.label === 'Negative' ? -signal.score : 0;
+  return clamp(signedScore, -1, 1);
+}
+
+function estimateValence(result: Pick<LocalEchoAnalysis, 'transcript' | 'sentiment' | 'safety' | 'escalation'>) {
+  const baseline = toValence(result.sentiment);
+  const normalized = result.transcript.toLowerCase();
+  const positiveSettledLanguage = /(steady|grounded|supported|hopeful|relieved|calm|safe|clear|okay|coping|manageable)/.test(normalized);
+  const positiveActivatedLanguage = /(motivated|ready|energized|excited|confident|encouraged|capable|focused)/.test(normalized);
+  const negativeSettledLanguage = /(drained|numb|empty|tired|exhausted|shutdown|shut down|flat)/.test(normalized);
+  const negativeActivatedLanguage = /(panic|panicked|racing|urgent|spiraling|overwhelmed|trapped|on edge|can't breathe)/.test(normalized);
+
+  let adjustment = 0;
+
+  if (result.sentiment.label === 'Neutral') {
+    if (positiveSettledLanguage) adjustment += 0.14;
+    if (positiveActivatedLanguage) adjustment += 0.2;
+    if (negativeSettledLanguage) adjustment -= 0.16;
+    if (negativeActivatedLanguage) adjustment -= 0.22;
+  }
+
+  if (result.safety.label === 'medium') adjustment -= 0.08;
+  if (result.safety.label === 'high') adjustment -= 0.16;
+  if (result.escalation.urgency === 'immediate') adjustment -= 0.08;
+
+  return clamp(baseline + adjustment, -1, 1);
+}
+
+function estimateEnergy(result: Pick<LocalEchoAnalysis, 'transcript' | 'sentiment' | 'safety' | 'escalation'>) {
+  const normalized = result.transcript.toLowerCase();
+  const highEnergyDistressLanguage = /(panic|racing|right now|urgent|overwhelmed|can't breathe|spiraling|on edge|trapped)/.test(normalized);
+  const highEnergyPositiveLanguage = /(excited|motivated|ready|energized|determined|focused|hopeful now)/.test(normalized);
+  const lowEnergyLanguage = /(drained|numb|tired|exhausted|empty|shutdown|shut down|flat|heavy)/.test(normalized);
+  const calmingLanguage = /(grounded|steady|calm|safe right now|breathing|relieved|settled)/.test(normalized);
+  const exclamationCount = (result.transcript.match(/!/g) ?? []).length;
+
+  let energy = 0.42;
+
+  if (result.escalation.urgency === 'same-day') energy += 0.12;
+  if (result.escalation.urgency === 'immediate') energy += 0.24;
+
+  if (result.safety.label === 'medium') energy += 0.12;
+  if (result.safety.label === 'high') energy += 0.22;
+
+  if (result.sentiment.label === 'Negative' && result.sentiment.score > 0.55) energy += 0.06;
+  if (result.sentiment.label === 'Positive' && result.sentiment.score > 0.55) energy += 0.03;
+
+  if (highEnergyDistressLanguage) energy += 0.18;
+  if (highEnergyPositiveLanguage) energy += 0.12;
+  if (lowEnergyLanguage) energy -= 0.16;
+  if (calmingLanguage) energy -= 0.1;
+  energy += Math.min(exclamationCount, 3) * 0.03;
+
+  return clamp(energy, 0, 1);
+}
+
+function inferZoneFromCoordinates(valence: number, energy: number): EmotionalZone {
+  if (valence >= 0 && energy >= 0.5) return 'Energized';
+  if (valence >= 0 && energy < 0.5) return 'Grounded';
+  if (valence < 0 && energy >= 0.5) return 'Overwhelmed';
+  return 'Drained';
+}
+
+export function deriveEchoEmotionProfile(
+  result: Pick<LocalEchoAnalysis, 'transcript' | 'sentiment' | 'safety' | 'escalation' | 'analysisEngine' | 'analysisEngineNote'>,
+) {
+  const valence = estimateValence(result);
+  const energy = estimateEnergy(result);
+  const modelBoost = result.analysisEngine.includes('transformers') ? 0.14 : 0;
+  const fallbackPenalty = result.analysisEngineNote ? 0.2 : 0;
+  const confidence = clamp(0.42 + Math.max(result.sentiment.score, result.safety.score) * 0.34 + modelBoost - fallbackPenalty, 0, 1);
+
+  return {
+    valence,
+    energy,
+    confidence,
+    zone: inferZoneFromCoordinates(valence, energy),
+  };
 }
 
 function normalizeComposite(total: number, alpha = 15) {
@@ -730,45 +810,25 @@ function inferRecommendationZone(
   safety: SafetyLevel,
   urgency: 'routine' | 'same-day' | 'immediate',
 ): EmotionalZone {
-  const normalized = normalize(transcript);
-  const highEnergyDistressLanguage = /(panic|panicked|racing|right now|urgent|overwhelmed|can't breathe|cannot breathe|spiraling|on edge|trapped)/.test(normalized);
-  const highEnergyPositiveLanguage = /(excited|motivated|ready|energized|determined|focused|hopeful now)/.test(normalized);
-  const lowEnergyLanguage = /(drained|numb|tired|exhausted|empty|shutdown|shut down|flat|heavy)/.test(normalized);
-  const calmingLanguage = /(grounded|steady|calm|safe right now|breathing|relieved|settled|supported|manageable)/.test(normalized);
-
   if (urgency === 'immediate') {
-    return highEnergyDistressLanguage && !lowEnergyLanguage ? 'Overwhelmed' : 'Drained';
+    const emergencyProfile = deriveEchoEmotionProfile({
+      transcript,
+      sentiment: { label: sentiment, score: 0.75, matchedTerms: [] },
+      safety: { label: safety, score: 0.95, matchedTerms: [] },
+      escalation: { urgency, rationale: [], resources: [] },
+      analysisEngine: 'rules-keyword',
+    });
+
+    return emergencyProfile.zone;
   }
 
-  if (urgency === 'same-day' || safety === 'medium' || safety === 'high') {
-    if (lowEnergyLanguage && !highEnergyDistressLanguage) {
-      return 'Drained';
-    }
-
-    return 'Overwhelmed';
-  }
-
-  if (highEnergyPositiveLanguage) {
-    return 'Energized';
-  }
-
-  if (lowEnergyLanguage) {
-    return 'Drained';
-  }
-
-  if (highEnergyDistressLanguage) {
-    return 'Overwhelmed';
-  }
-
-  if (sentiment === 'Positive') {
-    return calmingLanguage ? 'Grounded' : 'Energized';
-  }
-
-  if (sentiment === 'Negative') {
-    return 'Drained';
-  }
-
-  return calmingLanguage ? 'Grounded' : 'Overwhelmed';
+  return deriveEchoEmotionProfile({
+    transcript,
+    sentiment: { label: sentiment, score: sentiment === 'Neutral' ? 0.35 : 0.65, matchedTerms: [] },
+    safety: { label: safety, score: safety === 'low' ? 0.15 : safety === 'medium' ? 0.62 : 0.92, matchedTerms: [] },
+    escalation: { urgency, rationale: [], resources: [] },
+    analysisEngine: 'rules-keyword',
+  }).zone;
 }
 
 function buildRecommendations(

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 
-import { analyzeLocalEchoTranscript, type LocalEchoAnalysis, type TranscriptSource } from '../../lib/local-ai';
+import { analyzeLocalEchoTranscript, deriveEchoEmotionProfile, type EmotionalZone, type LocalEchoAnalysis, type TranscriptSource } from '../../lib/local-ai';
 
 const MIN_TRANSCRIPT_WORDS = 3;
 
@@ -33,13 +33,6 @@ function formatEnergyTone(value: number) {
   return 'High energy';
 }
 
-function formatQuadrantName(valence: number, energy: number) {
-  if (valence >= 0 && energy >= 0.5) return 'Energized';
-  if (valence >= 0 && energy < 0.5) return 'Grounded';
-  if (valence < 0 && energy >= 0.5) return 'Overwhelmed';
-  return 'Drained';
-}
-
 function formatTrend(previous: number | null, current: number) {
   if (previous === null) return 'First reading';
   const delta = current - previous;
@@ -47,7 +40,7 @@ function formatTrend(previous: number | null, current: number) {
   return delta > 0 ? 'Shifting more positive' : 'Shifting more negative';
 }
 
-function getZoneGuidance(zone: string, confidence: number) {
+function getZoneGuidance(zone: EmotionalZone, confidence: number) {
   const lowConfidenceSuffix = confidence < 0.5 ? ' Signals are mixed, so treat this as a light steer rather than a verdict.' : '';
 
   if (zone === 'Grounded') {
@@ -79,70 +72,6 @@ function getZoneGuidance(zone: string, confidence: number) {
     description: `Your signals suggest low-energy distress or depletion. Favor recovery, simplification, and support over performance right now.${lowConfidenceSuffix}`,
     accentClassName: 'border-slate-200 bg-slate-100 text-slate-900',
   };
-}
-
-function toValence(signal: LocalEchoAnalysis['sentiment']) {
-  const signedScore = signal.label === 'Positive' ? signal.score : signal.label === 'Negative' ? -signal.score : 0;
-  return clamp(signedScore, -1, 1);
-}
-
-function estimateValence(result: LocalEchoAnalysis) {
-  const baseline = toValence(result.sentiment);
-  const normalized = result.transcript.toLowerCase();
-  const positiveSettledLanguage = /(steady|grounded|supported|hopeful|relieved|calm|safe|clear|okay|coping|manageable)/.test(normalized);
-  const positiveActivatedLanguage = /(motivated|ready|energized|excited|confident|encouraged|capable|focused)/.test(normalized);
-  const negativeSettledLanguage = /(drained|numb|empty|tired|exhausted|shutdown|shut down|flat)/.test(normalized);
-  const negativeActivatedLanguage = /(panic|panicked|racing|urgent|spiraling|overwhelmed|trapped|on edge|can't breathe)/.test(normalized);
-
-  let adjustment = 0;
-
-  if (result.sentiment.label === 'Neutral') {
-    if (positiveSettledLanguage) adjustment += 0.14;
-    if (positiveActivatedLanguage) adjustment += 0.2;
-    if (negativeSettledLanguage) adjustment -= 0.16;
-    if (negativeActivatedLanguage) adjustment -= 0.22;
-  }
-
-  if (result.safety.label === 'medium') adjustment -= 0.08;
-  if (result.safety.label === 'high') adjustment -= 0.16;
-  if (result.escalation.urgency === 'immediate') adjustment -= 0.08;
-
-  return clamp(baseline + adjustment, -1, 1);
-}
-
-function estimateEnergy(result: LocalEchoAnalysis) {
-  const normalized = result.transcript.toLowerCase();
-  const highEnergyDistressLanguage = /(panic|racing|right now|urgent|overwhelmed|can't breathe|spiraling|on edge|trapped)/.test(normalized);
-  const highEnergyPositiveLanguage = /(excited|motivated|ready|energized|determined|focused|hopeful now)/.test(normalized);
-  const lowEnergyLanguage = /(drained|numb|tired|exhausted|empty|shutdown|shut down|flat|heavy)/.test(normalized);
-  const calmingLanguage = /(grounded|steady|calm|safe right now|breathing|relieved|settled)/.test(normalized);
-  const exclamationCount = (result.transcript.match(/!/g) ?? []).length;
-
-  let energy = 0.42;
-
-  if (result.escalation.urgency === 'same-day') energy += 0.12;
-  if (result.escalation.urgency === 'immediate') energy += 0.24;
-
-  if (result.safety.label === 'medium') energy += 0.12;
-  if (result.safety.label === 'high') energy += 0.22;
-
-  if (result.sentiment.label === 'Negative' && result.sentiment.score > 0.55) energy += 0.06;
-  if (result.sentiment.label === 'Positive' && result.sentiment.score > 0.55) energy += 0.03;
-
-  if (highEnergyDistressLanguage) energy += 0.18;
-  if (highEnergyPositiveLanguage) energy += 0.12;
-  if (lowEnergyLanguage) energy -= 0.16;
-  if (calmingLanguage) energy -= 0.1;
-  energy += Math.min(exclamationCount, 3) * 0.03;
-
-  return clamp(energy, 0, 1);
-}
-
-function estimateConfidence(result: LocalEchoAnalysis) {
-  const modelBoost = result.analysisEngine.includes('transformers') ? 0.14 : 0;
-  const fallbackPenalty = result.analysisEngineNote ? 0.2 : 0;
-  const base = 0.42 + Math.max(result.sentiment.score, result.safety.score) * 0.34 + modelBoost - fallbackPenalty;
-  return clamp(base, 0, 1);
 }
 
 /**
@@ -227,7 +156,7 @@ export default function SentimentMapping({
         warmupTimerRef.current = null;
       }
 
-      setPreviousValence(result ? toValence(result.sentiment) : null);
+      setPreviousValence(result ? deriveEchoEmotionProfile(result).valence : null);
       setResult(res);
       setShowEmotionMap(false);
       setHasAnalyzedOnce(true);
@@ -245,13 +174,14 @@ export default function SentimentMapping({
     }
   };
 
-  const valence = result ? estimateValence(result) : 0;
-  const energy = result ? estimateEnergy(result) : 0;
-  const confidence = result ? estimateConfidence(result) : 0;
+  const emotionProfile = result ? deriveEchoEmotionProfile(result) : null;
+  const valence = emotionProfile?.valence ?? 0;
+  const energy = emotionProfile?.energy ?? 0;
+  const confidence = emotionProfile?.confidence ?? 0;
   const valencePercent = ((valence + 1) / 2) * 100;
   const previousValencePercent = previousValence === null ? null : ((previousValence + 1) / 2) * 100;
   const energyPercentFromTop = (1 - energy) * 100;
-  const quadrantName = result ? formatQuadrantName(valence, energy) : '';
+  const quadrantName = emotionProfile?.zone ?? '';
   const trendLabel = result ? formatTrend(previousValence, valence) : '';
   const confidenceBandRadius = 11 - confidence * 6;
   const confidenceBandOpacity = 0.18 + confidence * 0.16;
