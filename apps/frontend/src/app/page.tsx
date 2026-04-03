@@ -1,10 +1,21 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Home() {
   return (
     <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-3 sm:p-4 md:p-6">
       <section className="max-w-5xl w-full text-center space-y-6 md:space-y-8">
+        <div className="mx-auto w-full max-w-3xl rounded-2xl bg-white/70 p-3 shadow-soft border border-indigo-100">
+          <Image
+            src="/aether-logo.svg"
+            alt="Aether logo"
+            width={1080}
+            height={360}
+            priority
+            className="h-auto w-full"
+          />
+        </div>
         <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-indigo-800 drop-shadow-lg leading-tight">
           Aether: Student Resiliency Ecosystem
         </h1>

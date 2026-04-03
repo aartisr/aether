@@ -3,6 +3,24 @@
 # Aether: The Student Resiliency Ecosystem
 
 <p align="center">
+  <img src="apps/frontend/public/aether-logo.svg" alt="Aether primary logo" width="760"/>
+</p>
+
+<p align="center">
+  <img src="apps/frontend/public/aether-logo-icon.svg" alt="Aether icon logo" width="88"/>
+  &nbsp;&nbsp;&nbsp;
+  <img src="apps/frontend/public/aether-logo-mono.svg" alt="Aether monochrome logo" width="300"/>
+</p>
+
+<p align="center">
+  <sub>Logo assets: <code>apps/frontend/public/aether-logo.svg</code>, <code>apps/frontend/public/aether-logo-icon.svg</code>, <code>apps/frontend/public/aether-logo-mono.svg</code></sub>
+</p>
+
+<p align="center">
+  <sub>Logo artwork copyright (c) 2026 Aarti S Ravikumar. All rights reserved.</sub>
+</p>
+
+<p align="center">
   <img src="docs/assets/aether-architecture-diagram.svg" alt="Aether Architecture Diagram" width="900"/>
 </p>
 

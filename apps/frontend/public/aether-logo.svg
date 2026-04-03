@@ -1,0 +1,58 @@
+<svg width="1080" height="360" viewBox="0 0 1080 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="logoTitle logoDesc">
+  <title id="logoTitle">Aether Logo</title>
+  <desc id="logoDesc">A circular emblem with a protective ring, open-book foundation, growing sprout, and peer-connection nodes, followed by the word Aether.</desc>
+  <metadata>
+    Copyright (c) 2026 Aarti S Ravikumar. All rights reserved.
+  </metadata>
+
+  <defs>
+    <linearGradient id="ringGradient" x1="40" y1="40" x2="320" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4F8FCB"/>
+      <stop offset="1" stop-color="#6D28D9"/>
+    </linearGradient>
+    <linearGradient id="sproutGradient" x1="122" y1="152" x2="234" y2="248" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#34D399"/>
+      <stop offset="1" stop-color="#14B8A6"/>
+    </linearGradient>
+    <linearGradient id="bookGradient" x1="96" y1="214" x2="264" y2="280" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EFF6FF"/>
+      <stop offset="1" stop-color="#DBEAFE"/>
+    </linearGradient>
+    <filter id="softShadow" x="20" y="20" width="320" height="320" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="8"/>
+      <feGaussianBlur stdDeviation="10"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.22 0 0 0 0 0.35 0 0 0 0 0.64 0 0 0 0.2 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softShadow)">
+    <circle cx="180" cy="180" r="132" fill="white"/>
+    <circle cx="180" cy="180" r="124" stroke="url(#ringGradient)" stroke-width="14"/>
+
+    <path d="M96 242C116 220 144 214 176 220V274C145 268 120 269 96 286V242Z" fill="url(#bookGradient)" stroke="#93C5FD" stroke-width="4"/>
+    <path d="M264 242C244 220 216 214 184 220V274C215 268 240 269 264 286V242Z" fill="url(#bookGradient)" stroke="#93C5FD" stroke-width="4"/>
+    <path d="M180 220V278" stroke="#60A5FA" stroke-width="4" stroke-linecap="round"/>
+
+    <path d="M180 218C182 188 194 169 210 154" stroke="#10B981" stroke-width="7" stroke-linecap="round"/>
+    <path d="M178 214C175 192 164 176 146 164" stroke="#10B981" stroke-width="7" stroke-linecap="round"/>
+    <path d="M210 154C212 178 198 195 180 201C183 181 194 166 210 154Z" fill="url(#sproutGradient)"/>
+    <path d="M146 164C160 176 168 192 164 208C148 202 139 186 146 164Z" fill="url(#sproutGradient)"/>
+
+    <path d="M88 154C118 129 146 120 180 120C214 120 242 129 272 154" stroke="#7C3AED" stroke-width="6" stroke-linecap="round" stroke-dasharray="1 13"/>
+    <circle cx="92" cy="154" r="9" fill="#A78BFA"/>
+    <circle cx="180" cy="118" r="10" fill="#6366F1"/>
+    <circle cx="268" cy="154" r="9" fill="#A78BFA"/>
+  </g>
+
+  <g transform="translate(360, 0)">
+    <text x="0" y="170" fill="#1E293B" font-family="Inter, Avenir Next, Segoe UI, sans-serif" font-size="96" font-weight="800" letter-spacing="1">Aether</text>
+    <text x="2" y="218" fill="#475569" font-family="Inter, Avenir Next, Segoe UI, sans-serif" font-size="31" font-weight="500" letter-spacing="0.6">Student Resilience Ecosystem</text>
+    <rect x="0" y="242" width="512" height="10" rx="5" fill="url(#ringGradient)"/>
+    <text x="0" y="296" fill="#64748B" font-family="Inter, Avenir Next, Segoe UI, sans-serif" font-size="24" font-weight="500" letter-spacing="0.4">Privacy-first • Research-driven • Peer-powered</text>
+  </g>
+</svg>

@@ -1,0 +1,39 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="iconTitle iconDesc">
+  <title id="iconTitle">Aether Icon</title>
+  <desc id="iconDesc">A circular emblem with a protective ring, open-book foundation, growing sprout, and peer-connection nodes.</desc>
+  <metadata>
+    Copyright (c) 2026 Aarti S Ravikumar. All rights reserved.
+  </metadata>
+
+  <defs>
+    <linearGradient id="iconRingGradient" x1="66" y1="66" x2="446" y2="446" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4F8FCB"/>
+      <stop offset="1" stop-color="#6D28D9"/>
+    </linearGradient>
+    <linearGradient id="iconSproutGradient" x1="170" y1="216" x2="320" y2="344" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#34D399"/>
+      <stop offset="1" stop-color="#14B8A6"/>
+    </linearGradient>
+    <linearGradient id="iconBookGradient" x1="142" y1="300" x2="370" y2="396" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EFF6FF"/>
+      <stop offset="1" stop-color="#DBEAFE"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="256" cy="256" r="202" fill="white"/>
+  <circle cx="256" cy="256" r="188" stroke="url(#iconRingGradient)" stroke-width="20"/>
+
+  <path d="M132 336C160 308 202 300 250 308V390C202 380 164 382 132 406V336Z" fill="url(#iconBookGradient)" stroke="#93C5FD" stroke-width="6"/>
+  <path d="M380 336C352 308 310 300 262 308V390C310 380 348 382 380 406V336Z" fill="url(#iconBookGradient)" stroke="#93C5FD" stroke-width="6"/>
+  <path d="M256 308V396" stroke="#60A5FA" stroke-width="6" stroke-linecap="round"/>
+
+  <path d="M256 304C258 260 276 232 300 210" stroke="#10B981" stroke-width="10" stroke-linecap="round"/>
+  <path d="M252 298C246 266 228 244 202 226" stroke="#10B981" stroke-width="10" stroke-linecap="round"/>
+  <path d="M300 210C304 246 282 270 256 280C260 250 276 226 300 210Z" fill="url(#iconSproutGradient)"/>
+  <path d="M202 226C222 244 234 268 228 290C204 282 190 258 202 226Z" fill="url(#iconSproutGradient)"/>
+
+  <path d="M118 214C162 176 202 162 256 162C310 162 350 176 394 214" stroke="#7C3AED" stroke-width="8" stroke-linecap="round" stroke-dasharray="1 18"/>
+  <circle cx="124" cy="214" r="12" fill="#A78BFA"/>
+  <circle cx="256" cy="160" r="13" fill="#6366F1"/>
+  <circle cx="388" cy="214" r="12" fill="#A78BFA"/>
+</svg>
