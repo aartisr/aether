@@ -109,4 +109,37 @@ describe('local-ai', () => {
       safety: { label: 'low' },
     });
   });
+
+  it('returns grounded recommendations for calm supported language', async () => {
+    await expect(
+      analyzeLocalEchoTranscript('I feel calm, supported, and steady today.'),
+    ).resolves.toMatchObject({
+      recommendations: expect.arrayContaining(['Protect the habits or people that are helping you stay steady.']),
+    });
+  });
+
+  it('returns energized recommendations for activated positive language', async () => {
+    await expect(
+      analyzeLocalEchoTranscript('I feel ready, motivated, and energized to move forward.'),
+    ).resolves.toMatchObject({
+      recommendations: expect.arrayContaining(['Turn this momentum into one concrete next step before it diffuses.']),
+    });
+  });
+
+  it('returns drained recommendations for depleted low-energy language', async () => {
+    await expect(
+      analyzeLocalEchoTranscript('I feel exhausted, flat, and heavy today.'),
+    ).resolves.toMatchObject({
+      recommendations: expect.arrayContaining(['Reduce load before asking yourself for more output.']),
+    });
+  });
+
+  it('returns overwhelmed recommendations for activated distress language', async () => {
+    await expect(
+      analyzeLocalEchoTranscript('I feel overwhelmed, on edge, and like everything is urgent.'),
+    ).resolves.toMatchObject({
+      recommendations: expect.arrayContaining(['Start a same-day handoff to campus counseling or another trained support channel.']),
+      escalation: { urgency: 'same-day' },
+    });
+  });
 });

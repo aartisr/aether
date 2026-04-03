@@ -47,6 +47,40 @@ function formatTrend(previous: number | null, current: number) {
   return delta > 0 ? 'Shifting more positive' : 'Shifting more negative';
 }
 
+function getZoneGuidance(zone: string, confidence: number) {
+  const lowConfidenceSuffix = confidence < 0.5 ? ' Signals are mixed, so treat this as a light steer rather than a verdict.' : '';
+
+  if (zone === 'Grounded') {
+    return {
+      title: 'Protect what is working',
+      description: `You appear steadier and lower intensity right now. Consolidate the habits or people helping you stay level.${lowConfidenceSuffix}`,
+      accentClassName: 'border-emerald-200 bg-emerald-50 text-emerald-900',
+    };
+  }
+
+  if (zone === 'Energized') {
+    return {
+      title: 'Channel the momentum',
+      description: `You appear positive with usable activation. Turn that energy into one concrete next step before it diffuses.${lowConfidenceSuffix}`,
+      accentClassName: 'border-amber-200 bg-amber-50 text-amber-900',
+    };
+  }
+
+  if (zone === 'Overwhelmed') {
+    return {
+      title: 'Lower intensity first',
+      description: `Your signals suggest activated distress. De-escalate the body load before trying to solve the whole situation.${lowConfidenceSuffix}`,
+      accentClassName: 'border-sky-200 bg-sky-50 text-sky-900',
+    };
+  }
+
+  return {
+    title: 'Reduce load and restore',
+    description: `Your signals suggest low-energy distress or depletion. Favor recovery, simplification, and support over performance right now.${lowConfidenceSuffix}`,
+    accentClassName: 'border-slate-200 bg-slate-100 text-slate-900',
+  };
+}
+
 function toValence(signal: LocalEchoAnalysis['sentiment']) {
   const signedScore = signal.label === 'Positive' ? signal.score : signal.label === 'Negative' ? -signal.score : 0;
   return clamp(signedScore, -1, 1);
@@ -219,6 +253,9 @@ export default function SentimentMapping({
   const energyPercentFromTop = (1 - energy) * 100;
   const quadrantName = result ? formatQuadrantName(valence, energy) : '';
   const trendLabel = result ? formatTrend(previousValence, valence) : '';
+  const confidenceBandRadius = 11 - confidence * 6;
+  const confidenceBandOpacity = 0.18 + confidence * 0.16;
+  const zoneGuidance = result ? getZoneGuidance(quadrantName, confidence) : null;
   const summaryLine = result
     ? `${formatValenceTone(valence)} and ${formatEnergyTone(energy).toLowerCase()}. ${formatConfidence(confidence)}.`
     : '';
@@ -358,6 +395,17 @@ export default function SentimentMapping({
                   <text x="50" y="96" textAnchor="middle" fontSize="4.2" fill="#64748b">Low energy</text>
                   <text x="6" y="54" textAnchor="start" fontSize="4.2" fill="#64748b">Negative</text>
                   <text x="94" y="54" textAnchor="end" fontSize="4.2" fill="#64748b">Positive</text>
+                  <circle
+                    cx={valencePercent}
+                    cy={energyPercentFromTop}
+                    r={confidenceBandRadius}
+                    fill="#818cf8"
+                    opacity={confidenceBandOpacity}
+                    stroke="#6366f1"
+                    strokeOpacity={0.38}
+                    strokeWidth="0.8"
+                    strokeDasharray="2 2"
+                  />
                   <circle cx={valencePercent} cy={energyPercentFromTop} r="5.2" fill="#ffffff" stroke="#4338ca" strokeWidth="1.4" />
                   <circle cx={valencePercent} cy={energyPercentFromTop} r="2.6" fill="#818cf8" />
                 </svg>
@@ -367,6 +415,10 @@ export default function SentimentMapping({
               </div>
               <div className="mt-1 text-center text-xs text-slate-500">
                 {formatValenceTone(valence)} • {formatEnergyTone(energy)}
+              </div>
+              <div className="mt-2 flex items-center justify-center gap-2 text-xs text-slate-500">
+                <span className="inline-block h-2.5 w-2.5 rounded-full border border-indigo-500 bg-indigo-300/40" aria-hidden="true" />
+                <span>Confidence band: {formatConfidence(confidence)}</span>
               </div>
             </div>
           )}
@@ -382,6 +434,15 @@ export default function SentimentMapping({
               {result.analysisEngineNote}
             </div>
           )}
+          {zoneGuidance && (
+            <div className={`mt-4 rounded-md border px-3 py-3 text-left ${zoneGuidance.accentClassName}`}>
+              <div className="text-xs font-semibold uppercase tracking-wide">{zoneGuidance.title}</div>
+              <p className="mt-1 text-sm">{zoneGuidance.description}</p>
+            </div>
+          )}
+          <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-slate-600">
+            Recommended next steps for {quadrantName || 'this'} zone
+          </div>
           <ul className="mt-3 space-y-2 text-sm text-slate-700">
             {result.recommendations.map((recommendation) => (
               <li key={recommendation} className="rounded-md bg-slate-50 px-3 py-2">

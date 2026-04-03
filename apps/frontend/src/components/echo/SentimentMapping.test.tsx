@@ -339,6 +339,8 @@ describe('SentimentMapping', () => {
     fireEvent.click(screen.getByRole('button', { name: /show emotional map/i }));
 
     expect(screen.getByText(/current zone:/i)).toHaveTextContent('Grounded');
+    expect(screen.getByText(/protect what is working/i)).toBeInTheDocument();
+    expect(screen.getByText(/recommended next steps for grounded zone/i)).toBeInTheDocument();
   });
 
   it('maps activated positive language into the energized zone', async () => {
@@ -374,6 +376,7 @@ describe('SentimentMapping', () => {
     fireEvent.click(screen.getByRole('button', { name: /show emotional map/i }));
 
     expect(screen.getByText(/current zone:/i)).toHaveTextContent('Energized');
+    expect(screen.getByText(/channel the momentum/i)).toBeInTheDocument();
   });
 
   it('maps depleted language into the drained zone', async () => {
@@ -409,5 +412,42 @@ describe('SentimentMapping', () => {
     fireEvent.click(screen.getByRole('button', { name: /show emotional map/i }));
 
     expect(screen.getByText(/current zone:/i)).toHaveTextContent('Drained');
+    expect(screen.getByText(/reduce load and restore/i)).toBeInTheDocument();
+  });
+
+  it('shows a confidence band label on the emotional map', async () => {
+    const analyzeSentiment = jest.fn().mockResolvedValue({
+      transcript: 'I feel steady but still a little uncertain.',
+      sentiment: { score: 0.43, label: 'Positive', matchedTerms: ['steady'] },
+      safety: { score: 0.12, label: 'low', matchedTerms: [] },
+      recommendations: ['Notice what helped you feel more steady today.'],
+      escalation: {
+        urgency: 'routine',
+        rationale: ['No urgent risk markers detected in this transcript.'],
+        resources: [
+          {
+            id: 'peer-circle',
+            title: 'Peer Support Circle',
+            availability: 'Daily sessions',
+            actionLabel: 'Open Peer Navigator',
+            actionHref: '/peer-navigator',
+          },
+        ],
+      },
+      analysisEngine: 'rules-keyword',
+      analysisEngineNote: 'Browser-local model unavailable; using weighted rules fallback.',
+    });
+
+    render(<SentimentMapping audio={null} transcript="I feel steady but still a little uncertain." analyzeSentiment={analyzeSentiment} />);
+
+    fireEvent.click(screen.getByRole('button', { name: /analyze check-in/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/sentiment rail/i)).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /show emotional map/i }));
+
+    expect(screen.getByText(/confidence band:/i)).toBeInTheDocument();
   });
 });

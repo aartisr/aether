@@ -64,6 +64,8 @@ type WeightedHit = {
   adjustedWeight: number;
 };
 
+type EmotionalZone = 'Grounded' | 'Energized' | 'Overwhelmed' | 'Drained';
+
 type RuleSet<TLabel extends string> = Record<TLabel, string[]>;
 
 const NEGATION_TERMS = new Set([
@@ -722,7 +724,59 @@ function deriveEscalation(safety: LabelScore<SafetyLevel>, sentiment: LabelScore
   };
 }
 
-function buildRecommendations(sentiment: SentimentLabel, safety: SafetyLevel, urgency: 'routine' | 'same-day' | 'immediate') {
+function inferRecommendationZone(
+  transcript: string,
+  sentiment: SentimentLabel,
+  safety: SafetyLevel,
+  urgency: 'routine' | 'same-day' | 'immediate',
+): EmotionalZone {
+  const normalized = normalize(transcript);
+  const highEnergyDistressLanguage = /(panic|panicked|racing|right now|urgent|overwhelmed|can't breathe|cannot breathe|spiraling|on edge|trapped)/.test(normalized);
+  const highEnergyPositiveLanguage = /(excited|motivated|ready|energized|determined|focused|hopeful now)/.test(normalized);
+  const lowEnergyLanguage = /(drained|numb|tired|exhausted|empty|shutdown|shut down|flat|heavy)/.test(normalized);
+  const calmingLanguage = /(grounded|steady|calm|safe right now|breathing|relieved|settled|supported|manageable)/.test(normalized);
+
+  if (urgency === 'immediate') {
+    return highEnergyDistressLanguage && !lowEnergyLanguage ? 'Overwhelmed' : 'Drained';
+  }
+
+  if (urgency === 'same-day' || safety === 'medium' || safety === 'high') {
+    if (lowEnergyLanguage && !highEnergyDistressLanguage) {
+      return 'Drained';
+    }
+
+    return 'Overwhelmed';
+  }
+
+  if (highEnergyPositiveLanguage) {
+    return 'Energized';
+  }
+
+  if (lowEnergyLanguage) {
+    return 'Drained';
+  }
+
+  if (highEnergyDistressLanguage) {
+    return 'Overwhelmed';
+  }
+
+  if (sentiment === 'Positive') {
+    return calmingLanguage ? 'Grounded' : 'Energized';
+  }
+
+  if (sentiment === 'Negative') {
+    return 'Drained';
+  }
+
+  return calmingLanguage ? 'Grounded' : 'Overwhelmed';
+}
+
+function buildRecommendations(
+  transcript: string,
+  sentiment: SentimentLabel,
+  safety: SafetyLevel,
+  urgency: 'routine' | 'same-day' | 'immediate',
+) {
   if (urgency === 'immediate') {
     return [
       'Contact immediate crisis support first, then notify a trusted person.',
@@ -747,6 +801,8 @@ function buildRecommendations(sentiment: SentimentLabel, safety: SafetyLevel, ur
     ];
   }
 
+  const zone = inferRecommendationZone(transcript, sentiment, safety, urgency);
+
   if (safety === 'medium') {
     return [
       'Pause and ground yourself with one small physical reset.',
@@ -755,25 +811,34 @@ function buildRecommendations(sentiment: SentimentLabel, safety: SafetyLevel, ur
     ];
   }
 
-  if (sentiment === 'Negative') {
+  if (zone === 'Grounded') {
     return [
-      'Name the main stressor in one sentence.',
-      'Choose one supportive action you can finish in 10 minutes.',
-      'Check back in after a short reset to see if the intensity changed.',
+      'Protect the habits or people that are helping you stay steady.',
+      'Capture one specific thing that is working so you can repeat it later.',
+      'Use this calmer window for one low-pressure supportive next step.',
     ];
   }
 
-  if (sentiment === 'Positive') {
+  if (zone === 'Energized') {
     return [
-      'Notice what helped you feel more steady today.',
-      'If your energy feels usable, turn it into one concrete next step.',
-      'Save one supportive habit so you can repeat it later.',
+      'Turn this momentum into one concrete next step before it diffuses.',
+      'Aim your energy at a single task instead of opening too many loops.',
+      'Keep one grounding habit nearby so activation stays usable.',
+    ];
+  }
+
+  if (zone === 'Overwhelmed') {
+    return [
+      'Lower intensity first with one short grounding or breathing reset.',
+      'Narrow the problem to the next 10 minutes instead of the whole situation.',
+      'Bring in support early so you do not have to carry the spike alone.',
     ];
   }
 
   return [
-    'Use a short journal note to clarify what you need next.',
-    'Pick a small support action if stress starts to build.',
+    'Reduce load before asking yourself for more output.',
+    'Choose one restorative action that is realistic at your current energy level.',
+    'Let one trusted person know today feels heavier than usual.',
   ];
 }
 
@@ -827,7 +892,7 @@ export async function analyzeLocalEchoTranscript(transcript: string): Promise<Lo
       transcript: normalized,
       sentiment,
       safety,
-      recommendations: buildRecommendations(sentiment.label, safety.label, escalation.urgency),
+      recommendations: buildRecommendations(normalized, sentiment.label, safety.label, escalation.urgency),
       escalation,
       analysisEngine: runtimeProvider ? runtimeProvider.id : 'rules-keyword',
       analysisEngineNote: runtimeProvider ? undefined : buildEngineFallbackNote(),
@@ -847,7 +912,7 @@ export async function analyzeLocalEchoTranscript(transcript: string): Promise<Lo
       transcript: normalized,
       sentiment,
       safety: elevatedSafety,
-      recommendations: buildRecommendations(sentiment.label, 'medium', escalation.urgency),
+      recommendations: buildRecommendations(normalized, sentiment.label, 'medium', escalation.urgency),
       escalation,
       analysisEngine: runtimeProvider ? runtimeProvider.id : 'rules-keyword',
       analysisEngineNote: runtimeProvider ? undefined : buildEngineFallbackNote(),
@@ -860,7 +925,7 @@ export async function analyzeLocalEchoTranscript(transcript: string): Promise<Lo
     transcript: normalized,
     sentiment,
     safety,
-    recommendations: buildRecommendations(sentiment.label, safety.label, escalation.urgency),
+    recommendations: buildRecommendations(normalized, sentiment.label, safety.label, escalation.urgency),
     escalation,
     analysisEngine: runtimeProvider ? runtimeProvider.id : 'rules-keyword',
     analysisEngineNote: runtimeProvider ? undefined : buildEngineFallbackNote(),
