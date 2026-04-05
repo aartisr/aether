@@ -1,112 +1,139 @@
 
+# Aether
 
-# Aether: The Student Resiliency Ecosystem
+Aether is a privacy-first student resilience platform that combines
+journaling, sentiment-aware guidance, and peer-support pathways in a
+production-ready monorepo.
 
 <p align="center">
   <img src="apps/frontend/public/aether-logo.svg" alt="Aether primary logo" width="760"/>
 </p>
 
 <p align="center">
-  <img src="apps/frontend/public/aether-logo-icon.svg" alt="Aether icon logo" width="88"/>
-  &nbsp;&nbsp;&nbsp;
-  <img src="apps/frontend/public/aether-logo-mono.svg" alt="Aether monochrome logo" width="300"/>
+  <img
+    src="docs/assets/aether-architecture-diagram.svg"
+    alt="Aether architecture diagram"
+    width="900"
+  />
 </p>
 
-<p align="center">
-  <sub>Logo assets: <code>apps/frontend/public/aether-logo.svg</code>, <code>apps/frontend/public/aether-logo-icon.svg</code>, <code>apps/frontend/public/aether-logo-mono.svg</code></sub>
-</p>
+## What This Repository Contains
 
-<p align="center">
-  <sub>Logo artwork copyright (c) 2026 Aarti S Ravikumar. All rights reserved.</sub>
-</p>
+- `apps/frontend`: Next.js 14 App Router web experience (TypeScript + Tailwind)
+- `apps/backend`: Node.js HTTP service for health checks and future APIs
+- `content/blog`: Markdown-backed blog content
+- `docs`: Product and algorithm documentation (including peer matching specs)
+- `packages/shared-ui`: Workspace placeholder for shared component library
+- `packages/site-config`: Workspace placeholder for centralized configuration
 
-<p align="center">
-  <img src="docs/assets/aether-architecture-diagram.svg" alt="Aether Architecture Diagram" width="900"/>
-</p>
+## Tech Stack
 
-<p align="center">
-  <b>Empowering students, educators, and institutions with privacy-first, research-driven digital tools for mental health resilience.</b>
-</p>
+- Node.js 20.x
+- npm 10+
+- Next.js 14.2.x
+- React 18
+- TypeScript 5.4.x
+- Jest + Testing Library
 
----
+## Quick Start
 
-## 🌟 Why Aether?
+### Prerequisites
 
-- **Holistic Student Support:** Safe, anonymous, and culturally responsive space for emotional well-being.
-- **AI-Augmented Triage:** Real-time sentiment and crisis detection with human-in-the-loop escalation.
-- **Peer-Navigator Network:** Connects students to trained peers for support and community.
-- **Privacy & Data Ethics:** Federated learning, zero-knowledge proofs, and SAFE-AI compliance.
-- **Resilience Pathway:** Personalized resources and interventions for growth.
-- **Accessibility by Design:** Fully responsive, mobile-friendly, and WCAG-compliant.
+- Node.js `20.x`
+- npm `>=10`
 
----
-
-## 🧩 Architecture Overview
-
-```mermaid
-graph TD
-  A["Frontend: Next.js + Tailwind"] -->|"UI"| B["Shared UI Components"]
-  B -->|"Config"| C["Site Config"]
-  A -->|"API"| D["Backend: Node.js, AI, Peer Matching"]
-  D -->|"Federated Learning"| E["Privacy Layer"]
-  D -->|"Peer Support"| F["Peer-Navigator"]
-  D -->|"AI Triage"| G["Sentiment and Crisis Detection"]
-```
-
----
-
-## 🚦 Quickstart
-
-1. **Install dependencies**
-   ```bash
-   npm install
-   ```
-2. **Run the development server**
-   ```bash
-   npm run dev
-   ```
-3. **Open the app**
-   Visit [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Environment Variables
-
-Set these for production deployments:
+### Install
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://your-domain.example
-NODE_ENV=production
-PORT=3000
-HOSTNAME=0.0.0.0
-BACKEND_PORT=8080
+npm install
 ```
 
----
-
-## ✅ Quality Gates
-
-Run these before opening a pull request:
+### Run Frontend (Default Dev Flow)
 
 ```bash
-npm run lint
-npm run typecheck
-npm run test:ci
-npm run build
+npm run dev
 ```
 
-Or run a local verification bundle:
+Open `http://localhost:3000`.
+
+### Run Backend (Optional in Parallel)
 
 ```bash
-npm run check
+npm --workspace=apps/backend run dev
 ```
 
-## 📝 Static Blog + Giscus
+Default backend URL: `http://localhost:8080`.
 
-Aether now includes a static blog at /blog with markdown-backed posts and optional Giscus comments.
+## Workspace Scripts
 
-### Local markdown mode (default)
+From repository root:
 
-1. Add markdown files in content/blog.
-2. Use this front matter shape:
+- `npm run dev`: start frontend dev server
+- `npm run build`: production build (frontend)
+- `npm run start`: serve production frontend build
+- `npm run lint`: lint frontend
+- `npm run typecheck`: typecheck frontend
+- `npm run test`: run frontend and backend tests
+- `npm run test:ci`: frontend tests with coverage
+- `npm run check`: lint + typecheck + test
+
+## Environment Variables
+
+### Frontend
+
+Core:
+
+- `NEXT_PUBLIC_SITE_URL`: canonical base URL for metadata/sitemap/robots
+  (recommended in production)
+
+Echo runtime:
+
+- `NEXT_PUBLIC_ECHO_ENABLE_BROWSER_MODELS`: set to `true` to enable
+  optional browser local-model path
+
+Blog source adapters:
+
+- `BLOG_SOURCE`: `local-markdown` (default) or `remote-json`
+- `BLOG_CONTENT_DIR`: optional override for markdown directory
+- `BLOG_REMOTE_JSON_URL`: required when `BLOG_SOURCE=remote-json`
+
+Giscus comments (required to enable comments):
+
+- `NEXT_PUBLIC_GISCUS_REPO`
+- `NEXT_PUBLIC_GISCUS_REPO_ID`
+- `NEXT_PUBLIC_GISCUS_CATEGORY`
+- `NEXT_PUBLIC_GISCUS_CATEGORY_ID`
+
+Giscus optional overrides:
+
+- `NEXT_PUBLIC_GISCUS_MAPPING` (default `pathname`)
+- `NEXT_PUBLIC_GISCUS_STRICT` (default `0`)
+- `NEXT_PUBLIC_GISCUS_REACTIONS_ENABLED` (default `1`)
+- `NEXT_PUBLIC_GISCUS_EMIT_METADATA` (default `0`)
+- `NEXT_PUBLIC_GISCUS_INPUT_POSITION` (default `bottom`)
+- `NEXT_PUBLIC_GISCUS_THEME` (default `light_high_contrast`)
+- `NEXT_PUBLIC_GISCUS_LANG` (default `en`)
+
+### Backend
+
+- `BACKEND_PORT` (preferred)
+- `PORT` (fallback)
+
+## Health Endpoints
+
+- Frontend: `GET /api/health`
+- Backend: `GET /health`
+
+Quick checks:
+
+```bash
+curl -s http://localhost:3000/api/health
+curl -s http://localhost:8080/health
+```
+
+## Blog Content Model
+
+Place posts in `content/blog` using this front matter:
 
 ```md
 ---
@@ -117,16 +144,7 @@ tags: product, updates, resilience
 ---
 ```
 
-### Plug-and-play source switching
-
-The blog loader supports source adapters via environment variables:
-
-- BLOG_SOURCE=local-markdown (default)
-- BLOG_SOURCE=remote-json
-- BLOG_REMOTE_JSON_URL=https://example.com/posts.json
-- BLOG_CONTENT_DIR=content/blog (optional override)
-
-When remote-json is enabled, the endpoint should return an array like:
+When using `BLOG_SOURCE=remote-json`, the endpoint must return an array of:
 
 ```json
 [
@@ -141,150 +159,103 @@ When remote-json is enabled, the endpoint should return an array like:
 ]
 ```
 
-### Giscus comments setup
-
-Set these variables to enable comments on blog posts:
-
-- NEXT_PUBLIC_GISCUS_REPO
-- NEXT_PUBLIC_GISCUS_REPO_ID
-- NEXT_PUBLIC_GISCUS_CATEGORY
-- NEXT_PUBLIC_GISCUS_CATEGORY_ID
-
-Optional:
-
-- NEXT_PUBLIC_GISCUS_MAPPING (default: pathname)
-- NEXT_PUBLIC_GISCUS_STRICT (default: 0)
-- NEXT_PUBLIC_GISCUS_REACTIONS_ENABLED (default: 1)
-- NEXT_PUBLIC_GISCUS_EMIT_METADATA (default: 0)
-- NEXT_PUBLIC_GISCUS_INPUT_POSITION (default: bottom)
-- NEXT_PUBLIC_GISCUS_THEME (default: preferred_color_scheme)
-- NEXT_PUBLIC_GISCUS_LANG (default: en)
-
----
-
-## 🚀 Deployment
+## Deployment
 
 ### Vercel
 
-1. Import this repository in Vercel.
-2. Use the repository root as the project root.
-3. Set `NEXT_PUBLIC_SITE_URL` to your production URL.
-4. Deploy using the included [vercel.json](vercel.json).
-5. Vercel is configured to install from the public npm registry and ignore the checked-in lockfile during its hosted install step.
+1. Import repository.
+2. Use repository root.
+3. Set `NEXT_PUBLIC_SITE_URL`.
+4. Deploy with `vercel.json`.
 
 ### Netlify
 
-1. Import this repository in Netlify.
-2. Keep the base directory as repository root.
-3. Netlify uses [netlify.toml](netlify.toml) to build and run Next.js.
-4. Set `NEXT_PUBLIC_SITE_URL` in Netlify environment variables.
-5. Netlify is configured to override npm install flags so hosted installs use the public registry instead of the corporate `.npmrc`.
-
-### Other Providers
-
-The frontend app is standard Next.js 14 and can be deployed to any provider that supports Node.js 20+ and the `next build` + `next start` flow.
-
-### Corporate Network Note
-
-Local installs continue to use the corporate registry defined in [.npmrc](.npmrc). Hosted deployments override that behavior explicitly in [vercel.json](vercel.json) and [netlify.toml](netlify.toml).
+1. Import repository.
+2. Use repository root.
+3. Set `NEXT_PUBLIC_SITE_URL`.
+4. Deploy with `netlify.toml`.
 
 ### Docker
 
-Build and run the production container:
+Build and run frontend production image:
 
 ```bash
 docker build -t aether .
-docker run --rm -p 3000:3000 --env-file .env.example aether
+docker run --rm -p 3000:3000 --env-file apps/frontend/.env.example aether
 ```
 
-### Health Checks
+## Architecture and Specs
 
-- Frontend: `/api/health`
-- Backend: `/health`
+- Peer matching algorithm: [docs/peer-matching-algorithm.md](docs/peer-matching-algorithm.md)
+- Peer matching API/service contracts: [docs/peer-matching-service-contracts.md](docs/peer-matching-service-contracts.md)
 
----
+## Quality Gates
 
-## 🛠️ Core Features
+Recommended before opening a pull request:
 
-- **Echo Chamber:** Voice-enabled journaling, NLP-based crisis detection, and total anonymity.
-- **AI-Triage & Sentiment Mapping:** Real-time analysis of text/voice for wellness mapping and escalation.
-- **Peer-Navigator Network:** Peer matching, culturally responsive support, and quality feedback.
-- **Resilience Hub:** Weekly check-in scoring, local-first safety planning, resource navigation, peer circle matching, and habit planning.
-- **Privacy & Data Ethics:** Federated learning, zero-knowledge proofs, and SAFE-AI compliance.
-- **Resilience Pathway:** Guided user journey, progress tracking, and personalized resources.
-- **Accessibility:** WCAG-compliant UI, mobile-first, ethical and explainable AI.
+```bash
+npm run lint
+npm run typecheck
+npm run test:ci
+npm run build
+```
 
----
+Or run one command:
 
-## 🧑‍💻 Design Philosophy
+```bash
+npm run check
+```
 
-- **Generic & Modular:** All components are prop-driven, themeable, and framework-agnostic.
-- **User-Friendly:** Clear language, onboarding flows, tooltips, and demo/playground mode.
-- **Maintainable:** Strict TypeScript, code linting, tests, and clear separation of concerns.
-- **Visually Appealing:** Modern color palette, subtle animations, responsive layouts, and professional iconography.
-- **Accessible:** WCAG 2.2 AA, keyboard navigation, ARIA, dark mode, and i18n-ready.
+## Troubleshooting
 
----
+- If metadata/canonical URLs look incorrect in production, verify `NEXT_PUBLIC_SITE_URL`.
+- If local blog content does not appear, verify `BLOG_CONTENT_DIR` or keep
+  default `content/blog`.
+- Avoid deleting `.next` as part of `dev` scripts, especially with multiple
+  running dev processes.
 
-## 📸 Screenshots
+## Contributor Onboarding
 
-<!-- Add screenshots/gifs here -->
+### First-Time Setup
 
----
+```bash
+git clone https://github.com/aartisr/aether.git
+cd aether
+nvm use 20 || echo "Install/use Node 20.x before continuing"
+npm install
+npm run check
+npm run dev
+```
 
-## ❓ FAQ
+### First PR Workflow
 
-**Q: Is my data private?**  
-A: Yes. Aether uses federated learning and zero-knowledge proofs. No raw data ever leaves your device.
+```bash
+git checkout -b docs/your-change-name
+# make your changes
+npm run check
+git add -A
+git commit -m "docs: improve contributor onboarding"
+git push -u origin docs/your-change-name
+```
 
-**Q: Can I use Aether for my institution?**  
-A: Absolutely! Aether is modular and can be customized for any educational environment.
+Then open a pull request against `main` and include:
 
-**Q: How do I contribute?**  
-A: See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+1. What changed.
+2. Why it changed.
+3. How you validated it (commands + results).
 
-**Q: Is Aether accessible?**  
-A: Yes. The UI is fully WCAG-compliant and mobile-first.
+### Good First Changes
 
----
+- Add or improve tests near touched code.
+- Improve docs for setup, env vars, and deployment.
+- Tighten type safety for existing modules.
+- Fix small accessibility and UX bugs in the frontend.
 
-## 📚 References & Research
+## Contributing
 
-- RAND (2025): Competency of Large Language Models in Evaluating Appropriate Responses to Suicidal Ideation.
-- Huntsman Mental Health Institute (2026): Scalable Agile Framework for Execution in AI (SAFE AI).
-- Pennebaker, J.W. (1997): Writing about emotional experiences as a therapeutic process.
-- Frontiers in Medicine (2025): Validating GenAI feedback in suicide prevention training.
-- The Jed Foundation: https://jedfoundation.org/
-- Active Minds: https://activeminds.org/
-- NAMI: https://www.nami.org/
-- Mental Health America: https://mhanational.org/
-- 988 Lifeline: https://988lifeline.org/
-- SAMHSA 988: https://www.samhsa.gov/find-help/988
-- WHO Mental Health: https://www.who.int/health-topics/mental-health
-- APA Resilience: https://www.apa.org/topics/resilience
-- NIMH Child and Adolescent Mental Health: https://www.nimh.nih.gov/health/topics/child-and-adolescent-mental-health
-- CDC Mental Health: https://www.cdc.gov/mental-health/index.html
-- Healthy Minds Network: https://healthymindsnetwork.org/
-- ACHA NCHA: https://www.acha.org/NCHA
-- SOS Signs of Suicide: https://sossignsofsuicide.org/
-- Togetherall: https://togetherall.com/
-- Kooth: https://www.kooth.com/
-- Sonar Mental Health: https://www.sonarmentalhealth.com/
-- SilverCloud: https://silvercloud.amwell.com/
-- Headspace: https://www.headspace.com/
-- Calm: https://www.calm.com/
-- Befrienders Worldwide: https://www.befrienders.org/
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 
----
-
-## 🤝 Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-## 📝 License
+## License
 
 [MIT](LICENSE)
-
-## Author
-
-Dedicated to PCSS II Students - Aarti S Ravikumar

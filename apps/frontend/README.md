@@ -1,30 +1,72 @@
 # Frontend (Next.js App Router)
 
-This package hosts the Aether web experience built with Next.js 14, TypeScript, and Tailwind CSS.
+This workspace contains the Aether web application, built on Next.js 14
+(App Router), TypeScript, and Tailwind CSS.
 
-## Scripts
+## Runbook
+
+From repository root:
+
+```bash
+npm run dev
+```
+
+From this directory (`apps/frontend`):
 
 ```bash
 npm run dev        # start local development server
 npm run lint       # run next lint
 npm run typecheck  # run TypeScript checks
-npm run test       # run unit tests
+npm run test       # run unit tests via root jest config
 npm run test:ci    # run unit tests with coverage
 npm run build      # production build
 npm run start      # serve production build
 ```
 
+## Key Routes
+
+- Home: `/`
+- Blog: `/blog`
+- Health check: `/api/health`
+
+## Environment Variables
+
+Core:
+
+- `NEXT_PUBLIC_SITE_URL`: canonical base URL for metadata, sitemap, and robots
+
+Echo local model switch:
+
+- `NEXT_PUBLIC_ECHO_ENABLE_BROWSER_MODELS`: set to `true` to enable
+    optional browser model path
+
+Blog source adapters:
+
+- `BLOG_SOURCE`: `local-markdown` (default) or `remote-json`
+- `BLOG_CONTENT_DIR`: optional local markdown directory override
+- `BLOG_REMOTE_JSON_URL`: required when using `remote-json`
+
+Giscus comments:
+
+- Required: `NEXT_PUBLIC_GISCUS_REPO`, `NEXT_PUBLIC_GISCUS_REPO_ID`,
+  `NEXT_PUBLIC_GISCUS_CATEGORY`, `NEXT_PUBLIC_GISCUS_CATEGORY_ID`
+- Optional: `NEXT_PUBLIC_GISCUS_MAPPING`, `NEXT_PUBLIC_GISCUS_STRICT`,
+  `NEXT_PUBLIC_GISCUS_REACTIONS_ENABLED`, `NEXT_PUBLIC_GISCUS_EMIT_METADATA`,
+  `NEXT_PUBLIC_GISCUS_INPUT_POSITION`, `NEXT_PUBLIC_GISCUS_THEME`,
+  `NEXT_PUBLIC_GISCUS_LANG`
+
 ## Runtime Notes
 
-- This app uses App Router metadata APIs (`manifest.ts`, `robots.ts`, `sitemap.ts`) for SEO and crawler support.
-- `NEXT_PUBLIC_SITE_URL` should be set in production for canonical URLs and sitemap generation.
-- Security and cache headers are configured in [next.config.mjs](next.config.mjs).
-- The Echo experience uses a privacy-first local pipeline: browser speech recognition when available, editable transcript fallback, and on-device transcript analysis with no backend inference.
-- The local Echo analyzer supports a pluggable runtime provider. It auto-falls back to the built-in rule engine when optional local model runtime dependencies are not installed.
-- In corporate environments, install optional local runtime packages using your configured private registry credentials before enabling runtime-backed models.
+- App metadata is generated with App Router metadata APIs (`manifest.ts`,
+  `robots.ts`, `sitemap.ts`).
+- Security and cache headers are managed in `next.config.mjs`.
+- Echo capture is privacy-first: local browser speech capture when available,
+    with editable transcript fallback.
+- Local AI analyzer supports pluggable runtimes and gracefully falls back to
+    rules when optional runtime dependencies are unavailable.
 
 ## Deployment
 
-- Vercel: use repository root with [vercel.json](../../vercel.json).
-- Netlify: use repository root with [netlify.toml](../../netlify.toml).
-- Any Node host: run `npm run build` then `npm run start` from workspace root.
+- Vercel: deploy from repository root using `vercel.json`.
+- Netlify: deploy from repository root using `netlify.toml`.
+- Generic Node host: `npm run build` then `npm run start` from root or this workspace.
