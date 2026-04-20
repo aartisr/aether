@@ -219,7 +219,7 @@ npm run check
 ### First-Time Setup
 
 ```bash
-git clone https://github.com/aartisr/aether.git
+git clone <your-repository-url>
 cd aether
 nvm use 20 || echo "Install/use Node 20.x before continuing"
 npm install

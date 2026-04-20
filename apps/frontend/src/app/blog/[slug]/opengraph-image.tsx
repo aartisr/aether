@@ -1,5 +1,4 @@
 import { ImageResponse } from 'next/og';
-import { getBlogPostBySlug } from '../../../lib/blog';
 import { siteName } from '../../../lib/site';
 
 export const runtime = 'edge';
@@ -15,23 +14,30 @@ type BlogPostImageProps = {
   };
 };
 
-export async function generateImageMetadata({ params }: BlogPostImageProps) {
-  const post = await getBlogPostBySlug(params.slug);
+function titleFromSlug(slug: string): string {
+  return slug
+    .split('-')
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+export function generateImageMetadata({ params }: BlogPostImageProps) {
+  const title = titleFromSlug(params.slug);
 
   return [
     {
       id: params.slug,
-      alt: post ? `${post.title} | ${siteName}` : `${siteName} blog article`,
+      alt: title ? `${title} | ${siteName}` : `${siteName} blog article`,
       size,
       contentType,
     },
   ];
 }
 
-export default async function BlogPostOpenGraphImage({ params }: BlogPostImageProps) {
-  const post = await getBlogPostBySlug(params.slug);
-  const title = post?.title ?? `${siteName} Blog`;
-  const excerpt = post?.excerpt ?? 'Practical, evidence-informed writing for student resilience.';
+export default function BlogPostOpenGraphImage({ params }: BlogPostImageProps) {
+  const title = titleFromSlug(params.slug) || `${siteName} Blog`;
+  const excerpt = 'Practical, evidence-informed writing for student resilience.';
 
   return new ImageResponse(
     (
