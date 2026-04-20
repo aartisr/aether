@@ -1,33 +1,41 @@
 import type { MetadataRoute } from 'next';
-import { getAllBlogSlugs } from '../lib/blog';
-
-const fallbackSiteUrl = 'https://aether.example.com';
-
-function normalizeSiteUrl(input?: string): string {
-  if (!input) {
-    return fallbackSiteUrl;
-  }
-
-  const candidate = input.startsWith('http://') || input.startsWith('https://') ? input : `https://${input}`;
-
-  try {
-    return new URL(candidate).toString().replace(/\/$/, '');
-  } catch {
-    return fallbackSiteUrl;
-  }
-}
+import { getAllBlogPosts } from '../lib/blog';
+import { siteUrl } from '../lib/site';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
-  const routes = ['', '/about', '/accessibility', '/echo', '/peer-navigator', '/privacy', '/resilience-pathway', '/blog'];
-  const blogSlugs = await getAllBlogSlugs();
-  const blogRoutes = blogSlugs.map((slug) => `/blog/${slug}`);
-  const allRoutes = [...routes, ...blogRoutes];
+  const now = new Date();
+  const staticRoutes = [
+    { path: '', changeFrequency: 'weekly' as const, priority: 1 },
+    { path: '/about', changeFrequency: 'monthly' as const, priority: 0.8 },
+    { path: '/accessibility', changeFrequency: 'monthly' as const, priority: 0.8 },
+    { path: '/echo', changeFrequency: 'weekly' as const, priority: 0.9 },
+    { path: '/fairness-governance', changeFrequency: 'monthly' as const, priority: 0.8 },
+    { path: '/peer-navigator', changeFrequency: 'weekly' as const, priority: 0.9 },
+    { path: '/privacy', changeFrequency: 'monthly' as const, priority: 0.8 },
+    { path: '/resilience-pathway', changeFrequency: 'weekly' as const, priority: 0.9 },
+    { path: '/blog', changeFrequency: 'daily' as const, priority: 0.9 },
+    { path: '/llms.txt', changeFrequency: 'weekly' as const, priority: 0.4 },
+  ];
+  const blogPosts = await getAllBlogPosts();
 
-  return allRoutes.map((route) => ({
-    url: `${siteUrl}${route}`,
-    lastModified: new Date(),
-    changeFrequency: route === '' ? 'weekly' : 'monthly',
-    priority: route === '' ? 1 : 0.8,
+  const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
+    url: `${siteUrl}${route.path}`,
+    lastModified: now,
+    changeFrequency: route.changeFrequency,
+    priority: route.priority,
   }));
+
+  const blogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => {
+    const postDate = new Date(post.lastModified ?? post.date);
+    const safeDate = Number.isNaN(postDate.getTime()) ? now : postDate;
+
+    return {
+      url: `${siteUrl}/blog/${post.slug}`,
+      lastModified: safeDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    };
+  });
+
+  return [...staticEntries, ...blogEntries];
 }

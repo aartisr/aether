@@ -6,6 +6,15 @@ import ResourceNavigator from '../../components/resilience/ResourceNavigator';
 import SafetyPlanBuilder from '../../components/resilience/SafetyPlanBuilder';
 import WellbeingCheckIn from '../../components/resilience/WellbeingCheckIn';
 import { researchReferences } from '../../lib/resilience-model';
+import { createPageMetadata } from '../../lib/site';
+
+export const metadata = createPageMetadata({
+  title: 'Resilience Pathway',
+  description:
+    'Explore Aether’s resilience pathway with check-ins, safety planning, care navigation, peer circles, and habit planning for students.',
+  path: '/resilience-pathway',
+  keywords: ['student resilience pathway', 'safety planning', 'wellbeing check-in', 'care navigation'],
+});
 
 const pathwayStages = [
   {

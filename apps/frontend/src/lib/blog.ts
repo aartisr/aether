@@ -5,8 +5,10 @@ export type BlogPostMeta = {
   slug: string;
   title: string;
   date: string;
+  lastModified?: string;
   excerpt: string;
   tags: string[];
+  readingTimeMinutes: number;
 };
 
 export type BlogPost = BlogPostMeta & {
@@ -80,20 +82,33 @@ function parseFrontMatter(raw: string): { frontMatter: FrontMatter; content: str
   return { frontMatter, content };
 }
 
-function toPost(slug: string, raw: string): BlogPost {
+function toPost(slug: string, raw: string, lastModified?: string): BlogPost {
   const { frontMatter, content } = parseFrontMatter(raw);
+  const readingTimeMinutes = estimateReadingTimeMinutes(`${frontMatter.excerpt || ''} ${content}`);
 
   return {
     slug,
     title: frontMatter.title || slug,
     date: frontMatter.date || '1970-01-01',
+    lastModified,
     excerpt: frontMatter.excerpt || 'No excerpt available.',
     tags: (frontMatter.tags || '')
       .split(',')
       .map((tag) => tag.trim())
       .filter(Boolean),
+    readingTimeMinutes,
     content,
   };
+}
+
+function estimateReadingTimeMinutes(input: string): number {
+  const plainText = input.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!plainText) {
+    return 1;
+  }
+
+  const words = plainText.split(' ').length;
+  return Math.max(1, Math.ceil(words / 220));
 }
 
 function compareByDateDescending(a: BlogPostMeta, b: BlogPostMeta): number {
@@ -121,14 +136,17 @@ const localMarkdownAdapter: BlogSourceAdapter = {
       .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
       .map((entry) => {
         const slug = entry.name.replace(/\.md$/, '');
-        const raw = fs.readFileSync(path.join(BLOG_DIR, entry.name), 'utf8');
-        const post = toPost(slug, raw);
+        const filePath = path.join(BLOG_DIR, entry.name);
+        const raw = fs.readFileSync(filePath, 'utf8');
+        const post = toPost(slug, raw, fs.statSync(filePath).mtime.toISOString());
         return {
           slug: post.slug,
           title: post.title,
           date: post.date,
+          lastModified: post.lastModified,
           excerpt: post.excerpt,
           tags: post.tags,
+          readingTimeMinutes: post.readingTimeMinutes,
         };
       })
       .sort(compareByDateDescending);
@@ -140,8 +158,11 @@ const localMarkdownAdapter: BlogSourceAdapter = {
       return null;
     }
 
-    const raw = await fs.promises.readFile(filePath, 'utf8');
-    return toPost(slug, raw);
+    const [raw, stats] = await Promise.all([
+      fs.promises.readFile(filePath, 'utf8'),
+      fs.promises.stat(filePath),
+    ]);
+    return toPost(slug, raw, stats.mtime.toISOString());
   },
 };
 
@@ -164,8 +185,10 @@ const remoteJsonAdapter: BlogSourceAdapter = {
           slug: post.slug,
           title: post.title,
           date: post.date,
+          lastModified: post.date,
           excerpt: post.excerpt,
           tags: post.tags ?? [],
+          readingTimeMinutes: estimateReadingTimeMinutes(`${post.excerpt} ${post.content}`),
         }))
         .sort(compareByDateDescending);
     } catch {
@@ -195,8 +218,10 @@ const remoteJsonAdapter: BlogSourceAdapter = {
         slug: match.slug,
         title: match.title,
         date: match.date,
+        lastModified: match.date,
         excerpt: match.excerpt,
         tags: match.tags ?? [],
+        readingTimeMinutes: estimateReadingTimeMinutes(`${match.excerpt} ${match.content}`),
         content: match.content,
       };
     } catch {
@@ -225,4 +250,28 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 export async function getAllBlogSlugs(): Promise<string[]> {
   const posts = await getAllBlogPosts();
   return posts.map((post) => post.slug);
+}
+
+export async function getRelatedBlogPosts(
+  currentSlug: string,
+  tags: string[],
+  limit = 3,
+): Promise<BlogPostMeta[]> {
+  const posts = await getAllBlogPosts();
+  const currentTags = new Set(tags.map((tag) => tag.toLowerCase()));
+
+  const scored = posts
+    .filter((post) => post.slug !== currentSlug)
+    .map((post) => {
+      const sharedTagCount = post.tags.filter((tag) => currentTags.has(tag.toLowerCase())).length;
+      return { post, sharedTagCount };
+    })
+    .sort((a, b) => {
+      if (b.sharedTagCount !== a.sharedTagCount) {
+        return b.sharedTagCount - a.sharedTagCount;
+      }
+      return compareByDateDescending(a.post, b.post);
+    });
+
+  return scored.slice(0, limit).map((entry) => entry.post);
 }

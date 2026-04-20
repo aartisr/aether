@@ -3,54 +3,86 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata, Viewport } from 'next';
-
-const fallbackSiteUrl = 'https://aether.example.com';
-
-function normalizeSiteUrl(input?: string): string {
-  if (!input) {
-    return fallbackSiteUrl;
-  }
-
-  const candidate = input.startsWith('http://') || input.startsWith('https://') ? input : `https://${input}`;
-
-  try {
-    return new URL(candidate).toString().replace(/\/$/, '');
-  } catch {
-    return fallbackSiteUrl;
-  }
-}
-
-const siteUrl = normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
+import {
+  authorName,
+  authorUrl,
+  organizationSameAs,
+  siteDescription,
+  siteKeywords,
+  siteName,
+  siteTitle,
+  siteUrl,
+  socialPreviewImage,
+  toAbsoluteUrl,
+} from '../lib/site';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Aether: Student Resiliency Ecosystem',
-    template: '%s | Aether',
+    default: siteTitle,
+    template: `%s | ${siteName}`,
   },
-  description: 'A research-driven, privacy-first platform for student mental health resilience.',
-  applicationName: 'Aether',
-  keywords: ['student wellbeing', 'mental health', 'resilience', 'peer support', 'privacy-first'],
-  authors: [{ name: 'Aarti S Ravikumar' }],
-  creator: 'Aarti S Ravikumar',
+  description: siteDescription,
+  applicationName: siteName,
+  keywords: siteKeywords,
+  authors: [{ name: authorName, url: authorUrl }],
+  creator: authorName,
+  publisher: 'Aether',
+  category: 'Health Technology',
   alternates: {
     canonical: '/',
+    types: {
+      'application/rss+xml': '/feed.xml',
+    },
   },
   openGraph: {
     type: 'website',
     url: '/',
-    title: 'Aether: Student Resiliency Ecosystem',
-    description: 'Privacy-first, research-driven resilience support for students.',
-    siteName: 'Aether',
+    title: siteTitle,
+    description: siteDescription,
+    siteName,
+    locale: 'en_US',
+    images: [
+      {
+        url: socialPreviewImage,
+        width: 1200,
+        height: 630,
+        alt: 'Aether student resilience platform',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Aether: Student Resiliency Ecosystem',
-    description: 'Privacy-first, research-driven resilience support for students.',
+    title: siteTitle,
+    description: siteDescription,
+    images: [socialPreviewImage],
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  icons: {
+    icon: '/aether-logo-icon.svg',
+    shortcut: '/aether-logo-icon.svg',
+    apple: '/aether-logo-icon.svg',
+  },
+  verification: {
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+      : {}),
+    other: process.env.NEXT_PUBLIC_BING_VERIFICATION
+      ? {
+          'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION,
+        }
+      : {},
   },
 };
 
@@ -61,9 +93,28 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const websiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: siteName,
+    url: siteUrl,
+    description: siteDescription,
+    inLanguage: 'en',
+    publisher: {
+      '@type': 'Organization',
+      name: siteName,
+      url: siteUrl,
+      logo: toAbsoluteUrl('/aether-logo-icon.svg'),
+    },
+  };
+
   return (
     <html lang="en">
       <body className="min-h-screen font-sans bg-background-soft text-gray-900 antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         {/* Skip link for keyboard users */}
         <a href="#main-content" className="sr-only focus:not-sr-only absolute top-2 left-2 bg-indigo-700 text-white px-4 py-2 rounded z-50">Skip to main content</a>
         <header className="w-full py-3 px-4 md:py-4 md:px-6 flex flex-col md:flex-row md:justify-between md:items-center gap-3 bg-surface/80 shadow-soft sticky top-0 z-50 rounded-b-2xl backdrop-blur-md" role="banner">
@@ -88,7 +139,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <p className="mt-1 text-[11px] text-gray-400">
             &quot;Dedicated to PCSS II Students&quot; -{' '}
             <a
-              href="https://aartisr.foreverlotus.com"
+              href={organizationSameAs[0]}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary-dark hover:text-accentDark"
