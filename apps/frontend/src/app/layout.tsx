@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Metadata, Viewport } from 'next';
+import { Analytics } from '@vercel/analytics/next';
 import {
   authorName,
   authorUrl,
@@ -148,6 +149,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </a>
           </p>
         </footer>
+        <Analytics />
       </body>
     </html>
   );
