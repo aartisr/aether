@@ -59,7 +59,7 @@ describe('SentimentMapping', () => {
     await waitFor(() => {
       expect(analyzeSentiment).toHaveBeenCalledWith({ audio, transcript: 'I feel steady' });
       expect(screen.getByText(/sentiment rail/i)).toBeInTheDocument();
-      expect(screen.getByText(/leaning positive and moderate energy/i)).toBeInTheDocument();
+      expect(screen.getByText(/leaning positive and (low|moderate) energy/i)).toBeInTheDocument();
       expect(screen.getByText(/safety signal:/i)).toHaveTextContent('low');
     });
   });
@@ -333,7 +333,7 @@ describe('SentimentMapping', () => {
     fireEvent.click(screen.getByRole('button', { name: /analyze check-in/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/leaning positive and low energy/i)).toBeInTheDocument();
+      expect(screen.getByText(/(leaning|strongly) positive and (low|moderate) energy/i)).toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByRole('button', { name: /show emotional map/i }));

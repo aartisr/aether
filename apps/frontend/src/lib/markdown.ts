@@ -9,9 +9,15 @@ function escapeHtml(input: string): string {
 
 function sanitizeUrl(url: string): string {
   const trimmed = url.trim();
-  if (/^(https?:\/\/|mailto:|\/)/i.test(trimmed)) {
+
+  if (trimmed.startsWith('//')) {
+    return '#';
+  }
+
+  if (/^(https?:\/\/|mailto:)/i.test(trimmed) || trimmed.startsWith('/')) {
     return trimmed;
   }
+
   return '#';
 }
 
@@ -24,7 +30,7 @@ function formatInlineMarkdown(text: string): string {
     .replace(/`([^`]+)`/g, '<code>$1</code>')
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, label: string, url: string) => {
       const safeUrl = sanitizeUrl(url);
-      const rel = safeUrl.startsWith('http') ? ' rel="noopener noreferrer" target="_blank"' : '';
+      const rel = /^https?:\/\//i.test(safeUrl) ? ' rel="noopener noreferrer" target="_blank"' : '';
       return `<a href="${escapeHtml(safeUrl)}"${rel}>${label}</a>`;
     });
 }

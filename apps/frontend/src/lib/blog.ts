@@ -27,6 +27,12 @@ type FrontMatter = {
   tags?: string;
 };
 
+const blogSlugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+export function isSafeBlogSlug(slug: unknown): slug is string {
+  return typeof slug === 'string' && blogSlugPattern.test(slug);
+}
+
 function resolveBlogDir(): string {
   const configuredDir = process.env.BLOG_CONTENT_DIR;
 
@@ -149,9 +155,14 @@ const localMarkdownAdapter: BlogSourceAdapter = {
           readingTimeMinutes: post.readingTimeMinutes,
         };
       })
+      .filter((post) => isSafeBlogSlug(post.slug))
       .sort(compareByDateDescending);
   },
   async getPostBySlug(slug: string) {
+    if (!isSafeBlogSlug(slug)) {
+      return null;
+    }
+
     const filePath = path.join(BLOG_DIR, `${slug}.md`);
 
     if (!fs.existsSync(filePath)) {
@@ -181,6 +192,7 @@ const remoteJsonAdapter: BlogSourceAdapter = {
 
       const posts = (await response.json()) as RemoteJsonPost[];
       return posts
+        .filter((post) => isSafeBlogSlug(post.slug))
         .map((post) => ({
           slug: post.slug,
           title: post.title,
@@ -196,6 +208,10 @@ const remoteJsonAdapter: BlogSourceAdapter = {
     }
   },
   async getPostBySlug(slug: string) {
+    if (!isSafeBlogSlug(slug)) {
+      return null;
+    }
+
     const remoteUrl = process.env.BLOG_REMOTE_JSON_URL;
     if (!remoteUrl) {
       return null;

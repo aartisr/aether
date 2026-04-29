@@ -1,157 +1,40 @@
 "use client";
 import React, { useState } from 'react';
 
-import { createPeerMatchingEngine, type MatchProfile } from '../../lib/peer-matching';
+import { PageBackdrop, PageContainer, PageHero, SurfaceCard } from '../../components/page/PagePrimitives';
+import {
+  createPeerNavigatorMatcher,
+  peerNavigatorBackgrounds,
+  runPeerNavigatorMatch,
+  type PeerNavigatorMatchResult,
+  type PeerNavigatorMetrics,
+} from '../../lib/peer-navigator-demo';
 
-const backgrounds = [
-  'First-generation College Student',
-  'LGBTQ+',
-  'International Student',
-  'Student of Color',
-  'Neurodivergent',
-  'Disability Community',
-  'Veteran',
-  'Other',
-];
-
-const peers = [
-  { name: 'Alex', background: 'LGBTQ+', pronouns: 'they/them' },
-  { name: 'Priya', background: 'International Student', pronouns: 'she/her' },
-  { name: 'Jordan', background: 'First-generation College Student', pronouns: 'he/him' },
-  { name: 'Samira', background: 'Student of Color', pronouns: 'she/her' },
-  { name: 'Taylor', background: 'Neurodivergent', pronouns: 'they/them' },
-  { name: 'Chris', background: 'Veteran', pronouns: 'he/him' },
-];
-
-type PeerAttributes = {
-  name: string;
-  background: string;
-  pronouns: string;
-  role: 'self' | 'peer';
-};
-
-const matcher = createPeerMatchingEngine<MatchProfile<PeerAttributes>>({
-  phase1: {
-    maxCandidatesPerProfile: 25,
-    hardFilter: (source, target) => source.id !== target.id && target.attributes.role === 'peer',
-    directedScore: (source, target) => {
-      const sameBackground = source.attributes.background === target.attributes.background;
-      return sameBackground ? 0.95 : 0.45;
-    },
-    minReciprocalScore: 0.3, // NEW: Quality floor filtering
-  },
-  phase2: {
-    enableStabilityRefinement: true,
-    fairness: {
-      groupKey: (profile) => profile.attributes.background,
-      maxShareDelta: 0.35,
-      underExposureBoost: 0.5, // NEW: Fairness parameters
-      overExposurePenalty: 0.6,
-    },
-  },
-  phase3: {
-    qualityFloor: 0.35,
-    explorationWeight: 0.2,
-    uncertaintyWeight: 0.1, // NEW: Separate uncertainty weight
-    randomJitter: 0.02,
-    rngSeed: 42, // NEW: Deterministic seed for reproducible matching
-  },
-});
-
-type MatchResult = {
-  name: string;
-  background: string;
-  pronouns: string;
-  phase1Score?: number;
-  phase2Score?: number;
-  phase3Score?: number;
-  fairnessAdjusted?: boolean;
-  fairnessAdjustmentMagnitude?: number;
-};
+const matcher = createPeerNavigatorMatcher();
 
 export default function PeerNavigator() {
   const [selected, setSelected] = useState<string | null>(null);
-  const [matches, setMatches] = useState<MatchResult[]>([]);
-  const [metrics, setMetrics] = useState<{ totalProfiles: number; totalCandidates: number; totalFinalAssignments: number; averageFinalScore: number } | null>(null);
+  const [matches, setMatches] = useState<PeerNavigatorMatchResult[]>([]);
+  const [metrics, setMetrics] = useState<PeerNavigatorMetrics | null>(null);
   const [showMetricsDetail, setShowMetricsDetail] = useState(false);
 
   const handleMatch = () => {
     if (!selected) return;
 
-    const profiles: MatchProfile<PeerAttributes>[] = [
-      {
-        id: 'self',
-        attributes: {
-          name: 'You',
-          background: selected,
-          pronouns: 'prefer not to say',
-          role: 'self',
-        },
-        capacity: 1, // NEW: Support for multi-match scenarios
-      },
-      ...peers.map((peer, index) => ({
-        id: `peer-${index}`,
-        attributes: {
-          name: peer.name,
-          background: peer.background,
-          pronouns: peer.pronouns,
-          role: 'peer' as const,
-        },
-      })),
-    ];
-
-    const output = matcher.match(profiles, {
-      phase: 'phase3',
-      maxAssignments: 3,
-    });
-
-    // NEW: Extract and display cycle metrics
-    if (output.metrics) {
-      setMetrics(output.metrics);
-    }
-
-    const rankedForSelf = output.candidates
-      .filter((candidate) => candidate.aId === 'self' || candidate.bId === 'self')
-      .sort((left, right) => right.phase3Score - left.phase3Score);
-
-    const findPeerFromCandidate = (candidate: (typeof rankedForSelf)[number]): MatchResult | null => {
-      const peerId = candidate.aId === 'self' ? candidate.bId : candidate.aId;
-      const profile = profiles.find((entry) => entry.id === peerId);
-      if (!profile || profile.attributes.role !== 'peer') return null;
-      
-      // Extract phase scores for audit trail
-      const fairnessAdjustmentMagnitude = (candidate.phase2Score ?? 0) - (candidate.phase1Score ?? 0);
-      
-      return {
-        name: profile.attributes.name,
-        background: profile.attributes.background,
-        pronouns: profile.attributes.pronouns,
-        phase1Score: candidate.phase1Score,
-        phase2Score: candidate.phase2Score,
-        phase3Score: candidate.phase3Score,
-        fairnessAdjusted: fairnessAdjustmentMagnitude !== 0,
-        fairnessAdjustmentMagnitude: fairnessAdjustmentMagnitude,
-      };
-    };
-
-    const matchResults = rankedForSelf
-      .map(findPeerFromCandidate)
-      .filter((m): m is MatchResult => m !== null)
-      .slice(0, 2);
-
-    setMatches(matchResults);
-
-    if (rankedForSelf[0]) {
-      // Demo-only simulated feedback loop for phase 3 learning.
-      matcher.recordOutcome({ pairId: rankedForSelf[0].id, reward: 0.75 });
-    }
+    const result = runPeerNavigatorMatch(selected, matcher);
+    setMetrics(result.metrics);
+    setMatches(result.matches);
   };
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-100 p-4">
-      <div className="max-w-2xl w-full text-center space-y-6">
-        <h1 className="text-3xl md:text-4xl font-bold text-indigo-800">Peer-Navigator Network</h1>
-        <p className="text-lg text-gray-700">Connect with a peer who shares your background or experience. Reduce stigma and find support in a safe, private space.</p>
+    <PageBackdrop>
+      <PageContainer className="max-w-3xl text-center">
+        <PageHero
+          kicker="Belonging Support"
+          title="Peer-Navigator Network"
+          description="Connect with peers who share relevant lived context and build support pathways in a privacy-aware matching flow."
+        />
+        <SurfaceCard>
         
         <form className="mt-6 flex flex-col gap-4 items-center" onSubmit={(e) => { e.preventDefault(); handleMatch(); }}>
           <label htmlFor="background" className="block text-left w-full font-medium text-indigo-700">Select your background or identity:</label>
@@ -164,7 +47,7 @@ export default function PeerNavigator() {
             aria-label="Select your background or identity"
           >
             <option value="" disabled>Select one...</option>
-            {backgrounds.map((bg) => <option key={bg} value={bg}>{bg}</option>)}
+            {peerNavigatorBackgrounds.map((bg) => <option key={bg} value={bg}>{bg}</option>)}
           </select>
           <button
             type="submit"
@@ -177,7 +60,7 @@ export default function PeerNavigator() {
 
         {/* NEW: Metrics Dashboard */}
         {metrics && (
-          <div className="mt-8 p-4 rounded-lg bg-blue-50 border border-blue-200 text-left max-w-2xl mx-auto">
+          <div className="mt-8 rounded-lg border border-blue-200 bg-blue-50 p-4 text-left max-w-2xl mx-auto">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-blue-700">Matching Cycle Metrics</h3>
               <button
@@ -264,7 +147,8 @@ export default function PeerNavigator() {
         )}
 
         <div className="text-xs text-gray-400 mt-4">This is a demo with advanced metrics. In production, matching is privacy-preserving and peer-verified.</div>
-      </div>
-    </section>
+        </SurfaceCard>
+      </PageContainer>
+    </PageBackdrop>
   );
 }

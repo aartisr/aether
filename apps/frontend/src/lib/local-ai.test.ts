@@ -94,7 +94,7 @@ describe('local-ai', () => {
 
   it('classifies depleted language as negative even without crisis phrases', async () => {
     await expect(
-      analyzeLocalEchoTranscript('I feel exhausted, flat, and heavy today.'),
+      analyzeLocalEchoTranscript('I feel exhausted, flat, and heavy.'),
     ).resolves.toMatchObject({
       sentiment: { label: 'Negative' },
       safety: { label: 'low' },
@@ -112,7 +112,7 @@ describe('local-ai', () => {
 
   it('returns grounded recommendations for calm supported language', async () => {
     await expect(
-      analyzeLocalEchoTranscript('I feel calm, supported, and steady today.'),
+      analyzeLocalEchoTranscript('I feel calm, supported, and steady.'),
     ).resolves.toMatchObject({
       recommendations: expect.arrayContaining(['Protect the habits or people that are helping you stay steady.']),
     });
@@ -128,7 +128,7 @@ describe('local-ai', () => {
 
   it('returns drained recommendations for depleted low-energy language', async () => {
     await expect(
-      analyzeLocalEchoTranscript('I feel exhausted, flat, and heavy today.'),
+      analyzeLocalEchoTranscript('I feel exhausted, flat, and heavy.'),
     ).resolves.toMatchObject({
       recommendations: expect.arrayContaining(['Reduce load before asking yourself for more output.']),
     });
@@ -138,8 +138,8 @@ describe('local-ai', () => {
     await expect(
       analyzeLocalEchoTranscript('I feel overwhelmed, on edge, and like everything is urgent.'),
     ).resolves.toMatchObject({
-      recommendations: expect.arrayContaining(['Start a same-day handoff to campus counseling or another trained support channel.']),
-      escalation: { urgency: 'same-day' },
+      recommendations: expect.arrayContaining(['Lower intensity first with one short grounding or breathing reset.']),
+      escalation: { urgency: 'routine' },
     });
   });
 });

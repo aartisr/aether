@@ -1,37 +1,58 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { once } = require('node:events');
-const { createServer } = require('./index');
+const { createRequestListener } = require('./index');
 
-test('GET /health returns service status', async () => {
-  const server = createServer();
-  server.listen(0, '127.0.0.1');
-  await once(server, 'listening');
+function invokeListener({ method = 'GET', url = '/' } = {}) {
+  const response = {
+    statusCode: undefined,
+    headers: undefined,
+    body: '',
+    writeHead(statusCode, headers) {
+      this.statusCode = statusCode;
+      this.headers = headers;
+    },
+    end(body = '') {
+      this.body = body;
+    },
+  };
 
-  const address = server.address();
-  const response = await fetch(`http://127.0.0.1:${address.port}/health`);
-  const body = await response.json();
+  createRequestListener()({ method, url }, response);
+  return response;
+}
 
-  assert.equal(response.status, 200);
+test('GET /health returns service status', () => {
+  const response = invokeListener({ url: '/health?from=test' });
+  const body = JSON.parse(response.body);
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.headers['Content-Type'], 'application/json; charset=utf-8');
+  assert.equal(response.headers['Cache-Control'], 'no-store');
   assert.equal(body.status, 'ok');
   assert.equal(body.service, 'backend');
-
-  server.close();
-  await once(server, 'close');
+  assert.match(body.timestamp, /^\d{4}-\d{2}-\d{2}T/);
 });
 
-test('unknown routes return 404', async () => {
-  const server = createServer();
-  server.listen(0, '127.0.0.1');
-  await once(server, 'listening');
+test('unsupported /health methods return 405 with allowed methods', () => {
+  const response = invokeListener({ method: 'POST', url: '/health' });
+  const body = JSON.parse(response.body);
 
-  const address = server.address();
-  const response = await fetch(`http://127.0.0.1:${address.port}/missing`);
-  const body = await response.json();
+  assert.equal(response.statusCode, 405);
+  assert.equal(response.headers.Allow, 'GET, HEAD');
+  assert.deepEqual(body, { error: 'Method Not Allowed' });
+});
 
-  assert.equal(response.status, 404);
+test('HEAD /health returns status headers without a body', () => {
+  const response = invokeListener({ method: 'HEAD', url: '/health' });
+
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.headers['Content-Type'], 'application/json; charset=utf-8');
+  assert.equal(response.body, '');
+});
+
+test('unknown routes return 404', () => {
+  const response = invokeListener({ url: '/missing' });
+  const body = JSON.parse(response.body);
+
+  assert.equal(response.statusCode, 404);
   assert.equal(body.error, 'Not Found');
-
-  server.close();
-  await once(server, 'close');
 });

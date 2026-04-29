@@ -34,6 +34,7 @@ npm run start      # serve production build
 Core:
 
 - `NEXT_PUBLIC_SITE_URL`: canonical base URL for metadata, sitemap, and robots
+  (optional on Vercel when system environment variables are exposed)
 
 Echo local model switch:
 
@@ -54,6 +55,8 @@ Giscus comments:
   `NEXT_PUBLIC_GISCUS_REACTIONS_ENABLED`, `NEXT_PUBLIC_GISCUS_EMIT_METADATA`,
   `NEXT_PUBLIC_GISCUS_INPUT_POSITION`, `NEXT_PUBLIC_GISCUS_THEME`,
   `NEXT_PUBLIC_GISCUS_LANG`
+- Use a public discussion repository only; public deployments should not expose
+  non-public project names.
 
 ## Runtime Notes
 
@@ -65,8 +68,20 @@ Giscus comments:
 - Local AI analyzer supports pluggable runtimes and gracefully falls back to
     rules when optional runtime dependencies are unavailable.
 
+## Page Architecture
+
+- Reusable page atoms live in `src/components/page`.
+- Route-specific copy and configuration live in `src/lib/*` modules where
+  practical, keeping page files thin.
+- Use `JsonLd`, `PageBackdrop`, `PageContainer`, `PageHero`, `SurfaceCard`,
+  `CardGrid`, and `LinkCardGrid` for new pages before adding bespoke markup.
+- XML and feed helpers live in `src/lib/xml`; add new machine-readable routes
+  by composing those helpers rather than duplicating escaping logic.
+
 ## Deployment
 
-- Vercel: deploy from repository root using `vercel.json`.
+- Vercel: deploy from repository root using `vercel.json`. The app resolves
+  canonicals from `NEXT_PUBLIC_SITE_URL`, `VERCEL_PROJECT_PRODUCTION_URL`, or
+  `VERCEL_URL`.
 - Netlify: deploy from repository root using `netlify.toml`.
 - Generic Node host: `npm run build` then `npm run start` from root or this workspace.

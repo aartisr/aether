@@ -1,19 +1,7 @@
 import { getAllBlogPosts, getBlogPostBySlug } from '../../lib/blog';
 import { markdownToHtml } from '../../lib/markdown';
 import { siteDescription, siteTitle, siteUrl } from '../../lib/site';
-
-function escapeXml(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
-}
-
-function wrapCdata(value: string): string {
-  return `<![CDATA[${value.replace(/]]>/g, ']]]]><![CDATA[>')}]]>`;
-}
+import { escapeXml, wrapCdata } from '../../lib/xml';
 
 export async function GET() {
   const posts = await getAllBlogPosts();
@@ -51,6 +39,12 @@ export async function GET() {
         <link>${escapeXml(siteUrl)}</link>
         <description>${escapeXml(siteDescription)}</description>
         <language>en-us</language>
+        <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+        <image>
+          <url>${escapeXml(`${siteUrl}/opengraph-image`)}</url>
+          <title>${escapeXml(siteTitle)}</title>
+          <link>${escapeXml(siteUrl)}</link>
+        </image>
         <atom:link href="${escapeXml(`${siteUrl}/feed.xml`)}" rel="self" type="application/rss+xml" />
         ${items}
       </channel>

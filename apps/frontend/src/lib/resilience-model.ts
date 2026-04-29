@@ -40,6 +40,29 @@ export interface PeerCircle {
   format: string;
 }
 
+export const resiliencePathwayStages = [
+  {
+    title: 'Early Signal Detection',
+    description: 'Weekly check-in identifies stress, connection, sleep, and safety trends early.',
+  },
+  {
+    title: 'Immediate Stabilization',
+    description: 'Students can create a practical safety plan and activate crisis support in one click.',
+  },
+  {
+    title: 'Right-Sized Support',
+    description: 'Resource navigator routes students to peer, self-guided, campus, or urgent options.',
+  },
+  {
+    title: 'Social Reinforcement',
+    description: 'Peer circles reduce isolation and create identity-safe belonging pathways.',
+  },
+  {
+    title: 'Sustainable Growth',
+    description: 'Habit planning builds long-term resilience through short, repeatable daily actions.',
+  },
+];
+
 export const researchReferences: ResearchReference[] = [
   {
     name: 'The Jed Foundation',

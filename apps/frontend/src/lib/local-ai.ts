@@ -536,7 +536,8 @@ function isTransformersModule(value: unknown): value is TransformersModule {
 
 let runtimeProviderPromise: Promise<RuntimeProvider | null> | null = null;
 let runtimeProviderInitError: string | null = null;
-const ENABLE_BROWSER_LOCAL_MODELS = process.env.NEXT_PUBLIC_ECHO_ENABLE_BROWSER_MODELS === 'true';
+const ENABLE_BROWSER_LOCAL_MODELS =
+  process.env.NEXT_PUBLIC_ECHO_ENABLE_BROWSER_MODELS === 'true' && process.env.NODE_ENV !== 'test';
 
 function formatRuntimeError(err: unknown) {
   if (err instanceof Error) {

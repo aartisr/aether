@@ -84,7 +84,8 @@ From repository root:
 Core:
 
 - `NEXT_PUBLIC_SITE_URL`: canonical base URL for metadata/sitemap/robots
-  (recommended in production)
+  (recommended in production; optional on Vercel when system environment
+  variables are exposed)
 
 Echo runtime:
 
@@ -103,6 +104,9 @@ Giscus comments (required to enable comments):
 - `NEXT_PUBLIC_GISCUS_REPO_ID`
 - `NEXT_PUBLIC_GISCUS_CATEGORY`
 - `NEXT_PUBLIC_GISCUS_CATEGORY_ID`
+
+Use a public discussion repository for Giscus. Do not point public deployments
+at non-public project names or restricted issue/discussion surfaces.
 
 Giscus optional overrides:
 
@@ -165,8 +169,13 @@ When using `BLOG_SOURCE=remote-json`, the endpoint must return an array of:
 
 1. Import repository.
 2. Use repository root.
-3. Set `NEXT_PUBLIC_SITE_URL`.
+3. Enable Vercel system environment variables or set `NEXT_PUBLIC_SITE_URL`
+   to the production domain.
 4. Deploy with `vercel.json`.
+
+The frontend automatically prefers `NEXT_PUBLIC_SITE_URL`, then Vercel's
+production/deployment URL variables, so canonical links, Open Graph images,
+RSS, sitemap, image sitemap, robots, and `llms.txt` stay production-friendly.
 
 ### Netlify
 

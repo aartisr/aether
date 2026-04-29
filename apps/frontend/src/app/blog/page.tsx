@@ -1,7 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
+import { JsonLd } from '../../components/page/PagePrimitives';
 import { getAllBlogPosts } from '../../lib/blog';
-import { createPageMetadata, siteName, toAbsoluteUrl } from '../../lib/site';
+import { createCollectionPageJsonLd, createPageMetadata, siteName, toAbsoluteUrl } from '../../lib/site';
 
 export const metadata = createPageMetadata({
   title: `Blog | ${siteName}`,
@@ -20,28 +21,21 @@ export default async function BlogIndexPage() {
     { href: '/fairness-governance', label: 'Fairness & Governance' },
   ];
   const collectionPageJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: `${siteName} Blog`,
-    url: toAbsoluteUrl('/blog'),
-    description: 'Practical student resilience guides and product notes from Aether.',
-    mainEntity: {
-      '@type': 'ItemList',
-      itemListElement: posts.map((post, index) => ({
-        '@type': 'ListItem',
-        position: index + 1,
-        url: toAbsoluteUrl(`/blog/${post.slug}`),
+    ...createCollectionPageJsonLd({
+      name: `${siteName} Blog`,
+      path: '/blog',
+      description: 'Practical student resilience guides and product notes from Aether.',
+      items: posts.map((post) => ({
         name: post.title,
+        url: toAbsoluteUrl(`/blog/${post.slug}`),
+        description: post.excerpt,
       })),
-    },
+    }),
   };
 
   return (
     <section className="blog-index max-w-4xl space-y-8">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd) }}
-      />
+      <JsonLd data={collectionPageJsonLd} idPrefix="blog-index-jsonld" />
       <header className="blog-hero">
         <p className="blog-hero-kicker">Aether Journal</p>
         <h1>Practical Resilience Library</h1>

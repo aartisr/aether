@@ -6,29 +6,39 @@ import dynamic from 'next/dynamic';
 import { useState } from 'react';
 
 import type { VoiceCapture } from '../../lib/local-ai';
+import { PageBackdrop, PageContainer, PageHero, SurfaceCard } from '../../components/page/PagePrimitives';
 
-const VoiceRecorder = dynamic(() => import('../../components/echo/VoiceRecorder'), { ssr: false });
-const SentimentMapping = dynamic(() => import('../../components/echo/SentimentMapping'), { ssr: false });
+const VoiceRecorder = dynamic(() => import('../../components/echo/VoiceRecorder'), {
+  ssr: false,
+  loading: () => <p className="text-sm text-slate-500">Loading recorder...</p>,
+});
+const SentimentMapping = dynamic(() => import('../../components/echo/SentimentMapping'), {
+  ssr: false,
+  loading: () => <p className="mt-3 text-sm text-slate-500">Preparing local sentiment analysis...</p>,
+});
 
 export default function EchoChamber() {
   const [capture, setCapture] = useState<VoiceCapture | null>(null);
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center bg-white p-4">
-      <div className="max-w-xl w-full text-center space-y-6">
-        <h1 className="text-3xl md:text-4xl font-bold text-indigo-700">Echo Chamber</h1>
-        <p className="text-lg text-gray-600">An anonymized, voice-enabled outlet for catharsis. Speak your thoughts freely and review a private, on-device transcript with local sentiment and safety signals.</p>
-        <div className="mt-8">
-          <VoiceRecorder
-            onCaptureComplete={setCapture}
-          />
+    <PageBackdrop>
+      <PageContainer className="max-w-3xl">
+        <PageHero
+          kicker="Private Reflection"
+          title="Echo Chamber"
+          description="An anonymized, voice-enabled outlet for catharsis with on-device transcript, sentiment, and safety signal mapping."
+        />
+        <SurfaceCard>
+          <VoiceRecorder onCaptureComplete={setCapture} />
           <SentimentMapping
             audio={capture?.audio ?? null}
             transcript={capture?.transcript ?? ''}
             transcriptSource={capture?.transcriptSource ?? 'unavailable'}
           />
-        </div>
-        <p className="text-xs text-gray-400 mt-4">Your privacy is protected. Audio, transcript, and classification remain on-device in this implementation.</p>
-      </div>
-    </section>
+          <p className="mt-4 text-xs text-slate-500">
+            Audio, transcript, and classifications remain on-device in this implementation.
+          </p>
+        </SurfaceCard>
+      </PageContainer>
+    </PageBackdrop>
   );
 }

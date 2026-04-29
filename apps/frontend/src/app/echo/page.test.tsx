@@ -36,6 +36,12 @@ jest.mock('../../lib/local-ai', () => ({
     analysisEngineNote: '',
     transcript: 'I feel really overwhelmed and panicked about everything. I can barely sleep.',
   }),
+  deriveEchoEmotionProfile: jest.fn().mockReturnValue({
+    valence: -0.62,
+    energy: 0.83,
+    confidence: 0.68,
+    zone: 'Overwhelmed',
+  }),
 }));
 
 describe('Echo Sentiment Visualization Integration Tests', () => {

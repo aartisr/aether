@@ -1,21 +1,42 @@
 import './globals.css';
 import React from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
+import { Manrope, Playfair_Display } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 import { Analytics } from '@vercel/analytics/next';
+import SiteFooter from '../components/layout/SiteFooter';
+import SiteHeader from '../components/layout/SiteHeader';
+import { JsonLd } from '../components/page/PagePrimitives';
 import {
   authorName,
   authorUrl,
-  organizationSameAs,
+  createLanguageAlternates,
+  entityTopics,
+  primarySiteSections,
+  normalizedTwitterHandle,
+  shareTagline,
   siteDescription,
   siteKeywords,
+  siteLocale,
   siteName,
   siteTitle,
   siteUrl,
+  socialProfiles,
   socialPreviewImage,
+  twitterHandle,
   toAbsoluteUrl,
 } from '../lib/site';
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  variable: '--font-body',
+  display: 'swap',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -25,15 +46,20 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   applicationName: siteName,
+  manifest: '/manifest.webmanifest',
   keywords: siteKeywords,
   authors: [{ name: authorName, url: authorUrl }],
   creator: authorName,
   publisher: 'Aether',
   category: 'Health Technology',
+  classification: 'Student Wellbeing Technology',
+  referrer: 'strict-origin-when-cross-origin',
   alternates: {
     canonical: '/',
+    languages: createLanguageAlternates('/'),
     types: {
       'application/rss+xml': '/feed.xml',
+      'text/plain': '/llms.txt',
     },
   },
   openGraph: {
@@ -42,10 +68,10 @@ export const metadata: Metadata = {
     title: siteTitle,
     description: siteDescription,
     siteName,
-    locale: 'en_US',
+    locale: siteLocale,
     images: [
       {
-        url: socialPreviewImage,
+        url: toAbsoluteUrl(socialPreviewImage),
         width: 1200,
         height: 630,
         alt: 'Aether student resilience platform',
@@ -56,7 +82,13 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteTitle,
     description: siteDescription,
-    images: [socialPreviewImage],
+    images: [toAbsoluteUrl(socialPreviewImage)],
+    ...(twitterHandle
+      ? {
+          creator: normalizedTwitterHandle(twitterHandle),
+          site: normalizedTwitterHandle(twitterHandle),
+        }
+      : {}),
   },
   robots: {
     index: true,
@@ -74,6 +106,23 @@ export const metadata: Metadata = {
     icon: '/aether-logo-icon.svg',
     shortcut: '/aether-logo-icon.svg',
     apple: '/aether-logo-icon.svg',
+  },
+  formatDetection: {
+    email: false,
+    telephone: false,
+    address: false,
+  },
+  appleWebApp: {
+    capable: true,
+    title: siteName,
+    statusBarStyle: 'default',
+  },
+  other: {
+    'application-name': siteName,
+    'apple-mobile-web-app-title': siteName,
+    'ai-summary': shareTagline,
+    'content-language': 'en-US',
+    'theme-color': '#2B5D8C',
   },
   verification: {
     ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
@@ -101,54 +150,57 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     url: siteUrl,
     description: siteDescription,
     inLanguage: 'en',
+    keywords: siteKeywords.join(', '),
+    hasPart: primarySiteSections.map((section) => ({
+      '@type': 'WebPage',
+      name: section.name,
+      url: toAbsoluteUrl(section.path),
+      description: section.description,
+    })),
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${siteUrl}/blog?query={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
     publisher: {
       '@type': 'Organization',
       name: siteName,
       url: siteUrl,
       logo: toAbsoluteUrl('/aether-logo-icon.svg'),
+      sameAs: socialProfiles,
     },
   };
 
+  const organizationJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: siteName,
+    url: siteUrl,
+    founder: {
+      '@type': 'Person',
+      name: authorName,
+      url: authorUrl,
+    },
+    sameAs: socialProfiles,
+    logo: toAbsoluteUrl('/aether-logo-icon.svg'),
+    knowsAbout: entityTopics,
+  };
+
+  const navigationJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'SiteNavigationElement',
+    name: primarySiteSections.map((section) => section.name),
+    url: primarySiteSections.map((section) => toAbsoluteUrl(section.path)),
+  };
+
   return (
-    <html lang="en">
+    <html lang="en" className={`${manrope.variable} ${playfair.variable}`}>
       <body className="min-h-screen font-sans bg-background-soft text-gray-900 antialiased">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
-        {/* Skip link for keyboard users */}
+        <JsonLd data={[websiteJsonLd, organizationJsonLd, navigationJsonLd]} idPrefix="root-layout-jsonld" />
         <a href="#main-content" className="sr-only focus:not-sr-only absolute top-2 left-2 bg-indigo-700 text-white px-4 py-2 rounded z-50">Skip to main content</a>
-        <header className="w-full py-3 px-4 md:py-4 md:px-6 flex flex-col md:flex-row md:justify-between md:items-center gap-3 bg-surface/80 shadow-soft sticky top-0 z-50 rounded-b-2xl backdrop-blur-md" role="banner">
-          <Link href="/" className="inline-flex items-center gap-2" aria-label="Aether Home">
-            <Image src="/aether-logo-icon.svg" alt="Aether logo" width={44} height={44} priority className="shrink-0" />
-            <span className="text-2xl md:text-3xl font-extrabold text-primary-dark tracking-tight drop-shadow">Aether</span>
-          </Link>
-          <nav className="w-full md:w-auto flex flex-wrap gap-1.5 md:gap-3 items-center" aria-label="Main navigation">
-            <Link href="/echo" className="px-3 py-1.5 rounded-xl text-sm md:text-base text-primary-dark hover:bg-accent-light focus:bg-accent-light transition">Echo Chamber</Link>
-            <Link href="/peer-navigator" className="px-3 py-1.5 rounded-xl text-sm md:text-base text-primary-dark hover:bg-accent-light focus:bg-accent-light transition">Peer-Navigator</Link>
-            <Link href="/accessibility" className="px-3 py-1.5 rounded-xl text-sm md:text-base text-primary-dark hover:bg-accent-light focus:bg-accent-light transition">Accessibility</Link>
-            <Link href="/resilience-pathway" className="px-3 py-1.5 rounded-xl text-sm md:text-base text-primary-dark hover:bg-accent-light focus:bg-accent-light transition">Resilience Pathway</Link>
-            <Link href="/privacy" className="px-3 py-1.5 rounded-xl text-sm md:text-base text-primary-dark hover:bg-accent-light focus:bg-accent-light transition">Privacy</Link>
-            <Link href="/about" className="px-3 py-1.5 rounded-xl text-sm md:text-base text-primary-dark hover:bg-accent-light focus:bg-accent-light transition">About</Link>
-            <Link href="/blog" className="px-3 py-1.5 rounded-xl text-sm md:text-base text-primary-dark hover:bg-accent-light focus:bg-accent-light transition">Blog</Link>
-          </nav>
-        </header>
+        <SiteHeader />
         <main id="main-content" className="max-w-7xl mx-auto w-full px-3 sm:px-4 md:px-8 py-6 md:py-12" tabIndex={-1}>{children}</main>
-        <footer className="w-full py-6 text-center text-gray-500 text-xs bg-surface/60 mt-12 rounded-t-2xl shadow-soft" role="contentinfo">
-          &copy; {new Date().getFullYear()} Aether. Research-driven. Privacy-first.
-          <p className="mt-1 text-[11px] text-gray-400">Aether logo artwork (c) {new Date().getFullYear()} Aarti S Ravikumar. All rights reserved.</p>
-          <p className="mt-1 text-[11px] text-gray-400">
-            &quot;Dedicated to PCSS II Students&quot; -{' '}
-            <a
-              href={organizationSameAs[0]}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary-dark hover:text-accentDark"
-            >
-              Aarti S Ravikumar
-            </a>
-          </p>
-        </footer>
+        <SiteFooter />
         <Analytics />
       </body>
     </html>

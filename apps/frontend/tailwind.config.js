@@ -7,12 +7,18 @@ module.exports = {
   theme: {
     fontFamily: {
       sans: [
-        'Inter',
-        'Nunito',
-        'Open Sans',
+        'var(--font-body)',
+        'Manrope',
+        'Avenir Next',
         'ui-sans-serif',
         'system-ui',
         'sans-serif',
+      ],
+      display: [
+        'var(--font-display)',
+        'Playfair Display',
+        'Iowan Old Style',
+        'serif',
       ],
     },
     extend: {

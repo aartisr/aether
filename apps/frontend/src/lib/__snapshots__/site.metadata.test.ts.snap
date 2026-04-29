@@ -1,0 +1,214 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`site metadata snapshots matches JSON-LD helper snapshots 1`] = `
+{
+  "collectionPage": {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "description": "Evidence-informed resilience writing.",
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "description": "Foundational recovery guide.",
+          "name": "Stabilize Your Baseline",
+          "position": 1,
+          "url": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline",
+        },
+        {
+          "@type": "ListItem",
+          "description": "Mapping people and channels for support.",
+          "name": "Build Your Support Map",
+          "position": 2,
+          "url": "https://aether-resilience.vercel.app/blog/practical-path-02-build-your-support-map",
+        },
+      ],
+    },
+    "name": "Aether Blog",
+    "url": "https://aether-resilience.vercel.app/blog",
+  },
+  "webPage": {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "about": [
+      "privacy",
+      "ethics",
+    ],
+    "description": "Privacy-by-design approach and ethical AI controls.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Aether",
+      "url": "https://aether-resilience.vercel.app/",
+    },
+    "keywords": "student resilience, student mental wellbeing, privacy-first AI, peer support, campus wellbeing programs, accessible technology, responsible AI governance, safety planning, habit formation, student support navigation, privacy, ethics",
+    "name": "Privacy and Data Ethics",
+    "primaryImageOfPage": "https://aether-resilience.vercel.app/opengraph-image",
+    "url": "https://aether-resilience.vercel.app/privacy",
+  },
+}
+`;
+
+exports[`site metadata snapshots matches article metadata snapshot 1`] = `
+{
+  "abstract": "Practical checklist for stabilizing during stress spikes.",
+  "alternates": {
+    "canonical": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline",
+    "languages": {
+      "en-US": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline",
+    },
+  },
+  "authors": [
+    {
+      "name": "Aarti S Ravikumar",
+      "url": "https://aartisr.foreverlotus.com",
+    },
+  ],
+  "creator": "Aarti S Ravikumar",
+  "description": "Practical checklist for stabilizing during stress spikes.",
+  "keywords": [
+    "student wellbeing",
+    "student resilience",
+    "mental health resilience",
+    "peer support",
+    "college student mental health",
+    "resilience pathway",
+    "privacy-first wellbeing tools",
+    "campus wellbeing technology",
+    "accessible mental wellbeing support",
+    "AI student wellbeing",
+    "student mental health app",
+    "resilience toolkit",
+    "generative engine optimization",
+    "AI-search friendly wellbeing platform",
+    "resilience",
+    "stability",
+  ],
+  "openGraph": {
+    "description": "Practical checklist for stabilizing during stress spikes.",
+    "images": [
+      {
+        "alt": "How to Stabilize Your Baseline",
+        "height": 630,
+        "url": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline/opengraph-image",
+        "width": 1200,
+      },
+    ],
+    "locale": "en_US",
+    "modifiedTime": "2026-04-02T00:00:00.000Z",
+    "publishedTime": "2026-04-01T00:00:00.000Z",
+    "siteName": "Aether",
+    "tags": [
+      "resilience",
+      "checklist",
+    ],
+    "title": "How to Stabilize Your Baseline",
+    "type": "article",
+    "url": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline",
+  },
+  "other": {
+    "ai-canonical-url": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline",
+    "ai-content-type": "article",
+    "audience": "students, campus wellbeing teams, mentors, researchers",
+  },
+  "publisher": "Aether",
+  "robots": {
+    "follow": true,
+    "googleBot": {
+      "follow": true,
+      "index": true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+    "index": true,
+  },
+  "title": "How to Stabilize Your Baseline",
+  "twitter": {
+    "card": "summary_large_image",
+    "description": "Practical checklist for stabilizing during stress spikes.",
+    "images": [
+      "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline/opengraph-image",
+    ],
+    "title": "How to Stabilize Your Baseline",
+  },
+}
+`;
+
+exports[`site metadata snapshots matches page metadata snapshot 1`] = `
+{
+  "abstract": "Accessibility commitments and support resources.",
+  "alternates": {
+    "canonical": "https://aether-resilience.vercel.app/accessibility",
+    "languages": {
+      "en-US": "https://aether-resilience.vercel.app/accessibility",
+    },
+  },
+  "authors": [
+    {
+      "name": "Aarti S Ravikumar",
+      "url": "https://aartisr.foreverlotus.com",
+    },
+  ],
+  "creator": "Aarti S Ravikumar",
+  "description": "Accessibility commitments and support resources.",
+  "keywords": [
+    "student wellbeing",
+    "student resilience",
+    "mental health resilience",
+    "peer support",
+    "college student mental health",
+    "resilience pathway",
+    "privacy-first wellbeing tools",
+    "campus wellbeing technology",
+    "accessible mental wellbeing support",
+    "AI student wellbeing",
+    "student mental health app",
+    "resilience toolkit",
+    "generative engine optimization",
+    "AI-search friendly wellbeing platform",
+    "accessibility",
+  ],
+  "openGraph": {
+    "description": "Accessibility commitments and support resources.",
+    "images": [
+      {
+        "alt": "Accessibility",
+        "height": 630,
+        "url": "https://aether-resilience.vercel.app/opengraph-image",
+        "width": 1200,
+      },
+    ],
+    "locale": "en_US",
+    "siteName": "Aether",
+    "title": "Accessibility",
+    "type": "website",
+    "url": "https://aether-resilience.vercel.app/accessibility",
+  },
+  "other": {
+    "ai-canonical-url": "https://aether-resilience.vercel.app/accessibility",
+    "ai-content-type": "website",
+    "audience": "students, campus wellbeing teams, mentors, researchers",
+  },
+  "publisher": "Aether",
+  "robots": {
+    "follow": true,
+    "googleBot": {
+      "follow": true,
+      "index": true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+    "index": true,
+  },
+  "title": "Accessibility",
+  "twitter": {
+    "card": "summary_large_image",
+    "description": "Accessibility commitments and support resources.",
+    "images": [
+      "https://aether-resilience.vercel.app/opengraph-image",
+    ],
+    "title": "Accessibility",
+  },
+}
+`;

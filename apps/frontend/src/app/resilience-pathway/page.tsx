@@ -5,8 +5,9 @@ import PeerCircleMatcher from '../../components/resilience/PeerCircleMatcher';
 import ResourceNavigator from '../../components/resilience/ResourceNavigator';
 import SafetyPlanBuilder from '../../components/resilience/SafetyPlanBuilder';
 import WellbeingCheckIn from '../../components/resilience/WellbeingCheckIn';
-import { researchReferences } from '../../lib/resilience-model';
+import { resiliencePathwayStages, researchReferences } from '../../lib/resilience-model';
 import { createPageMetadata } from '../../lib/site';
+import { CardGrid, PageBackdrop, PageContainer, PageHero, SurfaceCard } from '../../components/page/PagePrimitives';
 
 export const metadata = createPageMetadata({
   title: 'Resilience Pathway',
@@ -16,53 +17,28 @@ export const metadata = createPageMetadata({
   keywords: ['student resilience pathway', 'safety planning', 'wellbeing check-in', 'care navigation'],
 });
 
-const pathwayStages = [
-  {
-    title: 'Early Signal Detection',
-    desc: 'Weekly check-in identifies stress, connection, sleep, and safety trends early.',
-  },
-  {
-    title: 'Immediate Stabilization',
-    desc: 'Students can create a practical safety plan and activate crisis support in one click.',
-  },
-  {
-    title: 'Right-Sized Support',
-    desc: 'Resource navigator routes students to peer, self-guided, campus, or urgent options.',
-  },
-  {
-    title: 'Social Reinforcement',
-    desc: 'Peer circles reduce isolation and create identity-safe belonging pathways.',
-  },
-  {
-    title: 'Sustainable Growth',
-    desc: 'Habit planning builds long-term resilience through short, repeatable daily actions.',
-  },
-];
-
 export default function ResiliencePathway() {
   return (
-    <section className="min-h-screen bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50 p-2 sm:p-4 md:p-8">
-      <div className="max-w-6xl mx-auto space-y-5 md:space-y-8">
-        <header className="rounded-2xl bg-white/90 p-4 sm:p-6 md:p-8 shadow-soft border border-indigo-100">
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-extrabold text-indigo-900 leading-tight">Aether Resilience Hub</h1>
-          <p className="mt-3 text-sm sm:text-base text-gray-700 max-w-3xl">
-            A complete, modular student resiliency ecosystem grounded in real-world institute and platform models.
-            This implementation is generic by design, so campuses can swap resources, questions, and programs without rewriting UI.
-          </p>
-        </header>
+    <PageBackdrop className="p-2 sm:p-4 md:p-8">
+      <PageContainer className="max-w-6xl space-y-5 md:space-y-8">
+        <PageHero
+          kicker="Student Support System"
+          title="Aether Resilience Hub"
+          description="A modular resilience ecosystem grounded in real-world student support models so campuses can swap resources and workflows without rewriting UI."
+        />
 
-        <section className="rounded-2xl bg-white p-4 sm:p-6 shadow-soft border border-indigo-100">
+        <SurfaceCard>
           <h2 className="text-xl sm:text-2xl font-bold text-indigo-800">Intervention Pathway</h2>
-          <ol className="mt-4 md:mt-5 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-            {pathwayStages.map((stage, index) => (
-              <li key={stage.title} className="rounded-xl border border-indigo-100 p-4 bg-indigo-50/40">
-                <p className="text-xs font-semibold uppercase text-indigo-700">Step {index + 1}</p>
-                <h3 className="text-base sm:text-lg font-semibold text-indigo-900 mt-1">{stage.title}</h3>
-                <p className="text-sm text-gray-700 mt-2">{stage.desc}</p>
-              </li>
-            ))}
-          </ol>
-        </section>
+          <CardGrid
+            items={resiliencePathwayStages.map((stage, index) => ({
+              ...stage,
+              eyebrow: `Step ${index + 1}`,
+            }))}
+            columns="two"
+            className="mt-4 md:mt-5"
+            itemClassName="border-indigo-100 bg-indigo-50/40"
+          />
+        </SurfaceCard>
 
         <WellbeingCheckIn />
         <SafetyPlanBuilder />
@@ -70,7 +46,7 @@ export default function ResiliencePathway() {
         <PeerCircleMatcher />
         <HabitPlanner />
 
-        <section className="rounded-2xl bg-white p-4 sm:p-6 shadow-soft border border-indigo-100">
+        <SurfaceCard>
           <h2 className="text-xl sm:text-2xl font-bold text-indigo-800">Research and Benchmark Inputs (20)</h2>
           <p className="mt-2 text-sm text-gray-600">
             These references informed feature selection, safety pathways, and resilience intervention patterns.
@@ -92,8 +68,8 @@ export default function ResiliencePathway() {
               </article>
             ))}
           </div>
-        </section>
-      </div>
-    </section>
+        </SurfaceCard>
+      </PageContainer>
+    </PageBackdrop>
   );
 }

@@ -2,17 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --surface-bg: #f7fbff;
+  --text-main: #11263f;
+  --link-main: #0f6db1;
+  --link-hover: #0b4f82;
+}
+
 html {
-  font-family: 'Inter', 'Nunito', 'Open Sans', ui-sans-serif, system-ui, sans-serif;
-  background: #F7FAFC;
-  color: #22223b;
+  font-family: var(--font-body), 'Manrope', 'Avenir Next', 'Segoe UI', sans-serif;
+  background: var(--surface-bg);
+  color: var(--text-main);
+  overflow-x: clip;
 }
 
 body {
-  background: linear-gradient(120deg, #f0f4ff 0%, #e6f0fa 100%);
+  background:
+    radial-gradient(circle at 5% 0%, rgba(196, 232, 255, 0.35), transparent 28%),
+    radial-gradient(circle at 95% 15%, rgba(203, 241, 230, 0.34), transparent 22%),
+    linear-gradient(120deg, #f4f9ff 0%, #edf5ff 45%, #e8f2fb 100%);
   min-height: 100vh;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), 'Playfair Display', 'Iowan Old Style', serif;
+  letter-spacing: 0;
+}
+
+summary {
+  list-style: none;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+.social-share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+
+.social-share-compact {
+  justify-content: flex-start;
+}
+
+.social-share-label {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #475569;
+}
+
+.social-share-link {
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #0f4dc7;
+  font-size: 0.86rem;
+  font-weight: 800;
+  padding: 0.48rem 0.78rem;
+  text-decoration: none;
+  box-shadow: 0 10px 24px -20px rgba(15, 34, 66, 0.55);
+  white-space: nowrap;
+}
+
+.social-share-link:hover,
+.social-share-link:focus {
+  background: #eff6ff;
+  color: #0a2f80;
 }
 
 
@@ -22,13 +89,23 @@ button, input, select, textarea {
 }
 
 
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(15, 109, 177, 0.35);
+  outline-offset: 2px;
+}
+
+
 a {
-  color: #4F8FCB;
+  color: var(--link-main);
   text-decoration: underline;
   transition: color 0.2s ease-in-out;
 }
 a:hover, a:focus {
-  color: #6D28D9;
+  color: var(--link-hover);
 }
 
 ::-webkit-scrollbar {

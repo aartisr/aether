@@ -90,22 +90,22 @@ export default function FairnessAuditDashboard({
     : auditLog;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 p-3 sm:p-6">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-amber-900 mb-2">Fairness Audit Dashboard</h1>
+          <h1 className="text-3xl font-bold text-amber-900 mb-2 sm:text-4xl">Fairness Audit Dashboard</h1>
           <p className="text-amber-700">Peer Matching System Governance & Transparency</p>
         </div>
 
         {/* Policy Status */}
         <div className="bg-white rounded-lg shadow p-6 border-l-4 border-amber-500">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+            <div className="min-w-0">
               <p className="text-sm text-gray-600">Policy Version</p>
-              <p className="text-lg font-semibold text-amber-900">{policy.version}</p>
+              <p className="break-words text-lg font-semibold text-amber-900">{policy.version}</p>
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="text-sm text-gray-600">Status</p>
               <p className={`text-lg font-semibold ${
                 policy.approvalStatus === 'approved' ? 'text-green-700' :
@@ -115,13 +115,13 @@ export default function FairnessAuditDashboard({
                 {policy.approvalStatus.charAt(0).toUpperCase() + policy.approvalStatus.slice(1)}
               </p>
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="text-sm text-gray-600">Last Review</p>
-              <p className="text-lg font-semibold text-amber-900">{policy.lastReviewDate}</p>
+              <p className="break-words text-lg font-semibold text-amber-900">{policy.lastReviewDate}</p>
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="text-sm text-gray-600">Reviewer</p>
-              <p className="text-lg font-semibold text-amber-900">{policy.reviewer}</p>
+              <p className="break-all text-lg font-semibold text-amber-900">{policy.reviewer}</p>
             </div>
           </div>
         </div>
@@ -156,7 +156,45 @@ export default function FairnessAuditDashboard({
             <h2 className="text-lg font-semibold text-gray-900">Cohort Fairness Metrics</h2>
             <p className="text-sm text-gray-600">Exposure and quality parity by demographic cohort</p>
           </div>
-          <div className="overflow-x-auto">
+          <div className="grid gap-3 p-4 md:hidden">
+            {metrics.map((m) => {
+              const isSelected = selectedCohort === m.cohort;
+              const parityOk = Math.abs(m.exposureParity) <= policy.exposureParityBand;
+              return (
+                <button
+                  key={`mobile-${m.cohort}`}
+                  type="button"
+                  onClick={() => setSelectedCohort(isSelected ? null : m.cohort)}
+                  className={`w-full rounded-xl border p-4 text-left transition ${
+                    isSelected ? 'border-amber-300 bg-amber-50' : 'border-gray-200 bg-white hover:bg-gray-50'
+                  }`}
+                >
+                  <span className="block text-sm font-semibold text-gray-900">{m.cohort}</span>
+                  <span className="mt-3 grid grid-cols-2 gap-3 text-xs text-gray-600">
+                    <span>
+                      <span className="block font-semibold text-gray-500">Population</span>
+                      {(m.populationShare * 100).toFixed(1)}%
+                    </span>
+                    <span>
+                      <span className="block font-semibold text-gray-500">Match Share</span>
+                      {(m.matchExposure * 100).toFixed(1)}%
+                    </span>
+                    <span>
+                      <span className="block font-semibold text-gray-500">Parity Gap</span>
+                      <span className={parityOk ? 'font-bold text-green-700' : 'font-bold text-red-700'}>
+                        {parityOk ? '✓' : '✗'} {(m.exposureParity * 100).toFixed(1)}%
+                      </span>
+                    </span>
+                    <span>
+                      <span className="block font-semibold text-gray-500">Matches</span>
+                      {m.matchCount}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>

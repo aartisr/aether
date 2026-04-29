@@ -14,6 +14,11 @@ type BlogPostImageProps = {
   };
 };
 
+function trimTitle(title: string) {
+  if (title.length <= 72) return title;
+  return `${title.slice(0, 69).trimEnd()}...`;
+}
+
 function titleFromSlug(slug: string): string {
   return slug
     .split('-')
@@ -36,7 +41,7 @@ export function generateImageMetadata({ params }: BlogPostImageProps) {
 }
 
 export default function BlogPostOpenGraphImage({ params }: BlogPostImageProps) {
-  const title = titleFromSlug(params.slug) || `${siteName} Blog`;
+  const title = trimTitle(titleFromSlug(params.slug) || `${siteName} Blog`);
   const excerpt = 'Practical, evidence-informed writing for student resilience.';
 
   return new ImageResponse(
@@ -58,7 +63,7 @@ export default function BlogPostOpenGraphImage({ params }: BlogPostImageProps) {
         <div
           style={{
             color: '#1d4ed8',
-            fontSize: 28,
+            fontSize: 26,
             fontWeight: 700,
             letterSpacing: 2,
             textTransform: 'uppercase',
@@ -77,7 +82,7 @@ export default function BlogPostOpenGraphImage({ params }: BlogPostImageProps) {
             padding: '40px 44px',
           }}
         >
-          <div style={{ fontSize: 64, fontWeight: 800, lineHeight: 1.08 }}>{title}</div>
+          <div style={{ fontSize: 60, fontWeight: 800, lineHeight: 1.08 }}>{title}</div>
           <div style={{ color: '#334155', fontSize: 28, lineHeight: 1.35 }}>{excerpt}</div>
         </div>
         <div
@@ -89,8 +94,8 @@ export default function BlogPostOpenGraphImage({ params }: BlogPostImageProps) {
             justifyContent: 'space-between',
           }}
         >
-          <div>Privacy-first student resilience</div>
-          <div>aether</div>
+          <div>SEO, GEO and AI-search optimized</div>
+          <div>{siteName.toLowerCase()}</div>
         </div>
       </div>
     ),
