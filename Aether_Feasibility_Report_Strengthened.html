@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Aether Feasibility Report</title>
+    <style>
+      body {
+        color: #111827;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11pt;
+        line-height: 1.45;
+        margin: 48px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        color: #0f172a;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      h1 {
+        font-size: 24pt;
+        margin: 0 0 8px;
+      }
+
+      h2 {
+        border-bottom: 1px solid #cbd5e1;
+        font-size: 16pt;
+        margin: 28px 0 10px;
+        padding-bottom: 4px;
+      }
+
+      h3 {
+        font-size: 12.5pt;
+        margin: 18px 0 6px;
+      }
+
+      p {
+        margin: 0 0 10px;
+      }
+
+      ul {
+        margin: 6px 0 12px 22px;
+        padding: 0;
+      }
+
+      li {
+        margin: 4px 0;
+      }
+
+      table {
+        border-collapse: collapse;
+        margin: 10px 0 16px;
+        width: 100%;
+      }
+
+      th,
+      td {
+        border: 1px solid #cbd5e1;
+        padding: 7px 8px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: #eef2ff;
+        color: #0f172a;
+        font-weight: 700;
+      }
+
+      .subtitle {
+        color: #475569;
+        font-size: 13pt;
+        margin-bottom: 18px;
+      }
+
+      .meta {
+        border: 1px solid #cbd5e1;
+        margin: 18px 0 22px;
+        padding: 12px 14px;
+      }
+
+      .verdict {
+        background: #ecfdf5;
+        border: 1px solid #86efac;
+        margin: 14px 0 18px;
+        padding: 12px 14px;
+      }
+
+      .callout {
+        background: #f8fafc;
+        border-left: 4px solid #2563eb;
+        margin: 12px 0 16px;
+        padding: 10px 14px;
+      }
+
+      .small {
+        color: #475569;
+        font-size: 9.5pt;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Project Feasibility Report: Aether</h1>
+    <p class="subtitle">A Privacy-First Student Resilience Platform</p>
+
+    <div class="meta">
+      <p><strong>Prepared by:</strong> Aarti Sri Ravikumar</p>
+      <p><strong>Project type:</strong> Long-term project proposal and implementation feasibility report</p>
+      <p><strong>Date:</strong> April 29, 2026</p>
+      <p><strong>Purpose:</strong> To evaluate whether Aether is practical, ethical, technically achievable, financially reasonable, and appropriate to begin as a phased student technology project.</p>
+    </div>
+
+    <h2>1. Executive Summary</h2>
+    <p>
+      Aether is a proposed privacy-first digital platform designed to help students manage stress, build emotional resilience, reflect on their well-being, and connect with appropriate support before everyday pressure becomes a crisis. The project addresses a real gap in student support: many students experience stress, academic pressure, social difficulty, and uncertainty, but they may not seek help because of stigma, cost, fear of judgment, or not knowing where to start.
+    </p>
+    <p>
+      The recommended version of Aether is a non-clinical student resilience platform, not a therapy service and not a replacement for counselors, parents, guardians, teachers, or licensed mental health professionals. Its strongest feasible path is to begin with a focused minimum viable product (MVP): private journaling, mood check-ins, resilience resources, safety-aware guidance, and a carefully bounded peer-support pathway.
+    </p>
+    <div class="verdict">
+      <p><strong>Final feasibility verdict:</strong> Aether is feasible and recommended for approval if it is built in phases, keeps privacy and safety boundaries at the center, avoids medical or diagnostic claims, and begins with a controlled MVP before any broader student pilot.</p>
+    </div>
+    <p>
+      The project is technically achievable using the existing Aether repository structure, which already supports a modern web application stack: Next.js, React, TypeScript, Tailwind CSS, Node.js, npm workspaces, automated testing, health checks, and deployment configuration for Vercel. The most important risks are not basic technical implementation; they are responsible scope control, privacy protection, crisis safety messaging, fairness in support recommendations, and age-appropriate use.
+    </p>
+
+    <h2>2. Project Description and Problem Statement</h2>
+    <h3>2.1 The Problem</h3>
+    <p>
+      Students often face pressure from schoolwork, grades, family expectations, friendships, identity development, social comparison, financial concerns, and uncertainty about the future. Support systems such as counseling offices, trusted adults, and school resources are important, but many students delay asking for help until stress has already grown severe.
+    </p>
+    <p>
+      The current support gap can be summarized in four points:
+    </p>
+    <ul>
+      <li><strong>Access gap:</strong> Students may not know where to begin or may not have immediate access to structured help.</li>
+      <li><strong>Stigma gap:</strong> Students may avoid support because they fear being judged or misunderstood.</li>
+      <li><strong>Prevention gap:</strong> Many tools respond after problems escalate instead of helping students build daily habits earlier.</li>
+      <li><strong>Privacy gap:</strong> Students need tools that feel safe, respectful, and transparent about what is collected and why.</li>
+    </ul>
+
+    <h3>2.2 Proposed Solution</h3>
+    <p>
+      Aether will provide a student-friendly web experience that encourages private reflection, simple emotional check-ins, resilience-building habits, and connection to appropriate support resources. It will use plain language, calm design, and clear guardrails so students understand what the platform can and cannot do.
+    </p>
+    <p>
+      The platform should be designed around one principle: support students early without pretending to be a clinical system. Aether can help students notice patterns, build healthier habits, and identify next steps, but it must never diagnose, treat, or manage emergencies.
+    </p>
+
+    <h3>2.3 Primary Objectives</h3>
+    <ul>
+      <li>Build a responsive, accessible web platform that works well on phones, tablets, laptops, and desktops.</li>
+      <li>Offer private journaling and mood check-ins that help students reflect without feeling judged.</li>
+      <li>Provide structured resilience pathways with small, practical actions students can complete weekly.</li>
+      <li>Include safety-aware language, crisis resource direction, and clear boundaries around non-clinical support.</li>
+      <li>Create a foundation for future peer-support matching while avoiding unmoderated or unsafe interactions in the MVP.</li>
+      <li>Protect user privacy through data minimization, transparent consent language, and careful security choices.</li>
+    </ul>
+
+    <h2>3. Scope of the Recommended MVP</h2>
+    <p>
+      Aether is most feasible if the first version is intentionally focused. The MVP should prove the core idea without creating unnecessary safety, moderation, or compliance risk.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Included in MVP</th>
+          <th>Deferred Until Later</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Public informational pages explaining Aether, privacy, safety, and resilience concepts.</td>
+          <td>Clinical mental health diagnosis, therapy, treatment planning, or medical advice.</td>
+        </tr>
+        <tr>
+          <td>Private journaling prototype with clear user control and minimal stored data.</td>
+          <td>Open-ended unmoderated peer chat or student-to-student messaging.</td>
+        </tr>
+        <tr>
+          <td>Mood check-ins and simple trend summaries written in non-diagnostic language.</td>
+          <td>High-stakes automated decisions about student risk or school intervention.</td>
+        </tr>
+        <tr>
+          <td>Resilience pathway content with practical habits, reflection prompts, and support-seeking suggestions.</td>
+          <td>Institution-wide deployment involving minors without school approval, consent planning, and policy review.</td>
+        </tr>
+        <tr>
+          <td>Safety page with crisis resources and guidance to contact trusted adults or emergency services when needed.</td>
+          <td>Complex AI coaching that could be mistaken for professional counseling.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <p><strong>Recommended scope decision:</strong> Build the first version as a resilience and reflection platform. Treat peer support and AI-assisted personalization as future enhancements that require extra safety review.</p>
+    </div>
+
+    <h2>4. Market and User Feasibility</h2>
+    <p>
+      Aether fits a real user need because students already use digital tools for planning, schoolwork, communication, journaling, and wellness. Existing wellness products often focus on meditation, therapy access, habit tracking, or general mood journaling. Aether can stand out by focusing specifically on students, early support, privacy-first design, and responsible connection to peer or adult support.
+    </p>
+    <p>
+      The target audience includes high school and college students who want low-pressure support, as well as teachers, mentors, guardians, or school communities interested in preventive well-being tools. The user experience must feel respectful rather than clinical, calming rather than childish, and practical rather than overwhelming.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>User Group</th>
+          <th>Need</th>
+          <th>Aether Response</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Students</td>
+          <td>A private, low-stigma way to reflect and find next steps.</td>
+          <td>Journaling, check-ins, resilience plans, and clear support guidance.</td>
+        </tr>
+        <tr>
+          <td>Parents and guardians</td>
+          <td>Confidence that the tool is safe, ethical, and not replacing real care.</td>
+          <td>Transparent privacy, safety boundaries, and crisis-resource language.</td>
+        </tr>
+        <tr>
+          <td>Teachers and mentors</td>
+          <td>A constructive student support resource that encourages healthy habits.</td>
+          <td>Non-clinical content, reflection prompts, and responsible escalation guidance.</td>
+        </tr>
+        <tr>
+          <td>School leaders</td>
+          <td>A scalable preventive support model with clear implementation limits.</td>
+          <td>Phased rollout, measurable outcomes, and compliance review checkpoints.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>5. Technical Feasibility</h2>
+    <h3>5.1 Recommended Technology Stack</h3>
+    <p>
+      The project is technically feasible with the current Aether repository and a modern web application stack.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Recommended Choice</th>
+          <th>Reason</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Frontend</td>
+          <td>Next.js 14, React 18, TypeScript, Tailwind CSS</td>
+          <td>Supports fast, responsive, SEO-friendly web pages with reusable components and maintainable typed code.</td>
+        </tr>
+        <tr>
+          <td>Backend</td>
+          <td>Node.js service and future API routes</td>
+          <td>Fits the existing monorepo and can support health checks, future authentication, journaling APIs, and content services.</td>
+        </tr>
+        <tr>
+          <td>Data</td>
+          <td>Start with local/static content, then add a managed database such as Postgres when private accounts are introduced</td>
+          <td>Reduces early complexity while preserving a practical path to secure persistence later.</td>
+        </tr>
+        <tr>
+          <td>Hosting</td>
+          <td>Vercel for frontend deployment; optional managed backend/database services later</td>
+          <td>Vercel is well suited for a Next.js project and supports fast global delivery with low operational burden.</td>
+        </tr>
+        <tr>
+          <td>Testing</td>
+          <td>Jest, Testing Library, TypeScript checks, linting, build checks</td>
+          <td>Provides quality gates for correctness, maintainability, and confidence before deployment.</td>
+        </tr>
+        <tr>
+          <td>Analytics</td>
+          <td>Privacy-conscious product analytics only</td>
+          <td>Measures adoption and performance without collecting unnecessary sensitive information.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>5.2 Existing Technical Readiness</h3>
+    <p>
+      The current Aether codebase already supports several production-friendly practices:
+    </p>
+    <ul>
+      <li>A monorepo structure with separate frontend, backend, documentation, and shared package areas.</li>
+      <li>A modern Next.js frontend that can support responsive pages, metadata, sitemaps, and structured content.</li>
+      <li>Node.js 20.x and npm workspace scripts for consistent local and deployment workflows.</li>
+      <li>Automated linting, type checking, testing, and build scripts.</li>
+      <li>Vercel deployment configuration and health-check endpoints.</li>
+      <li>Documentation for peer matching service contracts and future algorithm design.</li>
+    </ul>
+
+    <h3>5.3 Architecture Recommendation</h3>
+    <p>
+      Aether should use a phased architecture:
+    </p>
+    <ul>
+      <li><strong>Phase 1:</strong> Static and server-rendered public pages, resilience content, safety pages, and privacy policy content.</li>
+      <li><strong>Phase 2:</strong> Private journaling and check-ins with local-only or temporary prototype storage for early testing.</li>
+      <li><strong>Phase 3:</strong> Authenticated accounts, encrypted-at-rest database storage, export/delete controls, and audit-friendly privacy design.</li>
+      <li><strong>Phase 4:</strong> Carefully reviewed peer-support matching with safeguards, moderation planning, and consent rules.</li>
+    </ul>
+
+    <h3>5.4 Technical Risks and Mitigations</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Risk</th>
+          <th>Impact</th>
+          <th>Mitigation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Scope creep from adding clinical, AI, or social features too early</td>
+          <td>High</td>
+          <td>Define MVP boundaries and defer therapy-like features, real-time chat, and high-risk personalization.</td>
+        </tr>
+        <tr>
+          <td>Privacy mistakes with sensitive journal data</td>
+          <td>High</td>
+          <td>Minimize collection, provide clear consent language, limit retention, and add delete/export controls before accounts launch.</td>
+        </tr>
+        <tr>
+          <td>Students may interpret guidance as medical advice</td>
+          <td>High</td>
+          <td>Use non-clinical language, visible disclaimers, and guidance to contact trusted adults or emergency resources when needed.</td>
+        </tr>
+        <tr>
+          <td>Peer matching could create fairness or safety concerns</td>
+          <td>High</td>
+          <td>Keep peer matching out of the first MVP or limit it to opt-in, moderated, non-crisis support pathways.</td>
+        </tr>
+        <tr>
+          <td>Deployment or dependency configuration issues</td>
+          <td>Medium</td>
+          <td>Use public npm registry configuration, locked dependencies, Node 20.x, and Vercel-compatible build settings.</td>
+        </tr>
+        <tr>
+          <td>Performance issues on mobile devices</td>
+          <td>Medium</td>
+          <td>Use responsive design, lightweight pages, optimized assets, and performance checks before launch.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>6. Economic Feasibility</h2>
+    <p>
+      Aether is economically feasible for a student project because the first version can be built with open-source technologies and low-cost hosting. Most of the investment is development time rather than licensing cost.
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Cost Category</th>
+          <th>MVP Estimate</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Development tools</td>
+          <td>$0</td>
+          <td>Next.js, React, TypeScript, Tailwind CSS, Jest, and Node.js are open-source.</td>
+        </tr>
+        <tr>
+          <td>Hosting</td>
+          <td>$0-$25 per month</td>
+          <td>Vercel can support an early project; a paid plan may be useful for production ownership and team needs.</td>
+        </tr>
+        <tr>
+          <td>Domain name</td>
+          <td>$10-$25 per year</td>
+          <td>Optional for class demonstration, recommended for a public pilot.</td>
+        </tr>
+        <tr>
+          <td>Database</td>
+          <td>$0-$25 per month initially</td>
+          <td>Can be deferred until account-based journaling is ready.</td>
+        </tr>
+        <tr>
+          <td>Monitoring and analytics</td>
+          <td>$0-$20 per month initially</td>
+          <td>Use privacy-conscious analytics and basic uptime checks.</td>
+        </tr>
+        <tr>
+          <td>Legal or institutional review</td>
+          <td>Varies</td>
+          <td>Required before real student deployment, especially with minors or school data.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>6.1 Return on Investment and Value</h3>
+    <p>
+      Aether does not need to generate immediate revenue to provide value. Its early return is educational, social, and technical:
+    </p>
+    <ul>
+      <li>Demonstrates strong full-stack engineering and responsible product thinking.</li>
+      <li>Creates a reusable platform that can grow into a school pilot or portfolio project.</li>
+      <li>Supports students with practical, preventive resilience resources.</li>
+      <li>Builds a foundation for future grants, partnerships, school adoption, or ethical wellness products.</li>
+    </ul>
+
+    <h2>7. Operational and Legal Feasibility</h2>
+    <h3>7.1 Operational Feasibility</h3>
+    <p>
+      Operationally, Aether is feasible if it starts as a guided self-support tool and avoids workflows that require real-time clinical response. The daily operations for an MVP are manageable: maintain content, monitor application health, review feedback, fix bugs, and improve accessibility.
+    </p>
+    <p>
+      The design should prioritize:
+    </p>
+    <ul>
+      <li>Mobile-first navigation because many students will access the platform from phones.</li>
+      <li>Plain-language content written in a calm, non-judgmental tone.</li>
+      <li>Fast page loads and minimal friction for check-ins or journaling.</li>
+      <li>Accessibility targets aligned with WCAG 2.2 AA principles.</li>
+      <li>Visible safety guidance and crisis-resource links.</li>
+    </ul>
+
+    <h3>7.2 Legal and Compliance Feasibility</h3>
+    <p>
+      Aether is legally feasible as a student project if it is positioned correctly and avoids collecting unnecessary sensitive data. However, any real deployment involving students, minors, school systems, or mental health-adjacent data requires careful review.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Area</th>
+          <th>Requirement or Concern</th>
+          <th>Recommended Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Medical claims</td>
+          <td>The platform must not diagnose, treat, or present itself as therapy.</td>
+          <td>Use clear non-clinical disclaimers and avoid diagnostic scoring.</td>
+        </tr>
+        <tr>
+          <td>Student privacy</td>
+          <td>Journal and mood data may be sensitive.</td>
+          <td>Collect only what is necessary, explain retention, and provide delete controls.</td>
+        </tr>
+        <tr>
+          <td>Minors</td>
+          <td>Use by minors can trigger consent and school policy requirements.</td>
+          <td>Do not run a live minor-facing pilot without adult, school, and policy review.</td>
+        </tr>
+        <tr>
+          <td>Education records</td>
+          <td>School-connected deployments may raise education privacy obligations.</td>
+          <td>Keep the MVP independent of official school records unless reviewed and approved.</td>
+        </tr>
+        <tr>
+          <td>International users</td>
+          <td>Privacy laws differ by region.</td>
+          <td>Start with a limited pilot audience and expand only after policy review.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="small">
+      This report is not legal advice. Before any live deployment with real students, the project should be reviewed by an appropriate teacher, administrator, guardian, and legal or compliance advisor if required.
+    </p>
+
+    <h2>8. Schedule Feasibility</h2>
+    <p>
+      Aether is feasible within a 10-week academic project timeline if the MVP remains focused. The schedule below supports design, implementation, safety review, testing, and final presentation.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Week</th>
+          <th>Milestone</th>
+          <th>Deliverable</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Research and requirements</td>
+          <td>Problem statement, user stories, feasibility report, and MVP scope.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Information architecture and design</td>
+          <td>Page map, wireframes, content model, privacy and safety language draft.</td>
+        </tr>
+        <tr>
+          <td>3-4</td>
+          <td>Core frontend build</td>
+          <td>Responsive homepage, about page, resources, mentor/support pages, shared layout components.</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Journaling and check-in prototype</td>
+          <td>Private reflection flow, mood check-in flow, and non-diagnostic summary language.</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Resilience pathways</td>
+          <td>Guided weekly practices, support map, reflection prompts, and content navigation.</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Safety and privacy hardening</td>
+          <td>Disclaimers, crisis guidance, privacy page, data minimization decisions, and risk review.</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Quality assurance</td>
+          <td>Linting, type checks, tests, accessibility checks, responsive review, and performance fixes.</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>Evaluation and feedback</td>
+          <td>Small usability review, feedback summary, revised success metrics, and bug fixes.</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>Final delivery</td>
+          <td>Production-ready demo, final report, presentation, and next-phase roadmap.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>9. Success Metrics</h2>
+    <p>
+      Aether should be evaluated using both technical and human-centered measures.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Metric</th>
+          <th>Target for MVP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Usability</td>
+          <td>Students can complete a check-in or find a resource without confusion.</td>
+          <td>80 percent or higher success in small usability testing.</td>
+        </tr>
+        <tr>
+          <td>Engagement</td>
+          <td>Users complete weekly check-ins or resilience practices.</td>
+          <td>At least 3 completed interactions per test user during pilot period.</td>
+        </tr>
+        <tr>
+          <td>Safety</td>
+          <td>Users can identify that Aether is not emergency care or therapy.</td>
+          <td>Clear comprehension in tester feedback.</td>
+        </tr>
+        <tr>
+          <td>Privacy</td>
+          <td>Users understand what data is collected and why.</td>
+          <td>Privacy explanation visible before sensitive workflows.</td>
+        </tr>
+        <tr>
+          <td>Quality</td>
+          <td>Application passes lint, type checks, tests, and production build.</td>
+          <td>All required checks pass before final submission.</td>
+        </tr>
+        <tr>
+          <td>Performance</td>
+          <td>Pages load quickly on common mobile and laptop devices.</td>
+          <td>Fast perceived load, optimized assets, and no major layout issues.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>10. Must-Resolve Issues Before Launch</h2>
+    <ul>
+      <li>Finalize privacy language and confirm that the MVP collects only necessary information.</li>
+      <li>Make the non-clinical scope visible throughout the experience.</li>
+      <li>Add crisis-resource guidance and encourage students to contact trusted adults or emergency services when appropriate.</li>
+      <li>Decide whether journaling data will be local-only, stored temporarily, or stored in an authenticated database.</li>
+      <li>Complete responsive testing across mobile, tablet, laptop, and desktop screen sizes.</li>
+      <li>Run linting, type checking, automated tests, and production build before final delivery.</li>
+      <li>Do not pilot with minors or school-connected data until consent, supervision, and policy requirements are reviewed.</li>
+    </ul>
+
+    <h2>11. Conclusion and Recommendation</h2>
+    <p>
+      Aether is a strong and feasible project because it addresses a meaningful student need, can be implemented with available technology, has manageable early costs, and provides a responsible path for growth. The project becomes strongest when it is disciplined: it should start as a privacy-first resilience platform, not a clinical care product or unmoderated social network.
+    </p>
+    <p>
+      The recommended decision is to approve Aether for development as a phased MVP. The first version should focus on public education, journaling, check-ins, resilience pathways, safety guidance, privacy transparency, and excellent responsive design. More sensitive features such as authenticated storage, AI personalization, and peer matching should be added only after the core platform has been tested and the safety model is mature.
+    </p>
+    <div class="verdict">
+      <p><strong>Recommendation:</strong> Proceed with Aether. Build the MVP now, keep the scope responsible, and use privacy, safety, accessibility, and maintainability as the project's primary quality standards.</p>
+    </div>
+
+    <h2>Appendix A: Acceptance Criteria for the MVP</h2>
+    <ul>
+      <li>The platform clearly explains its purpose in student-friendly language.</li>
+      <li>The homepage, resources, privacy/safety content, and mentor/support content are responsive and accessible.</li>
+      <li>Journaling and check-in flows use non-diagnostic wording and do not overpromise outcomes.</li>
+      <li>Every sensitive workflow includes privacy expectations and user control.</li>
+      <li>The codebase remains modular, reusable, and easy to extend.</li>
+      <li>Deployment works on Vercel using public package dependencies and documented environment variables.</li>
+      <li>All final checks pass: lint, type checking, tests, and production build.</li>
+    </ul>
+
+    <h2>Appendix B: Responsible Product Positioning</h2>
+    <p>
+      Aether should describe itself as a student resilience and reflection platform. It should not use language that implies therapy, diagnosis, treatment, emergency response, or guaranteed emotional outcomes. The safest product promise is:
+    </p>
+    <div class="callout">
+      <p><strong>Aether helps students reflect, notice patterns, practice resilience habits, and find appropriate support earlier.</strong></p>
+    </div>
+    <p>
+      This positioning is credible, ethical, and achievable within the proposed technical and academic timeline.
+    </p>
+  </body>
+</html>
