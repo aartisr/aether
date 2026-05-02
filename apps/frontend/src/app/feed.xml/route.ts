@@ -1,9 +1,21 @@
 import { getAllBlogPosts, getBlogPostBySlug } from '../../lib/blog';
+import { isPageEnabled } from '../../lib/page-flags';
 import { markdownToHtml } from '../../lib/markdown';
 import { siteDescription, siteTitle, siteUrl } from '../../lib/site';
 import { escapeXml, wrapCdata } from '../../lib/xml';
 
+export const revalidate = 3600;
+
 export async function GET() {
+  if (!isPageEnabled('blog')) {
+    return new Response('Not found', {
+      status: 404,
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+      },
+    });
+  }
+
   const posts = await getAllBlogPosts();
   const enrichedPosts = await Promise.all(
     posts.map(async (post) => ({

@@ -11,7 +11,7 @@ import {
   createPageMetadata,
   createWebPageJsonLd,
   entityTopics,
-  primarySiteSections,
+  getPrimarySiteSectionsForRequest,
   shareTagline,
   siteDescription,
   siteName,
@@ -19,6 +19,7 @@ import {
   socialProfiles,
   toAbsoluteUrl,
 } from '../lib/site';
+import { getEnabledPagesForRequest } from '../lib/page-flags';
 
 export const metadata = createPageMetadata({
   title: siteTitle,
@@ -34,6 +35,35 @@ export const metadata = createPageMetadata({
 });
 
 export default function Home() {
+  const visibleSections = getPrimarySiteSectionsForRequest();
+
+  const homepageCallToActions = getEnabledPagesForRequest(['echo', 'resilience-pathway', 'about']).map((page) => {
+    if (page.id === 'echo') {
+      return {
+        href: page.path,
+        label: 'Try Echo Chamber',
+        className:
+          'w-full rounded-lg bg-indigo-600 px-6 py-3 font-semibold text-white shadow transition hover:bg-indigo-700 sm:w-auto',
+      };
+    }
+
+    if (page.id === 'resilience-pathway') {
+      return {
+        href: page.path,
+        label: 'Open Resilience Hub',
+        className:
+          'w-full rounded-lg bg-teal-600 px-6 py-3 font-semibold text-white shadow transition hover:bg-teal-700 sm:w-auto',
+      };
+    }
+
+    return {
+      href: page.path,
+      label: 'Learn More',
+      className:
+        'w-full rounded-lg border border-indigo-600 bg-white px-6 py-3 font-semibold text-indigo-700 shadow transition hover:bg-indigo-50 sm:w-auto',
+    };
+  });
+
   const organizationJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -89,7 +119,7 @@ export default function Home() {
         audienceType: 'Mentors and researchers',
       },
     ],
-    featureList: primarySiteSections.slice(1, 5).map((section) => section.name),
+    featureList: visibleSections.slice(1, 5).map((section) => section.name),
     screenshot: toAbsoluteUrl('/opengraph-image'),
     offers: {
       '@type': 'Offer',
@@ -100,7 +130,7 @@ export default function Home() {
 
   const itemListJsonLd = {
     ...createItemListJsonLd(
-      primarySiteSections.map((section) => ({
+      visibleSections.map((section) => ({
         name: section.name,
         url: toAbsoluteUrl(section.path),
         description: section.description,
@@ -150,24 +180,15 @@ export default function Home() {
           assistants to understand.
         </p>
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap md:mt-8 md:gap-4">
-          <Link
-            href="/echo"
-            className="w-full rounded-lg bg-indigo-600 px-6 py-3 font-semibold text-white shadow transition hover:bg-indigo-700 sm:w-auto"
-          >
-            Try Echo Chamber
-          </Link>
-          <Link
-            href="/resilience-pathway"
-            className="w-full rounded-lg bg-teal-600 px-6 py-3 font-semibold text-white shadow transition hover:bg-teal-700 sm:w-auto"
-          >
-            Open Resilience Hub
-          </Link>
-          <Link
-            href="/about"
-            className="w-full rounded-lg border border-indigo-600 bg-white px-6 py-3 font-semibold text-indigo-700 shadow transition hover:bg-indigo-50 sm:w-auto"
-          >
-            Learn More
-          </Link>
+          {homepageCallToActions.map((callToAction) => (
+            <Link
+              key={callToAction.href}
+              href={callToAction.href}
+              className={callToAction.className}
+            >
+              {callToAction.label}
+            </Link>
+          ))}
         </div>
         <SocialShareLinks path="/" title={siteTitle} />
 
@@ -189,7 +210,7 @@ export default function Home() {
             </p>
             <LinkCardGrid
               className="mt-6"
-              items={primarySiteSections.slice(1).map((section) => ({
+              items={visibleSections.slice(1).map((section) => ({
                 title: section.name,
                 href: section.path,
                 description: section.description,

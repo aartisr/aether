@@ -1,5 +1,6 @@
 import React from 'react';
 import { ActionLink, CardGrid, JsonLd, PageBackdrop, PageContainer, PageHero, SurfaceCard } from './PagePrimitives';
+import { isPathEnabledForRequest } from '../../lib/page-flags';
 
 export type InfoPageItem = {
   title: string;
@@ -23,6 +24,9 @@ export type InfoPageConfig = {
 };
 
 export default function GenericInfoPage({ config }: { config: InfoPageConfig }) {
+  const visibleItems = config.items.filter((item) => (item.href ? isPathEnabledForRequest(item.href) : true));
+  const shouldShowFooterLink = config.footerLink ? isPathEnabledForRequest(config.footerLink.href) : false;
+
   return (
     <PageBackdrop>
       <JsonLd data={config.jsonLd} idPrefix="generic-info-page-jsonld" />
@@ -30,13 +34,13 @@ export default function GenericInfoPage({ config }: { config: InfoPageConfig }) 
         <PageHero title={config.title} description={config.description} kicker={config.kicker} />
 
         <SurfaceCard>
-          <CardGrid items={config.items} columns="two" titleLevel="h2" className="text-left" />
+          <CardGrid items={visibleItems} columns="two" titleLevel="h2" className="text-left" />
         </SurfaceCard>
 
         {config.footerNote ? (
           <div className="text-center text-xs text-slate-500">
             <p>{config.footerNote}</p>
-            {config.footerLink ? (
+            {config.footerLink && shouldShowFooterLink ? (
               <div className="mt-1">
                 <ActionLink
                   href={config.footerLink.href}

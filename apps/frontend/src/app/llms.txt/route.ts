@@ -1,8 +1,11 @@
 import { getAllBlogPosts } from '../../lib/blog';
+import { isPageEnabled } from '../../lib/page-flags';
 import { entityTopics, primarySiteSections, shareTagline, siteDescription, siteName, siteUrl } from '../../lib/site';
 
+export const revalidate = 3600;
+
 export async function GET() {
-  const posts = await getAllBlogPosts();
+  const posts = isPageEnabled('blog') ? await getAllBlogPosts() : [];
 
   const body = [
     `# ${siteName}`,

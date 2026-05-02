@@ -2,16 +2,17 @@ import './globals.css';
 import React from 'react';
 import { Manrope, Playfair_Display } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
-import { Analytics } from '@vercel/analytics/next';
+import AnalyticsProvider from '../components/AnalyticsProvider';
 import SiteFooter from '../components/layout/SiteFooter';
 import SiteHeader from '../components/layout/SiteHeader';
 import { JsonLd } from '../components/page/PagePrimitives';
+import { isPageEnabled, isPageEnabledForRequest } from '../lib/page-flags';
 import {
   authorName,
   authorUrl,
   createLanguageAlternates,
   entityTopics,
-  primarySiteSections,
+  getPrimarySiteSectionsForRequest,
   normalizedTwitterHandle,
   shareTagline,
   siteDescription,
@@ -26,6 +27,8 @@ import {
   toAbsoluteUrl,
 } from '../lib/site';
 
+export const dynamic = 'force-dynamic';
+
 const manrope = Manrope({
   subsets: ['latin'],
   variable: '--font-body',
@@ -37,6 +40,11 @@ const playfair = Playfair_Display({
   variable: '--font-display',
   display: 'swap',
 });
+
+const metadataAlternatesTypes = {
+  ...(isPageEnabled('blog') ? { 'application/rss+xml': '/feed.xml' } : {}),
+  'text/plain': '/llms.txt',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -57,10 +65,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
     languages: createLanguageAlternates('/'),
-    types: {
-      'application/rss+xml': '/feed.xml',
-      'text/plain': '/llms.txt',
-    },
+    types: metadataAlternatesTypes,
   },
   openGraph: {
     type: 'website',
@@ -143,6 +148,9 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const visibleSections = getPrimarySiteSectionsForRequest();
+  const blogEnabled = isPageEnabledForRequest('blog');
+
   const websiteJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -151,17 +159,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     description: siteDescription,
     inLanguage: 'en',
     keywords: siteKeywords.join(', '),
-    hasPart: primarySiteSections.map((section) => ({
+    hasPart: visibleSections.map((section) => ({
       '@type': 'WebPage',
       name: section.name,
       url: toAbsoluteUrl(section.path),
       description: section.description,
     })),
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: `${siteUrl}/blog?query={search_term_string}`,
-      'query-input': 'required name=search_term_string',
-    },
+    ...(blogEnabled
+      ? {
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: `${siteUrl}/blog?query={search_term_string}`,
+            'query-input': 'required name=search_term_string',
+          },
+        }
+      : {}),
     publisher: {
       '@type': 'Organization',
       name: siteName,
@@ -189,8 +201,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const navigationJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SiteNavigationElement',
-    name: primarySiteSections.map((section) => section.name),
-    url: primarySiteSections.map((section) => toAbsoluteUrl(section.path)),
+    name: visibleSections.map((section) => section.name),
+    url: visibleSections.map((section) => toAbsoluteUrl(section.path)),
   };
 
   return (
@@ -201,7 +213,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         <main id="main-content" className="max-w-7xl mx-auto w-full px-3 sm:px-4 md:px-8 py-6 md:py-12" tabIndex={-1}>{children}</main>
         <SiteFooter />
-        <Analytics />
+        <AnalyticsProvider />
       </body>
     </html>
   );

@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { createPageMetadata } from '../../lib/site';
+import { assertPageEnabledForRequest } from '../../lib/page-flags';
 
 export const metadata = createPageMetadata({
   title: 'Echo Chamber',
@@ -10,5 +11,6 @@ export const metadata = createPageMetadata({
 });
 
 export default function EchoLayout({ children }: { children: ReactNode }) {
+  assertPageEnabledForRequest('echo');
   return children;
 }

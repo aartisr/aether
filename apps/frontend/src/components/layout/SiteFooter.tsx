@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import SocialShareLinks from '../SocialShareLinks';
-import { footerNavigation, trustSignals } from '../../lib/navigation';
+import { getFooterNavigationForRequest, trustSignals } from '../../lib/navigation';
 import { authorName, authorUrl, shareTagline, siteName } from '../../lib/site';
 
 function FooterLink({
@@ -28,6 +28,8 @@ function FooterLink({
 }
 
 export default function SiteFooter() {
+  const footerNavigation = getFooterNavigationForRequest();
+
   return (
     <footer className="mt-14 border-t border-sky-100 bg-white/88" role="contentinfo">
       <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-10 md:grid-cols-[1.2fr_2fr] md:px-6 lg:py-12">

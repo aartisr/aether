@@ -9,6 +9,7 @@ import {
   mentorRecognitionRituals,
 } from '../../lib/mentor-recognition';
 import { CardGrid, JsonLd, PageBackdrop, PageContainer, PageHero, SurfaceCard } from '../../components/page/PagePrimitives';
+import { assertPageEnabledForRequest } from '../../lib/page-flags';
 
 export const metadata = createPageMetadata({
   title: `Mentor Appreciation | ${siteName}`,
@@ -25,6 +26,8 @@ export const metadata = createPageMetadata({
 });
 
 export default function MentorsPage() {
+  assertPageEnabledForRequest('mentors');
+
   const webPageJsonLd = createWebPageJsonLd({
     name: `${siteName} Mentor Appreciation`,
     path: '/mentors',

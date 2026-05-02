@@ -1,9 +1,12 @@
 import { getAllBlogPosts } from '../../lib/blog';
+import { isPageEnabled } from '../../lib/page-flags';
 import { primarySiteSections, siteName, siteUrl } from '../../lib/site';
 import { escapeXml } from '../../lib/xml';
 
+export const revalidate = 3600;
+
 export async function GET() {
-  const posts = await getAllBlogPosts();
+  const posts = isPageEnabled('blog') ? await getAllBlogPosts() : [];
   const staticEntries = primarySiteSections.map((section) => ({
     loc: `${siteUrl}${section.path}`,
     image: `${siteUrl}/opengraph-image`,

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { JsonLd } from '../../components/page/PagePrimitives';
 import { getAllBlogPosts } from '../../lib/blog';
 import { createCollectionPageJsonLd, createPageMetadata, siteName, toAbsoluteUrl } from '../../lib/site';
+import { assertPageEnabledForRequest, getEnabledPagesForRequest } from '../../lib/page-flags';
 
 export const metadata = createPageMetadata({
   title: `Blog | ${siteName}`,
@@ -12,14 +13,19 @@ export const metadata = createPageMetadata({
 });
 
 export default async function BlogIndexPage() {
+  assertPageEnabledForRequest('blog');
+
   const posts = await getAllBlogPosts();
   const latestPosts = posts.slice(0, 3);
-  const keyRoutes = [
-    { href: '/resilience-pathway', label: 'Resilience Pathway' },
-    { href: '/peer-navigator', label: 'Peer Navigator' },
-    { href: '/echo', label: 'Echo Chamber' },
-    { href: '/fairness-governance', label: 'Fairness & Governance' },
-  ];
+  const keyRoutes = getEnabledPagesForRequest([
+    'resilience-pathway',
+    'peer-navigator',
+    'echo',
+    'fairness-governance',
+  ]).map((page) => ({
+    href: page.path,
+    label: page.name,
+  }));
   const collectionPageJsonLd = {
     ...createCollectionPageJsonLd({
       name: `${siteName} Blog`,

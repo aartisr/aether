@@ -2,6 +2,7 @@ import React from 'react';
 import { createPageMetadata, siteName } from '../../lib/site';
 import GenericInfoPage from '../../components/page/GenericInfoPage';
 import { aboutPageConfig } from '../../lib/info-pages';
+import { assertPageEnabledForRequest } from '../../lib/page-flags';
 
 export const metadata = createPageMetadata({
   title: `About ${siteName}`,
@@ -12,5 +13,6 @@ export const metadata = createPageMetadata({
 });
 
 export default function About() {
+  assertPageEnabledForRequest('about');
   return <GenericInfoPage config={aboutPageConfig} />;
 }

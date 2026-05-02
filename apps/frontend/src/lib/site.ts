@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getEnabledPages, getEnabledPagesForRequest } from './page-flags';
 
 const fallbackSiteUrl = 'https://aether-resilience.vercel.app';
 
@@ -80,58 +81,19 @@ export const entityTopics = [
   'student support navigation',
 ];
 
-export const primarySiteSections = [
-  {
-    path: '/',
-    name: 'Homepage',
-    description: 'Overview of the Aether student resilience ecosystem and core product pathways.',
-  },
-  {
-    path: '/resilience-pathway',
-    name: 'Resilience Pathway',
-    description: 'Interactive resilience hub covering check-ins, safety planning, navigation, peer circles, and habits.',
-  },
-  {
-    path: '/echo',
-    name: 'Echo Chamber',
-    description: 'Private, on-device voice reflection with transcript and sentiment mapping.',
-  },
-  {
-    path: '/peer-navigator',
-    name: 'Peer-Navigator',
-    description: 'Privacy-aware peer matching demo for identity-safe student support.',
-  },
-  {
-    path: '/fairness-governance',
-    name: 'Fairness & Governance',
-    description: 'Transparency layer for fairness metrics, policy, and auditability.',
-  },
-  {
-    path: '/privacy',
-    name: 'Privacy',
-    description: 'Privacy-by-design approach including federated learning, minimized data exposure, and safety guardrails.',
-  },
-  {
-    path: '/accessibility',
-    name: 'Accessibility',
-    description: 'Accessibility commitments, inclusive design approach, and SAFE-AI guidance.',
-  },
-  {
-    path: '/about',
-    name: 'About',
-    description: 'Background, positioning, and product summary for Aether.',
-  },
-  {
-    path: '/blog',
-    name: 'Blog',
-    description: 'Evidence-informed resilience articles, product notes, and practical student guidance.',
-  },
-  {
-    name: 'Mentor Appreciation',
-    path: '/mentors',
-    description: 'A public acknowledgment of mentors who shaped strategy, ethics, and implementation.',
-  },
-] as const;
+function toSiteSections(pages: ReturnType<typeof getEnabledPages>) {
+  return pages.map((page) => ({
+    path: page.path,
+    name: page.name,
+    description: page.description,
+  }));
+}
+
+export const primarySiteSections = toSiteSections(getEnabledPages());
+
+export function getPrimarySiteSectionsForRequest() {
+  return toSiteSections(getEnabledPagesForRequest());
+}
 
 type PageMetadataInput = {
   title: string;

@@ -34,3 +34,10 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Performance Budget
+        run: npm --workspace=apps/frontend run perf:smoke
+        env:
+          PERF_BUDGET_P95_MS: "900"
+          PERF_SAMPLES: "5"
+          PERF_WARMUPS: "2"

@@ -2,6 +2,7 @@ import React from 'react';
 import { createPageMetadata } from '../../lib/site';
 import GenericInfoPage from '../../components/page/GenericInfoPage';
 import { accessibilityPageConfig } from '../../lib/info-pages';
+import { assertPageEnabledForRequest } from '../../lib/page-flags';
 
 export const metadata = createPageMetadata({
   title: 'Accessibility',
@@ -12,5 +13,6 @@ export const metadata = createPageMetadata({
 });
 
 export default function AccessibilityCompliance() {
+  assertPageEnabledForRequest('accessibility');
   return <GenericInfoPage config={accessibilityPageConfig} />;
 }

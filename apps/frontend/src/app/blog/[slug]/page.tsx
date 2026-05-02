@@ -7,6 +7,7 @@ import SocialShareLinks from '../../../components/SocialShareLinks';
 import { CardGrid, JsonLd } from '../../../components/page/PagePrimitives';
 import { getAllBlogSlugs, getBlogPostBySlug, getRelatedBlogPosts } from '../../../lib/blog';
 import { markdownToHtml } from '../../../lib/markdown';
+import { assertPageEnabledForRequest, isPageEnabled } from '../../../lib/page-flags';
 import { authorName, authorUrl, createArticleMetadata, siteName, toAbsoluteUrl } from '../../../lib/site';
 import { createHowToJsonLd, extractHowToStepsFromMarkdown } from '../../../lib/structured-data';
 
@@ -17,11 +18,21 @@ type BlogPostPageProps = {
 };
 
 export async function generateStaticParams() {
+  if (!isPageEnabled('blog')) {
+    return [];
+  }
+
   const slugs = await getAllBlogSlugs();
   return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+  if (!isPageEnabled('blog')) {
+    return {
+      title: 'Post not found',
+    };
+  }
+
   const post = await getBlogPostBySlug(params.slug);
 
   if (!post) {
@@ -51,6 +62,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  assertPageEnabledForRequest('blog');
+
   const post = await getBlogPostBySlug(params.slug);
 
   if (!post) {

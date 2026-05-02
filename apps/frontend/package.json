@@ -10,6 +10,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "perf:smoke": "node ./scripts/perf-smoke.mjs",
+    "perf:budget": "npm run build && npm run perf:smoke",
     "lint": "next lint",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "test": "jest --config ../../jest.config.js --runInBand",

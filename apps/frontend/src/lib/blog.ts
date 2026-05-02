@@ -27,6 +27,11 @@ type FrontMatter = {
   tags?: string;
 };
 
+const BLOG_REVALIDATE_SECONDS = 300;
+
+let allPostsPromise: Promise<BlogPostMeta[]> | null = null;
+const postBySlugPromise = new Map<string, Promise<BlogPost | null>>();
+
 const blogSlugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export function isSafeBlogSlug(slug: unknown): slug is string {
@@ -137,14 +142,17 @@ const localMarkdownAdapter: BlogSourceAdapter = {
     }
 
     const entries = await fs.promises.readdir(BLOG_DIR, { withFileTypes: true });
+    const markdownEntries = entries.filter((entry) => entry.isFile() && entry.name.endsWith('.md'));
 
-    return entries
-      .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
-      .map((entry) => {
+    const posts = await Promise.all(
+      markdownEntries.map(async (entry) => {
         const slug = entry.name.replace(/\.md$/, '');
         const filePath = path.join(BLOG_DIR, entry.name);
-        const raw = fs.readFileSync(filePath, 'utf8');
-        const post = toPost(slug, raw, fs.statSync(filePath).mtime.toISOString());
+        const [raw, stats] = await Promise.all([
+          fs.promises.readFile(filePath, 'utf8'),
+          fs.promises.stat(filePath),
+        ]);
+        const post = toPost(slug, raw, stats.mtime.toISOString());
         return {
           slug: post.slug,
           title: post.title,
@@ -154,7 +162,10 @@ const localMarkdownAdapter: BlogSourceAdapter = {
           tags: post.tags,
           readingTimeMinutes: post.readingTimeMinutes,
         };
-      })
+      }),
+    );
+
+    return posts
       .filter((post) => isSafeBlogSlug(post.slug))
       .sort(compareByDateDescending);
   },
@@ -185,7 +196,12 @@ const remoteJsonAdapter: BlogSourceAdapter = {
     }
 
     try {
-      const response = await fetch(remoteUrl, { cache: 'force-cache' });
+      const response = await fetch(remoteUrl, {
+        next: {
+          revalidate: BLOG_REVALIDATE_SECONDS,
+          tags: ['blog-content'],
+        },
+      });
       if (!response.ok) {
         return [];
       }
@@ -218,7 +234,12 @@ const remoteJsonAdapter: BlogSourceAdapter = {
     }
 
     try {
-      const response = await fetch(remoteUrl, { cache: 'force-cache' });
+      const response = await fetch(remoteUrl, {
+        next: {
+          revalidate: BLOG_REVALIDATE_SECONDS,
+          tags: ['blog-content'],
+        },
+      });
       if (!response.ok) {
         return null;
       }
@@ -256,11 +277,19 @@ function getAdapter(): BlogSourceAdapter {
 }
 
 export async function getAllBlogPosts(): Promise<BlogPostMeta[]> {
-  return getAdapter().listPosts();
+  if (!allPostsPromise) {
+    allPostsPromise = getAdapter().listPosts();
+  }
+
+  return allPostsPromise;
 }
 
 export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
-  return getAdapter().getPostBySlug(slug);
+  if (!postBySlugPromise.has(slug)) {
+    postBySlugPromise.set(slug, getAdapter().getPostBySlug(slug));
+  }
+
+  return postBySlugPromise.get(slug) as Promise<BlogPost | null>;
 }
 
 export async function getAllBlogSlugs(): Promise<string[]> {

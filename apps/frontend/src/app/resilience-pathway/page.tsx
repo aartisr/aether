@@ -8,6 +8,7 @@ import WellbeingCheckIn from '../../components/resilience/WellbeingCheckIn';
 import { resiliencePathwayStages, researchReferences } from '../../lib/resilience-model';
 import { createPageMetadata } from '../../lib/site';
 import { CardGrid, PageBackdrop, PageContainer, PageHero, SurfaceCard } from '../../components/page/PagePrimitives';
+import { assertPageEnabledForRequest } from '../../lib/page-flags';
 
 export const metadata = createPageMetadata({
   title: 'Resilience Pathway',
@@ -18,6 +19,8 @@ export const metadata = createPageMetadata({
 });
 
 export default function ResiliencePathway() {
+  assertPageEnabledForRequest('resilience-pathway');
+
   return (
     <PageBackdrop className="p-2 sm:p-4 md:p-8">
       <PageContainer className="max-w-6xl space-y-5 md:space-y-8">
