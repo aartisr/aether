@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation';
 import { getAdminSessionMaxAgeSeconds, isAdminAuthenticatedForRequest, shouldExposeAdminConsole } from '../../../lib/admin-auth';
 import { createPageMetadata } from '../../../lib/site';
 import {
+  DEFAULT_ENABLED_PAGE_IDS,
   getAllPages,
   getRequestPageOverrides,
   isPageEnabledForRequest,
@@ -33,6 +34,15 @@ export default async function AdminPageControlsPage({
   const configurablePages = pages.filter((page) => page.id !== 'home');
   const requestOverrides = getRequestPageOverrides();
   const usingSessionOverrides = Boolean(requestOverrides);
+  const defaultPublicPageNames = DEFAULT_ENABLED_PAGE_IDS.map((pageId) => {
+    if (pageId === 'home') {
+      return 'Home';
+    }
+
+    return pages.find((page) => page.id === pageId)?.name;
+  })
+    .filter(Boolean)
+    .join(', ');
 
   return (
     <section className="mx-auto w-full max-w-4xl space-y-8 rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-soft md:p-8">
@@ -42,6 +52,9 @@ export default async function AdminPageControlsPage({
         <p className="text-sm leading-6 text-slate-700">
           Toggle pages on and off instantly for this browser session. Changes are saved in a cookie and applied to
           navigation and route guards without restarting the app.
+        </p>
+        <p className="text-sm leading-6 text-slate-700">
+          Default public pages are {defaultPublicPageNames}. All other pages stay hidden until an admin enables them.
         </p>
         <p className="text-xs text-slate-500">
           Admin session TTL: {Math.floor(getAdminSessionMaxAgeSeconds() / 60)} minutes.
@@ -74,7 +87,7 @@ export default async function AdminPageControlsPage({
         <p className="mt-2 text-sm text-slate-700">
           {usingSessionOverrides
             ? 'Runtime cookie overrides are active for this browser.'
-            : 'Using environment defaults (NEXT_PUBLIC_ENABLED_PAGES / NEXT_PUBLIC_DISABLED_PAGES).'}
+            : 'Using default public pages plus any environment allowlist/disable-list configuration.'}
         </p>
       </section>
 
@@ -82,6 +95,15 @@ export default async function AdminPageControlsPage({
         <h2 className="text-lg font-bold text-slate-900">Quick Presets</h2>
         <p className="text-sm text-slate-600">One-click profiles inspired by modern dashboard workflows.</p>
         <div className="flex flex-wrap gap-3">
+          <form action={applyPresetAction}>
+            <input type="hidden" name="preset" value="default" />
+            <button
+              type="submit"
+              className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-100"
+            >
+              Default Public
+            </button>
+          </form>
           <form action={applyPresetAction}>
             <input type="hidden" name="preset" value="all" />
             <button
@@ -115,7 +137,9 @@ export default async function AdminPageControlsPage({
       <form action={savePageFlagsAction} className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5">
         <div>
           <h2 className="text-lg font-bold text-slate-900">Enable Pages</h2>
-          <p className="mt-1 text-sm text-slate-600">Home stays enabled by default. Select the pages you want active.</p>
+          <p className="mt-1 text-sm text-slate-600">
+            Home always stays enabled. About and Mentors are checked by default; select any additional pages you want active.
+          </p>
         </div>
 
         <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">

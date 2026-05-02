@@ -1,13 +1,19 @@
-import type { MatchAssignment, MatchProfile, PairCandidate, Phase1Config } from "./types";
+import type {
+  DirectedScore,
+  HardFilter,
+  MatchAssignment,
+  MatchProfile,
+  PairCandidate,
+  Phase1Config,
+} from "./types";
+import { clampScore, normalizeCapacity, stablePairId } from "./utils";
 
-function clampScore(value: number) {
-  if (!Number.isFinite(value)) return 0;
-  return Math.max(0, Math.min(1, value));
-}
+function defaultDirectedScore<TProfile extends MatchProfile<object>>(source: TProfile, target: TProfile) {
+  const sourceAttributes = source.attributes as Record<string, unknown>;
+  const targetAttributes = target.attributes as Record<string, unknown>;
+  const sourceTags = String(sourceAttributes.tags ?? "").toLowerCase();
+  const targetTags = String(targetAttributes.tags ?? "").toLowerCase();
 
-function defaultDirectedScore(source: MatchProfile, target: MatchProfile) {
-  const sourceTags = String(source.attributes.tags ?? "").toLowerCase();
-  const targetTags = String(target.attributes.tags ?? "").toLowerCase();
   if (!sourceTags || !targetTags) return 0.5;
   return sourceTags === targetTags ? 0.8 : 0.45;
 }
@@ -20,29 +26,27 @@ function defaultReciprocalScore(sourceToTarget: number, targetToSource: number) 
   return (2 * a * b) / denominator;
 }
 
-function pairId(aId: string, bId: string) {
-  return aId < bId ? `${aId}::${bId}` : `${bId}::${aId}`;
-}
-
-function defaultHardFilter(source: MatchProfile, target: MatchProfile) {
+function defaultHardFilter<TProfile extends MatchProfile<object>>(source: TProfile, target: TProfile) {
   return source.id !== target.id;
 }
 
-function isAvailable(profile: MatchProfile) {
+function isAvailable<TProfile extends MatchProfile<object>>(profile: TProfile) {
   return profile.isAvailable !== false;
 }
 
-export function buildPhase1Candidates<TProfile extends MatchProfile>(
+export function buildPhase1Candidates<TProfile extends MatchProfile<object>>(
   profiles: TProfile[],
   config: Phase1Config<TProfile> = {}
 ) {
-  const hardFilter = config.hardFilter ?? defaultHardFilter;
-  const directedScore = config.directedScore ?? defaultDirectedScore;
+  const hardFilter: HardFilter<TProfile> = config.hardFilter ?? defaultHardFilter;
+  const directedScore: DirectedScore<TProfile> = config.directedScore ?? defaultDirectedScore;
   const reciprocalScore = config.reciprocalScore ?? defaultReciprocalScore;
+  const isProfileAvailable: (profile: TProfile) => boolean = config.isAvailable ?? isAvailable;
+  const createPairId = config.pairId ?? ((source: TProfile, target: TProfile) => stablePairId(source.id, target.id));
   const maxCandidatesPerProfile = config.maxCandidatesPerProfile ?? 50;
   const minReciprocalScore = config.minReciprocalScore ?? 0;
 
-  const eligible = profiles.filter(isAvailable);
+  const eligible = profiles.filter(isProfileAvailable);
   const byId = new Map(eligible.map((profile) => [profile.id, profile]));
   const pairMap = new Map<string, PairCandidate>();
 
@@ -57,7 +61,7 @@ export function buildPhase1Candidates<TProfile extends MatchProfile>(
       .slice(0, maxCandidatesPerProfile);
 
     for (const { target, directed } of scoredTargets) {
-      const id = pairId(source.id, target.id);
+      const id = createPairId(source, target);
       const existing = pairMap.get(id);
       if (!existing) {
         pairMap.set(id, {
@@ -118,7 +122,7 @@ export function assignGreedy(
   capacities?: Record<string, number>
 ) {
   const used = new Map<string, number>();
-  const maxCap = (profileId: string) => Math.max(1, capacities?.[profileId] ?? 1);
+  const maxCap = (profileId: string) => normalizeCapacity(capacities?.[profileId], 1);
   const assignments: MatchAssignment[] = [];
 
   for (const candidate of candidates) {

@@ -7,6 +7,7 @@ import {
   isAdminAuthenticatedForRequest,
 } from '../../../lib/admin-auth';
 import {
+  DEFAULT_ENABLED_PAGE_IDS,
   type AppPageId,
   getAllPages,
   PAGE_FLAGS_COOKIE_NAME,
@@ -19,12 +20,13 @@ const nonHomePageIds = new Set<AppPageId>(
     .map((page) => page.id),
 );
 
-type TogglePreset = 'all' | 'core' | 'journal';
+type TogglePreset = 'default' | 'all' | 'core' | 'journal';
 
 const togglePresets: Record<TogglePreset, AppPageId[]> = {
+  default: DEFAULT_ENABLED_PAGE_IDS.filter((pageId) => pageId !== 'home'),
   all: [...nonHomePageIds],
-  core: ['resilience-pathway', 'echo', 'peer-navigator', 'privacy', 'about'],
-  journal: ['blog', 'about', 'privacy', 'accessibility'],
+  core: ['resilience-pathway', 'echo', 'peer-navigator', 'privacy', 'about', 'mentors'],
+  journal: ['blog', 'about', 'mentors', 'privacy', 'accessibility'],
 };
 
 async function assertAdminSessionOrRedirect(): Promise<void> {

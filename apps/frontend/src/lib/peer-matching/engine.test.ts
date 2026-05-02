@@ -1,4 +1,9 @@
-import { createPeerMatchingEngine, type MatchProfile } from './index';
+import {
+  createEntityMatchingEngine,
+  createMatchingEngine,
+  createPeerMatchingEngine,
+  type MatchProfile,
+} from './index';
 
 type DemoAttributes = {
   role: 'self' | 'peer';
@@ -39,6 +44,101 @@ function createDemoEngine() {
 }
 
 describe('peer matching engine phases', () => {
+  it('keeps the peer-named factory as a backwards-compatible alias', () => {
+    const peerEngine = createPeerMatchingEngine<MatchProfile<DemoAttributes>>();
+    const genericEngine = createMatchingEngine<MatchProfile<DemoAttributes>>();
+
+    expect(peerEngine.match(profiles, { phase: 'phase1' }).metrics.totalProfiles).toBe(
+      genericEngine.match(profiles, { phase: 'phase1' }).metrics.totalProfiles
+    );
+  });
+
+  it('adapts arbitrary domain entities without callers pre-wrapping MatchProfile objects', () => {
+    type ProgramParticipant = {
+      uid: string;
+      kind: 'seeker' | 'navigator';
+      active: boolean;
+      goals: string[];
+      canSupport: string[];
+      remainingCapacity: number;
+    };
+
+    const participants: ProgramParticipant[] = [
+      {
+        uid: 'student-1',
+        kind: 'seeker',
+        active: true,
+        goals: ['belonging'],
+        canSupport: [],
+        remainingCapacity: 1,
+      },
+      {
+        uid: 'navigator-1',
+        kind: 'navigator',
+        active: true,
+        goals: [],
+        canSupport: ['belonging'],
+        remainingCapacity: 1,
+      },
+      {
+        uid: 'navigator-full',
+        kind: 'navigator',
+        active: true,
+        goals: [],
+        canSupport: ['belonging'],
+        remainingCapacity: 0,
+      },
+    ];
+
+    const engine = createEntityMatchingEngine<
+      ProgramParticipant,
+      {
+        kind: ProgramParticipant['kind'];
+        goals: string[];
+        canSupport: string[];
+      }
+    >({
+      adapter: {
+        id: (participant) => participant.uid,
+        isAvailable: (participant) => participant.active,
+        capacity: (participant) => participant.remainingCapacity,
+        attributes: (participant) => ({
+          kind: participant.kind,
+          goals: participant.goals,
+          canSupport: participant.canSupport,
+        }),
+      },
+      defaults: {
+        phase: 'phase1',
+      },
+      phase1: {
+        hardFilter: (source, target) =>
+          source.attributes.kind === 'seeker' &&
+          target.attributes.kind === 'navigator' &&
+          target.capacity !== 0,
+        directedScore: (source, target) => {
+          if (source.attributes.kind === 'seeker') {
+            return source.attributes.goals.some((goal) => target.attributes.canSupport.includes(goal))
+              ? 0.95
+              : 0.2;
+          }
+
+          return target.attributes.goals.some((goal) => source.attributes.canSupport.includes(goal))
+            ? 0.95
+            : 0.2;
+        },
+      },
+    });
+
+    const output = engine.match(participants);
+
+    expect(output.finalAssignments).toHaveLength(1);
+    expect(output.finalAssignments[0]).toMatchObject({
+      aId: 'student-1',
+      bId: 'navigator-1',
+    });
+  });
+
   it('runs phase 1 only and returns phase1 assignments', () => {
     const engine = createDemoEngine();
     const output = engine.match(profiles, { phase: 'phase1', maxAssignments: 2 });
@@ -102,5 +202,22 @@ describe('peer matching engine phases', () => {
     );
 
     expect(selfAssignments.length).toBe(2);
+  });
+
+  it('can snapshot, restore, and reset exploration state', () => {
+    const engine = createDemoEngine();
+    const output = engine.match(profiles, { phase: 'phase3', maxAssignments: 1 });
+    const assignment = output.finalAssignments[0];
+
+    engine.recordOutcome({ pairId: assignment.pairId, reward: 1 });
+    const snapshot = engine.snapshotStore();
+
+    expect(snapshot.byPairId[assignment.pairId].seen).toBe(1);
+
+    engine.resetStore();
+    expect(engine.snapshotStore().byPairId).toEqual({});
+
+    engine.restoreStore(snapshot);
+    expect(engine.snapshotStore().byPairId[assignment.pairId].seen).toBe(1);
   });
 });

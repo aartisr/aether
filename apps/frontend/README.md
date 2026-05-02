@@ -43,7 +43,9 @@ Page toggles (plug-and-play route control):
 - `NEXT_PUBLIC_DISABLED_PAGES`: comma-separated page IDs to disable
 - `NEXT_PUBLIC_ENABLED_PAGES`: comma-separated allowlist of page IDs to enable
 - If `NEXT_PUBLIC_ENABLED_PAGES` is set, it takes priority over disabled list
-- `home` is always enabled
+- Default enabled public pages: `home`, `about`, `mentors`
+- `home` is always enabled; other pages stay hidden unless enabled by admin runtime controls or `NEXT_PUBLIC_ENABLED_PAGES`
+- `NEXT_PUBLIC_DISABLED_PAGES` can hide default enabled non-home pages such as `about` or `mentors`
 - Supported IDs:
   `resilience-pathway, echo, peer-navigator, blog, fairness-governance, privacy, accessibility, about, mentors`
 - Runtime admin page (cookie-based, no restart): `/admin/page-controls`
@@ -55,10 +57,10 @@ Page toggles (plug-and-play route control):
 
 Examples:
 
-- Disable two pages:
-  `NEXT_PUBLIC_DISABLED_PAGES=mentors,fairness-governance`
+- Hide the default Mentors page:
+  `NEXT_PUBLIC_DISABLED_PAGES=mentors`
 - Run a minimal build with only core journey pages:
-  `NEXT_PUBLIC_ENABLED_PAGES=resilience-pathway,echo,peer-navigator`
+  `NEXT_PUBLIC_ENABLED_PAGES=about,mentors,resilience-pathway,echo,peer-navigator`
 
 Echo local model switch:
 

@@ -1,4 +1,4 @@
-import { createPeerMatchingEngine, type MatchProfile } from './peer-matching';
+import { createMatchingEngine, type MatchProfile } from './peer-matching';
 
 export const peerNavigatorBackgrounds = [
   'First-generation College Student',
@@ -46,7 +46,7 @@ export type PeerNavigatorMetrics = {
 };
 
 export function createPeerNavigatorMatcher() {
-  return createPeerMatchingEngine<MatchProfile<PeerAttributes>>({
+  return createMatchingEngine<MatchProfile<PeerAttributes>>({
     phase1: {
       maxCandidatesPerProfile: 25,
       hardFilter: (source, target) => source.id !== target.id && target.attributes.role === 'peer',

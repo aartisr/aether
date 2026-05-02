@@ -15,7 +15,7 @@ function normalizeShares(values: Record<string, number>) {
   return normalized;
 }
 
-export function applyFairnessRescoring<TProfile extends MatchProfile>(
+export function applyFairnessRescoring<TProfile extends MatchProfile<object>>(
   candidates: PairCandidate[],
   profiles: TProfile[],
   config: Phase2Config<TProfile>
@@ -141,7 +141,11 @@ function tryImproveBlockingPairs(assignments: MatchAssignment[], candidates: Pai
   };
 }
 
-export function runPhase2<TProfile extends MatchProfile>(
+function hasMultiCapacity(capacities?: Record<string, number>) {
+  return Object.values(capacities ?? {}).some((capacity) => capacity > 1);
+}
+
+export function runPhase2<TProfile extends MatchProfile<object>>(
   candidates: PairCandidate[],
   profiles: TProfile[],
   config: Phase2Config<TProfile> = {},
@@ -151,7 +155,7 @@ export function runPhase2<TProfile extends MatchProfile>(
   const rescored = applyFairnessRescoring(candidates, profiles, config);
   const baseAssignments = assignGreedy(rescored, "phase2", maxAssignments, capacities);
 
-  if (!config.enableStabilityRefinement) {
+  if (!config.enableStabilityRefinement || hasMultiCapacity(capacities)) {
     return {
       candidates: rescored,
       assignments: baseAssignments,

@@ -33,6 +33,8 @@ type PageOverridesJson = {
 
 export const PAGE_FLAGS_COOKIE_NAME = 'aether_page_flags';
 
+export const DEFAULT_ENABLED_PAGE_IDS = ['home', 'about', 'mentors'] as const satisfies readonly AppPageId[];
+
 const appPages: readonly AppPageDefinition[] = [
   {
     id: 'home',
@@ -97,6 +99,7 @@ const appPages: readonly AppPageDefinition[] = [
 ] as const;
 
 const appPageIdSet = new Set<AppPageId>(appPages.map((page) => page.id));
+const defaultEnabledPageIdSet = new Set<AppPageId>(DEFAULT_ENABLED_PAGE_IDS);
 const pageById = new Map<AppPageId, AppPageDefinition>(appPages.map((page) => [page.id, page]));
 const pageByPath = new Map<string, AppPageDefinition>(appPages.map((page) => [page.path, page]));
 
@@ -136,11 +139,13 @@ function applyOverrides(pageId: AppPageId, overrides: PageOverrides): boolean {
     return overrides.enabled.has(pageId);
   }
 
-  if (overrides.mode === 'none') {
-    return true;
+  const defaultEnabled = defaultEnabledPageIdSet.has(pageId);
+
+  if (overrides.mode === 'disabled') {
+    return defaultEnabled && !overrides.disabled.has(pageId);
   }
 
-  return !overrides.disabled.has(pageId);
+  return defaultEnabled;
 }
 
 function normalizeOverrides(input: PageOverridesJson): PageOverrides {

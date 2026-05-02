@@ -1,23 +1,26 @@
 import { assignGreedy, buildPhase1Candidates } from "./phase1";
 import { runPhase2 } from "./phase2";
 import { recordBanditOutcome, runPhase3 } from "./phase3";
+import { toMatchProfiles } from "./profiles";
 import type {
   BanditStore,
+  EntityMatchEngineConfig,
+  MatchEngine,
   MatchCycleOutput,
   MatchEngineConfig,
   MatchOutcomeEvent,
   MatchProfile,
   MatchRuntimeOptions,
 } from "./types";
+import { cloneBanditStore, createEmptyBanditStore, normalizeCapacity } from "./utils";
 
-function emptyStore(): BanditStore {
-  return { byPairId: {} };
-}
-
-function buildCapacities<TProfile extends MatchProfile>(profiles: TProfile[]) {
+function buildCapacities<TProfile extends MatchProfile<object>>(
+  profiles: TProfile[],
+  capacity?: MatchEngineConfig<TProfile>["capacity"]
+) {
   const capacities: Record<string, number> = {};
   for (const profile of profiles) {
-    capacities[profile.id] = Math.max(1, profile.capacity ?? 1);
+    capacities[profile.id] = normalizeCapacity(capacity?.(profile) ?? profile.capacity, 1);
   }
   return capacities;
 }
@@ -41,15 +44,15 @@ function buildMetrics(output: {
   };
 }
 
-export function createPeerMatchingEngine<TProfile extends MatchProfile = MatchProfile>(
+export function createMatchingEngine<TProfile extends MatchProfile<object> = MatchProfile>(
   config: MatchEngineConfig<TProfile> = {}
-) {
-  const store = emptyStore();
+): MatchEngine<TProfile> {
+  let store = cloneBanditStore(config.initialState?.banditStore ?? createEmptyBanditStore());
 
   function match(profiles: TProfile[], options: MatchRuntimeOptions = {}): MatchCycleOutput {
-    const maxAssignments = options.maxAssignments;
-    const requestedPhase = options.phase ?? "phase3";
-    const capacities = buildCapacities(profiles);
+    const maxAssignments = options.maxAssignments ?? config.defaults?.maxAssignments;
+    const requestedPhase = options.phase ?? config.defaults?.phase ?? "phase3";
+    const capacities = buildCapacities(profiles, config.capacity);
 
     const phase1Candidates = buildPhase1Candidates(profiles, config.phase1);
     const phase1Assignments = assignGreedy(phase1Candidates, "phase1", maxAssignments, capacities);
@@ -105,12 +108,50 @@ export function createPeerMatchingEngine<TProfile extends MatchProfile = MatchPr
   }
 
   function snapshotStore() {
-    return JSON.parse(JSON.stringify(store)) as BanditStore;
+    return cloneBanditStore(store);
+  }
+
+  function restoreStore(nextStore: BanditStore) {
+    store = cloneBanditStore(nextStore);
+  }
+
+  function resetStore() {
+    store = createEmptyBanditStore();
   }
 
   return {
     match,
     recordOutcome,
     snapshotStore,
+    restoreStore,
+    resetStore,
   };
+}
+
+export function createEntityMatchingEngine<
+  TEntity,
+  TAttributes extends object = Record<string, unknown>,
+>(config: EntityMatchEngineConfig<TEntity, TAttributes>): MatchEngine<TEntity> {
+  const engine = createMatchingEngine<MatchProfile<TAttributes>>({
+    defaults: config.defaults,
+    capacity: config.capacity,
+    initialState: config.initialState,
+    phase1: config.phase1,
+    phase2: config.phase2,
+    phase3: config.phase3,
+  });
+
+  return {
+    match: (entities, options) => engine.match(toMatchProfiles(entities, config.adapter), options),
+    recordOutcome: engine.recordOutcome,
+    snapshotStore: engine.snapshotStore,
+    restoreStore: engine.restoreStore,
+    resetStore: engine.resetStore,
+  };
+}
+
+export function createPeerMatchingEngine<TProfile extends MatchProfile<object> = MatchProfile>(
+  config: MatchEngineConfig<TProfile> = {}
+) {
+  return createMatchingEngine(config);
 }

@@ -1,9 +1,6 @@
 import { assignGreedy } from "./phase1";
 import type { BanditStore, MatchAssignment, PairCandidate, Phase3Config } from "./types";
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value));
-}
+import { clampScore } from "./utils";
 
 function ensureArm(store: BanditStore, pairId: string) {
   if (!store.byPairId[pairId]) {
@@ -45,7 +42,7 @@ export function rerankWithConstrainedExploration(
       const jitter = (random() * 2 - 1) * randomJitter;
       const eligibleScore = candidate.phase2Score >= qualityFloor ? candidate.phase2Score : 0;
       const blended = eligibleScore * (1 - explorationWeight) + posteriorMean * explorationWeight + explorationBoost + jitter;
-      const phase3Score = clamp(blended, 0, 1);
+      const phase3Score = clampScore(blended);
 
       const reasons = [...candidate.reasons];
       if (candidate.phase2Score < qualityFloor) {
@@ -83,7 +80,7 @@ export function runPhase3(
 
 export function recordBanditOutcome(store: BanditStore, pairId: string, reward: number) {
   const arm = ensureArm(store, pairId);
-  const boundedReward = clamp(reward, 0, 1);
+  const boundedReward = clampScore(reward);
   arm.alpha += boundedReward;
   arm.beta += 1 - boundedReward;
   arm.seen += 1;
