@@ -1,7 +1,10 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import SocialShareLinks from '../SocialShareLinks';
 import { getFooterNavigationForRequest, trustSignals } from '../../lib/navigation';
 import { authorName, authorUrl, shareTagline, siteName } from '../../lib/site';
+
+const pcssIiUrl = 'https://saugus.pioneercss.org';
 
 function FooterLink({
   href,
@@ -29,9 +32,10 @@ function FooterLink({
 
 export default function SiteFooter() {
   const footerNavigation = getFooterNavigationForRequest();
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-14 border-t border-sky-100 bg-white/88" role="contentinfo">
+    <footer className="mt-14 border-t border-sky-100 bg-white/90" role="contentinfo">
       <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-10 md:grid-cols-[1.2fr_2fr] md:px-6 lg:py-12">
         <section aria-label="Aether summary" className="space-y-5">
           <div>
@@ -63,24 +67,55 @@ export default function SiteFooter() {
         </nav>
       </div>
 
-      <div className="border-t border-sky-100 bg-slate-950 text-white">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-5 text-xs md:flex-row md:items-center md:justify-between md:px-6">
-          <div>
-            <p>&copy; {new Date().getFullYear()} {siteName}. Research-driven. Privacy-first.</p>
-            <p className="mt-1 text-slate-300">
-              Logo artwork (c) {new Date().getFullYear()} {authorName}. Dedicated to PCSS II Students.
-            </p>
+      <div className="relative overflow-hidden border-t border-sky-100 bg-slate-950 text-white">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/70 to-transparent" />
+        <div aria-hidden="true" className="pointer-events-none absolute -left-20 top-1/2 h-28 w-80 -translate-y-1/2 rounded-full bg-sky-500/10 blur-3xl" />
+        <div className="relative mx-auto grid w-full max-w-7xl gap-5 px-4 py-5 text-xs md:grid-cols-[minmax(0,1.4fr)_auto] md:items-center md:px-6">
+          <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center">
+            <a
+              href={pcssIiUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit PCSS II Saugus"
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white p-1.5 shadow-[0_18px_45px_rgba(14,165,233,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_22px_55px_rgba(14,165,233,0.26)]"
+            >
+              <Image
+                src="/pcss-ii-logo.jpg"
+                alt="PCSS II"
+                width={220}
+                height={229}
+                className="h-full w-full rounded-xl object-contain"
+                priority={false}
+              />
+            </a>
+            <div className="min-w-0">
+              <p className="font-semibold text-white">&copy; {currentYear} {siteName}. Research-driven. Privacy-first.</p>
+              <p className="mt-1 max-w-2xl leading-5 text-slate-300">
+                Aether logo artwork (c) {currentYear} {authorName}.{' '}
+                <a
+                  href={pcssIiUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-sky-100 underline decoration-sky-300/50 underline-offset-4 transition hover:text-white hover:decoration-white"
+                >
+                  Dedicated to PCSS II Students and Staff.
+                </a>
+              </p>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {trustSignals.map((signal) => (
-              <span key={`footer-${signal}`} className="rounded-full border border-white/15 px-2.5 py-1 font-bold text-sky-100">
-                {signal}
-              </span>
-            ))}
+
+          <div className="flex flex-col gap-3 md:items-end">
+            <div className="flex flex-wrap gap-2 md:justify-end">
+              {trustSignals.map((signal) => (
+                <span key={`footer-${signal}`} className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 font-bold text-sky-100">
+                  {signal}
+                </span>
+              ))}
+            </div>
+            <a href={authorUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-sky-100 no-underline hover:underline">
+              {authorName}
+            </a>
           </div>
-          <a href={authorUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-sky-100 no-underline hover:underline">
-            {authorName}
-          </a>
         </div>
       </div>
     </footer>
