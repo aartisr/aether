@@ -15,16 +15,19 @@ function FooterLink({
   label: string;
   external?: boolean;
 }) {
+  const className =
+    'text-sm text-[color:var(--theme-text-muted)] no-underline transition hover:text-[color:var(--theme-primary-strong)] hover:underline';
+
   if (external || href.startsWith('http://') || href.startsWith('https://')) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600 no-underline hover:text-sky-900 hover:underline">
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
         {label}
       </a>
     );
   }
 
   return (
-    <Link href={href} className="text-sm text-slate-600 no-underline hover:text-sky-900 hover:underline">
+    <Link href={href} className={className}>
       {label}
     </Link>
   );
@@ -35,16 +38,16 @@ export default function SiteFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-14 border-t border-sky-100 bg-white/90" role="contentinfo">
+    <footer className="mt-14 border-t border-[color:var(--theme-border)] bg-[rgb(255_255_255/0.82)]" role="contentinfo">
       <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-10 md:grid-cols-[1.2fr_2fr] md:px-6 lg:py-12">
         <section aria-label="Aether summary" className="space-y-5">
           <div>
-            <p className="font-display text-3xl font-extrabold text-slate-950">{siteName}</p>
-            <p className="mt-3 max-w-md text-sm leading-6 text-slate-650">{shareTagline}</p>
+            <p className="font-display text-3xl font-extrabold text-[color:var(--theme-text)]">{siteName}</p>
+            <p className="mt-3 max-w-md text-sm leading-6 text-[color:var(--theme-text-muted)]">{shareTagline}</p>
           </div>
-          <div className="rounded-2xl border border-sky-100 bg-sky-50/80 p-4">
-            <p className="text-xs font-bold uppercase tracking-[0.12em] text-sky-900">Safety Note</p>
-            <p className="mt-2 text-sm leading-6 text-slate-700">
+          <div className="theme-card p-4">
+            <p className="theme-kicker">Safety Note</p>
+            <p className="mt-2 text-sm leading-6 text-[color:var(--theme-text-muted)]">
               Aether is a support and resilience experience, not emergency care. If there is imminent danger, contact local emergency services. In the United States, call or text 988.
             </p>
           </div>
@@ -54,7 +57,7 @@ export default function SiteFooter() {
         <nav aria-label="Footer navigation" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {footerNavigation.map((group) => (
             <section key={group.title}>
-              <h2 className="text-sm font-extrabold uppercase tracking-[0.12em] text-slate-900">{group.title}</h2>
+              <h2 className="text-sm font-extrabold uppercase tracking-[0.12em] text-[color:var(--theme-text)]">{group.title}</h2>
               <ul className="mt-3 space-y-2">
                 {group.links.map((link) => (
                   <li key={`${group.title}-${link.href}`}>
@@ -67,9 +70,8 @@ export default function SiteFooter() {
         </nav>
       </div>
 
-      <div className="relative overflow-hidden border-t border-sky-100 bg-slate-950 text-white">
-        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/70 to-transparent" />
-        <div aria-hidden="true" className="pointer-events-none absolute -left-20 top-1/2 h-28 w-80 -translate-y-1/2 rounded-full bg-sky-500/10 blur-3xl" />
+      <div className="relative overflow-hidden border-t border-[color:var(--theme-border)] bg-[color:var(--theme-bg-strong)] text-white">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color:var(--theme-mint)] to-transparent" />
         <div className="relative mx-auto grid w-full max-w-7xl gap-5 px-4 py-5 text-xs md:grid-cols-[minmax(0,1.4fr)_auto] md:items-center md:px-6">
           <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center">
             <a
@@ -77,7 +79,7 @@ export default function SiteFooter() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit PCSS II Saugus"
-              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white p-1.5 shadow-[0_18px_45px_rgba(14,165,233,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_22px_55px_rgba(14,165,233,0.26)]"
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white p-1.5 shadow-[0_18px_45px_rgba(21,111,112,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_22px_55px_rgba(21,111,112,0.26)]"
             >
               <Image
                 src="/pcss-ii-logo.jpg"
@@ -107,7 +109,7 @@ export default function SiteFooter() {
           <div className="flex flex-col gap-3 md:items-end">
             <div className="flex flex-wrap gap-2 md:justify-end">
               {trustSignals.map((signal) => (
-                <span key={`footer-${signal}`} className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 font-bold text-sky-100">
+                <span key={`footer-${signal}`} className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 font-bold text-emerald-50">
                   {signal}
                 </span>
               ))}

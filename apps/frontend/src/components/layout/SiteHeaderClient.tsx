@@ -85,10 +85,10 @@ function HeaderNavigationLink({
 }) {
   const current = isCurrentPath(pathname, link.href);
   const className = cx(
-    'inline-flex h-10 items-center rounded-lg px-3 text-sm font-extrabold no-underline transition hover:no-underline focus:no-underline',
+    'inline-flex h-10 items-center rounded-[var(--theme-radius-sm)] px-3 text-sm font-extrabold no-underline transition hover:no-underline focus:no-underline',
     current
-      ? 'bg-slate-950 text-white shadow-sm hover:text-white focus:text-white'
-      : 'text-slate-700 hover:bg-sky-50 hover:text-slate-950 focus:bg-sky-50 focus:text-slate-950',
+      ? 'bg-[color:var(--theme-bg-strong)] text-white shadow-sm hover:text-white focus:text-white'
+      : 'text-[color:var(--theme-text-muted)] hover:bg-white hover:text-[color:var(--theme-text)] focus:bg-white focus:text-[color:var(--theme-text)]',
   );
 
   if (link.external || isExternalHref(link.href)) {
@@ -129,23 +129,23 @@ function PanelNavigationLink({
 }) {
   const current = isCurrentPath(pathname, link.href);
   const className = cx(
-    'block rounded-lg border p-3 no-underline shadow-sm transition hover:-translate-y-0.5 hover:no-underline focus:no-underline',
+    'theme-card-interactive block p-3 no-underline transition hover:no-underline focus:no-underline',
     current
-      ? 'border-sky-300 bg-white text-slate-950 ring-1 ring-sky-100'
-      : 'border-slate-200 bg-white/90 text-slate-800 hover:border-sky-200 hover:bg-sky-50/80',
+      ? 'ring-2 ring-teal-100'
+      : '',
   );
   const content = (
     <>
       <span className="flex items-center justify-between gap-3">
         <span className="text-sm font-extrabold">{link.label}</span>
         {current ? (
-          <span className="rounded-lg bg-sky-100 px-2 py-0.5 text-[0.68rem] font-extrabold uppercase tracking-[0.08em] text-sky-900">
+          <span className="rounded-lg bg-[rgba(21,111,112,0.1)] px-2 py-0.5 text-[0.68rem] font-extrabold uppercase tracking-[0.08em] text-[color:var(--theme-primary-strong)]">
             Current
           </span>
         ) : null}
       </span>
       {link.description ? (
-        <span className="mt-1 block text-xs leading-5 text-slate-600">{link.description}</span>
+        <span className="mt-1 block text-xs leading-5 text-[color:var(--theme-text-muted)]">{link.description}</span>
       ) : null}
     </>
   );
@@ -175,7 +175,7 @@ function HeaderActionLink({
   onNavigate: () => void;
 }) {
   const className =
-    'hidden h-10 items-center rounded-lg bg-teal-600 px-4 text-sm font-extrabold text-white no-underline shadow-sm transition hover:bg-teal-700 hover:text-white hover:no-underline focus:bg-teal-700 focus:text-white focus:no-underline sm:inline-flex';
+    'hidden h-10 items-center rounded-[var(--theme-radius-sm)] border border-[color:var(--theme-primary-strong)] bg-[color:var(--theme-primary-strong)] px-4 text-sm font-extrabold text-white no-underline shadow-[var(--theme-shadow-sm)] transition hover:-translate-y-0.5 hover:bg-[#0c3f41] hover:text-white hover:no-underline focus:bg-[#0c3f41] focus:text-white focus:no-underline sm:inline-flex';
 
   if (link.external || isExternalHref(link.href)) {
     return (
@@ -211,8 +211,8 @@ export default function SiteHeaderClient({
     () => selectDesktopNavigation(allNavigation, pathname),
     [allNavigation, pathname],
   );
-  const ctaLink = primaryNavigation[0] ?? allNavigation[0] ?? { href: '/', label: 'Home' };
-  const ctaLabel = primaryNavigation.length > 0 ? 'Start here' : allNavigation.length > 0 ? 'Explore' : 'Home';
+  const ctaLink = { href: '/ask', label: 'Ask Aether', description: 'Open the guided copilot workspace.' };
+  const ctaLabel = 'Ask Aether';
   const hasNavigation = allNavigation.length > 0;
   const hasOverflowNavigation = overflowNavigation.length > 0;
 
@@ -250,20 +250,23 @@ export default function SiteHeaderClient({
   }, [closeMenus]);
 
   return (
-    <header ref={headerRef} className="sticky top-0 z-50 border-b border-sky-100 bg-white/95 shadow-sm backdrop-blur">
+    <header
+      ref={headerRef}
+      className="sticky top-0 z-50 border-b border-[color:var(--theme-border)] bg-[rgb(255_255_255/0.88)] shadow-[var(--theme-shadow-sm)] backdrop-blur-xl"
+    >
       <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-3 md:px-6">
         <Link
           href="/"
-          className="flex min-w-0 flex-none items-center gap-3 text-slate-950 no-underline hover:text-slate-950 hover:no-underline focus:text-slate-950 focus:no-underline"
+          className="flex min-w-0 flex-none items-center gap-3 text-[color:var(--theme-text)] no-underline hover:text-[color:var(--theme-text)] hover:no-underline focus:text-[color:var(--theme-text)] focus:no-underline"
           onClick={closeMenus}
           aria-label={`${siteName} home`}
         >
-          <span className="grid h-10 w-10 flex-none place-items-center rounded-lg bg-white p-1 shadow-sm ring-1 ring-sky-100">
+          <span className="grid h-10 w-10 flex-none place-items-center rounded-[var(--theme-radius-sm)] bg-white p-1 shadow-sm ring-1 ring-[color:var(--theme-border)]">
             <Image src="/aether-logo-icon.svg" alt="" width={40} height={40} priority className="h-full w-full" />
           </span>
           <span className="min-w-0">
             <span className="block font-display text-2xl font-extrabold leading-none">{siteName}</span>
-            <span className="mt-1 hidden max-w-[13rem] truncate text-xs font-bold text-slate-500 sm:block">
+            <span className="mt-1 hidden max-w-[13rem] truncate text-xs font-bold text-[color:var(--theme-text-muted)] sm:block">
               Student resilience
             </span>
           </span>
@@ -278,10 +281,10 @@ export default function SiteHeaderClient({
               <button
                 type="button"
                 className={cx(
-                  'inline-flex h-10 items-center gap-2 rounded-lg border px-3 text-sm font-extrabold transition',
+                  'inline-flex h-10 items-center gap-2 rounded-[var(--theme-radius-sm)] border px-3 text-sm font-extrabold transition',
                   isExploreOpen
-                    ? 'border-slate-950 bg-slate-950 text-white shadow-sm'
-                    : 'border-sky-100 bg-white text-slate-700 hover:border-sky-200 hover:bg-sky-50 hover:text-slate-950',
+                    ? 'border-[color:var(--theme-bg-strong)] bg-[color:var(--theme-bg-strong)] text-white shadow-sm'
+                    : 'border-[color:var(--theme-border)] bg-white text-[color:var(--theme-text-muted)] hover:border-[color:var(--theme-border-strong)] hover:text-[color:var(--theme-text)]',
                 )}
                 aria-expanded={isExploreOpen}
                 aria-controls={explorePanelId}
@@ -305,10 +308,10 @@ export default function SiteHeaderClient({
             <button
               type="button"
               className={cx(
-                'inline-flex h-10 items-center gap-2 rounded-lg border px-3 text-sm font-extrabold transition lg:hidden',
+                'inline-flex h-10 items-center gap-2 rounded-[var(--theme-radius-sm)] border px-3 text-sm font-extrabold transition lg:hidden',
                 isMobileOpen
-                  ? 'border-slate-950 bg-slate-950 text-white shadow-sm'
-                  : 'border-sky-100 bg-white text-slate-800 hover:border-sky-200 hover:bg-sky-50',
+                  ? 'border-[color:var(--theme-bg-strong)] bg-[color:var(--theme-bg-strong)] text-white shadow-sm'
+                  : 'border-[color:var(--theme-border)] bg-white text-[color:var(--theme-text)] hover:border-[color:var(--theme-border-strong)]',
               )}
               aria-expanded={isMobileOpen}
               aria-controls={mobilePanelId}
@@ -327,7 +330,7 @@ export default function SiteHeaderClient({
       </div>
 
       {isExploreOpen && hasOverflowNavigation ? (
-        <div id={explorePanelId} className="hidden border-t border-sky-100 bg-slate-50/95 lg:block">
+        <div id={explorePanelId} className="hidden border-t border-[color:var(--theme-border)] bg-[rgb(247_251_248/0.96)] lg:block">
           <nav
             aria-label="More site navigation"
             className="mx-auto grid w-full max-w-7xl gap-3 px-6 py-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
@@ -340,7 +343,7 @@ export default function SiteHeaderClient({
       ) : null}
 
       {isMobileOpen && hasNavigation ? (
-        <div id={mobilePanelId} className="border-t border-sky-100 bg-slate-50/95 lg:hidden">
+        <div id={mobilePanelId} className="border-t border-[color:var(--theme-border)] bg-[rgb(247_251_248/0.96)] lg:hidden">
           <nav aria-label="Site navigation" className="mx-auto w-full max-w-7xl px-4 py-4 md:px-6">
             <div className="grid gap-2 sm:grid-cols-2">
               {allNavigation.map((link) => (
@@ -351,14 +354,14 @@ export default function SiteHeaderClient({
         </div>
       ) : null}
 
-      <div className="border-t border-sky-100 bg-gradient-to-r from-sky-50 via-white to-teal-50">
+      <div className="border-t border-[color:var(--theme-border)] bg-[rgb(237_247_242/0.74)]">
         <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-2 md:px-6">
-          <p className="hidden min-w-0 flex-1 truncate text-xs font-bold text-slate-600 md:block">{shareTagline}</p>
+          <p className="hidden min-w-0 flex-1 truncate text-xs font-bold text-[color:var(--theme-text-muted)] md:block">{shareTagline}</p>
           <div className="flex flex-wrap gap-1.5 md:ml-auto">
             {trustSignals.map((signal) => (
               <span
                 key={`header-${signal}`}
-                className="rounded-lg border border-white bg-white/80 px-2 py-1 text-[0.68rem] font-extrabold uppercase tracking-[0.08em] text-slate-600 shadow-sm"
+                className="theme-pill min-h-0 rounded-[var(--theme-radius-sm)] px-2 py-1 text-[0.68rem]"
               >
                 {signal}
               </span>

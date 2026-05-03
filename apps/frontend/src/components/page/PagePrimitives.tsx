@@ -43,7 +43,7 @@ export function ActionLink({
 }) {
   const shouldUseAnchor = external || isExternalHref(href) || href.startsWith('mailto:');
   const linkClassName = cx(
-    'inline-flex items-center text-sm font-semibold text-sky-700 no-underline hover:text-sky-900 hover:underline',
+    'inline-flex items-center text-sm font-semibold no-underline hover:underline',
     className,
   );
 
@@ -78,7 +78,7 @@ export function PageBackdrop({ children, className }: PageBackdropProps) {
   return (
     <section
       className={cx(
-        'min-h-screen bg-[radial-gradient(circle_at_top,_#f5fbff,_#ebf4ff_40%,_#e6f0fa_100%)] p-4 sm:p-6 md:p-8',
+        'theme-section min-h-screen rounded-[2rem] p-4 sm:p-6 md:p-8',
         className,
       )}
     >
@@ -104,10 +104,12 @@ type PageHeroProps = {
 
 export function PageHero({ title, description, kicker }: PageHeroProps) {
   return (
-    <header className="rounded-3xl border border-sky-100 bg-white/85 p-6 text-center shadow-soft md:p-8">
-      {kicker ? <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sky-700">{kicker}</p> : null}
-      <h1 className="mt-2 text-3xl font-extrabold text-slate-900 md:text-5xl">{title}</h1>
-      <p className="mx-auto mt-3 max-w-3xl text-base text-slate-700 md:text-lg">{description}</p>
+    <header className="theme-band p-6 text-center md:p-9">
+      {kicker ? <p className="theme-kicker">{kicker}</p> : null}
+      <h1 className="mt-3 text-3xl font-extrabold text-[color:var(--theme-text)] md:text-5xl">{title}</h1>
+      <p className="mx-auto mt-4 max-w-3xl text-base leading-7 text-[color:var(--theme-text-muted)] md:text-lg">
+        {description}
+      </p>
     </header>
   );
 }
@@ -119,7 +121,7 @@ type SurfaceCardProps = {
 
 export function SurfaceCard({ children, className }: SurfaceCardProps) {
   return (
-    <article className={cx('rounded-2xl border border-sky-100 bg-white/90 p-5 shadow-soft md:p-6', className)}>
+    <article className={cx('theme-card p-5 md:p-6', className)}>
       {children}
     </article>
   );
@@ -159,12 +161,12 @@ export function CardGrid({
   return (
     <div className={cx('grid grid-cols-1 gap-4', columnClassByCount[columns], className)}>
       {items.map((item) => (
-        <article key={item.title} className={cx('rounded-xl border border-slate-200 bg-white p-4', itemClassName)}>
+        <article key={item.title} className={cx('theme-card p-4', itemClassName)}>
           {item.eyebrow ? (
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">{item.eyebrow}</p>
+            <p className="theme-kicker">{item.eyebrow}</p>
           ) : null}
-          <Title className="text-lg font-semibold text-slate-900">{item.title}</Title>
-          <p className="mt-2 text-sm leading-6 text-slate-700">{item.description}</p>
+          <Title className="text-lg font-semibold text-[color:var(--theme-text)]">{item.title}</Title>
+          <p className="mt-2 text-sm leading-6 text-[color:var(--theme-text-muted)]">{item.description}</p>
           {item.href && item.hrefLabel ? (
             <div className="mt-2">
               <ActionLink href={item.href} label={item.hrefLabel} />
@@ -192,10 +194,10 @@ export function LinkCardGrid({ items, className }: LinkCardGridProps) {
         <Link
           key={item.href}
           href={item.href}
-          className="rounded-2xl border border-slate-200 bg-white p-4 no-underline transition hover:-translate-y-0.5 hover:shadow-lg"
+          className="theme-card-interactive p-4 no-underline"
         >
-          <h3 className="text-lg font-semibold text-slate-900">{item.title}</h3>
-          <p className="mt-2 text-sm text-slate-600">{item.description}</p>
+          <h3 className="text-lg font-semibold text-[color:var(--theme-text)]">{item.title}</h3>
+          <p className="mt-2 text-sm leading-6 text-[color:var(--theme-text-muted)]">{item.description}</p>
         </Link>
       ))}
     </div>

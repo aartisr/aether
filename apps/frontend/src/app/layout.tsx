@@ -1,4 +1,7 @@
 import './globals.css';
+import '../styles/theme.css';
+import '../styles/home.css';
+import '../styles/assistant.css';
 import React from 'react';
 import { Manrope, Playfair_Display } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
@@ -209,11 +212,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en" className={`${manrope.variable} ${playfair.variable}`}>
-      <body className="min-h-screen font-sans bg-background-soft text-gray-900 antialiased">
+      <body className="min-h-screen font-sans antialiased">
         <JsonLd data={[websiteJsonLd, organizationJsonLd, navigationJsonLd]} idPrefix="root-layout-jsonld" />
         <a href="#main-content" className="sr-only focus:not-sr-only absolute top-2 left-2 bg-indigo-700 text-white px-4 py-2 rounded z-50">Skip to main content</a>
         <SiteHeader />
-        <main id="main-content" className="max-w-7xl mx-auto w-full px-3 sm:px-4 md:px-8 py-6 md:py-12" tabIndex={-1}>{children}</main>
+        <main id="main-content" className="theme-app-main max-w-7xl mx-auto w-full px-3 sm:px-4 md:px-8 py-6 md:py-12" tabIndex={-1}>{children}</main>
         <SiteFooter />
         <AetherAssistant enabledPaths={enabledPaths} />
         <AnalyticsProvider />

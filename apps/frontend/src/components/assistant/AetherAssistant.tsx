@@ -84,12 +84,12 @@ function canOpenHref(href: string, enabledPathSet: Set<string>) {
 function SourceLink({ source, enabledPathSet }: { source: AssistantSource; enabledPathSet: Set<string> }) {
   const isReachable = canOpenHref(source.href, enabledPathSet);
   const className =
-    'block rounded-xl border border-slate-200 bg-white/85 p-3 text-left no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-sky-200 hover:bg-sky-50';
+    'assistant-source block rounded-xl p-3 text-left no-underline shadow-sm transition';
   const content = (
     <>
-      <span className="block text-xs font-extrabold uppercase tracking-[0.12em] text-sky-700">Source</span>
-      <span className="mt-1 block text-sm font-bold text-slate-950">{source.title}</span>
-      <span className="mt-1 block text-xs leading-5 text-slate-600">{source.description}</span>
+      <span className="theme-kicker block">Source</span>
+      <span className="mt-1 block text-sm font-bold text-[color:var(--theme-text)]">{source.title}</span>
+      <span className="mt-1 block text-xs leading-5 text-[color:var(--theme-text-muted)]">{source.description}</span>
       {!isReachable ? (
         <span className="mt-2 block text-xs font-bold text-amber-700">Page is currently off in navigation.</span>
       ) : null}
@@ -120,17 +120,15 @@ function ActionLink({ action, enabledPathSet }: { action: AssistantAction; enabl
   const isPrimary = action.priority === 'primary';
   const className = cx(
     'block rounded-xl border p-3 text-left no-underline shadow-sm transition',
-    isPrimary
-      ? 'border-slate-950 bg-slate-950 text-white hover:-translate-y-0.5 hover:bg-sky-950'
-      : 'border-sky-200 bg-sky-50 text-slate-950 hover:-translate-y-0.5 hover:bg-sky-100',
+    isPrimary ? 'assistant-action-primary' : 'assistant-action-secondary',
     !isReachable && 'cursor-not-allowed opacity-70 hover:translate-y-0',
   );
   const content = (
     <>
-      <span className={cx('block text-sm font-extrabold', isPrimary ? 'text-white' : 'text-slate-950')}>
+      <span className={cx('block text-sm font-extrabold', isPrimary ? 'text-white' : 'text-[color:var(--theme-text)]')}>
         {action.label}
       </span>
-      <span className={cx('mt-1 block text-xs leading-5', isPrimary ? 'text-slate-200' : 'text-slate-600')}>
+      <span className={cx('mt-1 block text-xs leading-5', isPrimary ? 'text-emerald-50' : 'text-[color:var(--theme-text-muted)]')}>
         {isReachable ? action.description : 'This page is currently off. An admin can enable it when ready.'}
       </span>
     </>
@@ -170,15 +168,13 @@ function AssistantMessageBubble({
       <div
         className={cx(
           'max-w-[92%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm',
-          isUser
-            ? 'bg-slate-950 text-white'
-            : 'border border-slate-200 bg-white text-slate-800',
+          isUser ? 'assistant-message assistant-message-user' : 'assistant-message assistant-message-ai',
         )}
       >
         <p className="whitespace-pre-line">{message.content}</p>
         {!isUser && visibleActions.length > 0 ? (
           <div className="mt-4 grid gap-2">
-            <p className="text-[0.7rem] font-extrabold uppercase tracking-[0.14em] text-slate-500">
+            <p className="text-[0.7rem] font-extrabold uppercase tracking-[0.14em] text-[color:var(--theme-text-soft)]">
               Copilot next steps
             </p>
             {visibleActions.map((action) => (
@@ -354,17 +350,18 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
       aria-modal={isFullPage ? undefined : true}
       className={cx(
         'flex min-h-0 flex-col overflow-hidden border border-slate-200 bg-white shadow-2xl',
+        'assistant-panel',
         isFullPage
           ? 'h-[min(760px,calc(100vh-10rem))] rounded-3xl'
           : 'max-h-[min(720px,calc(100vh-7rem))] w-[min(440px,calc(100vw-1.5rem))] rounded-3xl',
       )}
     >
-      <header className="border-b border-slate-200 bg-slate-950 px-4 py-4 text-white">
+      <header className="assistant-header px-4 py-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-sky-200">Aether Copilot</p>
+            <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-emerald-100">Aether Copilot</p>
             <h2 className="mt-1 text-lg font-extrabold text-white">Guided next step</h2>
-            <p className="mt-1 text-xs leading-5 text-slate-300">
+            <p className="mt-1 text-xs leading-5 text-emerald-50">
               Driving from: <span className="font-bold text-white">{contextProfile.label}</span>
             </p>
           </div>
@@ -381,20 +378,20 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
         </div>
       </header>
 
-      <div ref={transcriptRef} className="min-h-0 flex-1 space-y-4 overflow-y-auto bg-slate-50/70 p-4">
+      <div ref={transcriptRef} className="assistant-transcript min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
         {messages.map((message) => (
           <AssistantMessageBubble key={message.id} message={message} enabledPathSet={enabledPathSet} />
         ))}
         {isSending ? (
           <div className="flex justify-start">
-            <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-600 shadow-sm">
+            <div className="theme-card rounded-2xl px-4 py-3 text-sm font-semibold text-[color:var(--theme-text-muted)]">
               Choosing the next useful step...
             </div>
           </div>
         ) : null}
       </div>
 
-      <div className="border-t border-slate-200 bg-white p-4">
+      <div className="assistant-composer p-4">
         {latestAssistantSuggestions && latestAssistantSuggestions.length > 0 ? (
           <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
             {latestAssistantSuggestions.slice(0, 3).map((suggestion) => (
@@ -402,7 +399,7 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
                 key={suggestion}
                 type="button"
                 onClick={() => void sendMessage(suggestion)}
-                className="shrink-0 rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-extrabold text-sky-900 transition hover:bg-sky-100"
+                className="theme-pill shrink-0 px-3 py-1.5 text-xs"
               >
                 {suggestion}
               </button>
@@ -421,16 +418,16 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
             onKeyDown={handleInputKeyDown}
             rows={isFullPage ? 3 : 2}
             placeholder="Ask about this page, Peer Navigator, privacy, RAG, or where to start..."
-            className="max-h-36 min-h-[4.5rem] w-full resize-none rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm leading-6 text-slate-900 shadow-inner outline-none transition placeholder:text-slate-400 focus:border-sky-400 focus:ring-4 focus:ring-sky-100"
+            className="assistant-input max-h-36 min-h-[4.5rem] w-full resize-none rounded-2xl px-4 py-3 text-sm leading-6 shadow-inner outline-none transition placeholder:text-slate-400"
           />
           <div className="flex items-center justify-between gap-3">
-            <p className="text-[0.72rem] leading-5 text-slate-500">
+            <p className="text-[0.72rem] leading-5 text-[color:var(--theme-text-soft)]">
               Informational only. Not emergency, clinical, legal, or crisis care.
             </p>
             <button
               type="submit"
               disabled={isSending || input.trim().length === 0}
-              className="shrink-0 rounded-xl bg-slate-950 px-4 py-2 text-sm font-extrabold text-white shadow-sm transition hover:bg-sky-900 disabled:cursor-not-allowed disabled:bg-slate-300"
+              className="theme-button theme-button-primary shrink-0 px-4 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-45"
             >
               Send
             </button>
@@ -454,22 +451,22 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
       <button
         type="button"
         onClick={() => setIsOpen((current) => !current)}
-        className="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-950 px-4 py-3 text-left text-white shadow-2xl transition hover:-translate-y-0.5 hover:bg-sky-950"
+        className="assistant-launcher group flex items-center gap-3 rounded-2xl px-4 py-3 text-left transition"
         aria-expanded={isOpen}
         aria-controls="ask-aether-floating-panel"
       >
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-400 text-sm font-black text-slate-950">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[color:var(--theme-gold)] text-sm font-black text-[color:var(--theme-text)]">
           AI
         </span>
         <span className="hidden sm:block">
           <span className="block text-sm font-extrabold">Aether Copilot</span>
-          <span className="block text-xs text-slate-300">Guides your next step</span>
+          <span className="block text-xs text-emerald-50">Guides your next step</span>
         </span>
       </button>
       {!isOpen ? (
         <Link
           href="/ask"
-          className="hidden rounded-full border border-slate-200 bg-white/95 px-3 py-1.5 text-xs font-extrabold text-slate-700 no-underline shadow-lg transition hover:bg-sky-50 hover:text-slate-950 sm:inline-flex"
+          className="hidden rounded-full border border-[color:var(--theme-border)] bg-white/95 px-3 py-1.5 text-xs font-extrabold text-[color:var(--theme-text-muted)] no-underline shadow-lg transition hover:bg-[color:var(--theme-bg-soft)] hover:text-[color:var(--theme-text)] sm:inline-flex"
         >
           Open full copilot
         </Link>

@@ -19,9 +19,9 @@
   --blog-font-ui: "Manrope", "Avenir Next", "Segoe UI", sans-serif;
   min-height: 100%;
   background:
-    radial-gradient(circle at 85% -5%, rgba(73, 147, 255, 0.2), transparent 42%),
-    radial-gradient(circle at -5% 15%, rgba(34, 101, 220, 0.17), transparent 38%),
-    linear-gradient(180deg, var(--blog-bg-soft) 0%, #eef3fa 100%);
+    linear-gradient(180deg, var(--blog-bg-soft) 0%, #eef3fa 100%),
+    linear-gradient(90deg, rgba(73, 147, 255, 0.08) 0 1px, transparent 1px 100%);
+  background-size: auto, 72px 72px;
   color: var(--blog-copy);
   padding: 0.25rem 0 2rem;
   transition: background-color 280ms ease, color 280ms ease;
@@ -42,9 +42,8 @@
   --blog-focus: #fdc93c;
   --blog-shadow: 0 18px 44px -28px rgba(0, 0, 0, 0.75);
   background:
-    radial-gradient(circle at 85% -5%, rgba(110, 174, 255, 0.15), transparent 42%),
-    radial-gradient(circle at -5% 15%, rgba(56, 104, 189, 0.12), transparent 38%),
-    linear-gradient(180deg, #1a202c 0%, #151d2e 100%);
+    linear-gradient(180deg, #1a202c 0%, #151d2e 100%),
+    linear-gradient(90deg, rgba(110, 174, 255, 0.08) 0 1px, transparent 1px 100%);
 }
 
 /* === HIGH CONTRAST THEME === */
@@ -150,16 +149,14 @@
 .blog-post-header::after {
   content: "";
   position: absolute;
-  inset: auto -20% -30% auto;
-  width: 16rem;
-  height: 16rem;
-  background: radial-gradient(circle, rgba(46, 114, 224, 0.18) 0%, rgba(46, 114, 224, 0) 68%);
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0 70%, rgba(46, 114, 224, 0.08) 70% 71%, transparent 71% 100%);
   pointer-events: none;
 }
 
 .blog-shell[data-theme="dark"] .blog-hero::after,
 .blog-shell[data-theme="dark"] .blog-post-header::after {
-  background: radial-gradient(circle, rgba(110, 174, 255, 0.12) 0%, rgba(110, 174, 255, 0) 68%);
+  background: linear-gradient(120deg, transparent 0 70%, rgba(110, 174, 255, 0.08) 70% 71%, transparent 71% 100%);
 }
 
 .blog-shell[data-theme="high-contrast"] .blog-hero::after,

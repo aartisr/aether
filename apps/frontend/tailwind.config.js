@@ -23,16 +23,16 @@ module.exports = {
     },
     extend: {
       colors: {
-        primary: '#4F8FCB', // calming blue
-        primaryLight: '#E6F0FA',
-        primaryDark: '#2B5D8C',
-        accent: '#A78BFA', // soft indigo
-        accentLight: '#F3F0FF',
-        accentDark: '#6D28D9',
-        background: '#F7FAFC',
-        backgroundSoft: '#F0F4FF',
-        surface: '#FFFFFF',
-        surfaceSubtle: '#F5F7FB',
+        primary: 'rgb(var(--theme-primary-rgb) / <alpha-value>)',
+        primaryLight: 'var(--theme-bg-soft)',
+        primaryDark: 'var(--theme-primary-strong)',
+        accent: 'rgb(var(--theme-accent-rgb) / <alpha-value>)',
+        accentLight: 'var(--theme-lavender)',
+        accentDark: '#cf5d48',
+        background: 'var(--theme-bg)',
+        backgroundSoft: 'var(--theme-bg-soft)',
+        surface: 'var(--theme-bg-elevated)',
+        surfaceSubtle: 'var(--theme-bg-soft)',
         success: '#4ADE80',
         warning: '#FBBF24',
         error: '#F87171',

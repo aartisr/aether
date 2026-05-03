@@ -95,12 +95,12 @@ export default function MentorsPage() {
           description="This project exists because mentors gave more than advice. They gave precision, challenge, and care at every critical turning point."
         />
 
-        <SurfaceCard className="bg-gradient-to-r from-sky-50 via-white to-emerald-50">
-          <h2 className="text-2xl font-bold text-slate-900">A Public Thank You</h2>
-          <p className="mt-3 text-slate-700 leading-7">
+        <SurfaceCard className="theme-band">
+          <h2 className="text-2xl font-bold text-[color:var(--theme-text)]">A Public Thank You</h2>
+          <p className="mt-3 leading-7 text-[color:var(--theme-text-muted)]">
             Aether was shaped in rooms where mentors asked harder questions than we expected and offered steadier support than we deserved. They challenged assumptions, redirected weak decisions, and helped us build a system that protects students while remaining practical to implement.
           </p>
-          <p className="mt-3 text-slate-700 leading-7">
+          <p className="mt-3 leading-7 text-[color:var(--theme-text-muted)]">
             This page is a standing acknowledgment that mentorship is core infrastructure. It is as important to project quality as code, design, and research.
           </p>
         </SurfaceCard>
@@ -109,14 +109,14 @@ export default function MentorsPage() {
           {featuredMentors.map((mentor, index) => (
             <SurfaceCard
               key={mentor.name}
-              className="bg-[linear-gradient(135deg,_rgba(14,165,233,0.08),_rgba(16,185,129,0.06),_rgba(255,255,255,1))]"
+              className="bg-[linear-gradient(135deg,_rgba(21,111,112,0.08),_rgba(232,111,87,0.06),_rgba(255,255,255,1))]"
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+              <p className="theme-kicker">
                 Featured Mentor {index + 1}
               </p>
-              <h2 className="mt-2 text-2xl font-bold text-slate-900">Thank You, {mentor.name}</h2>
-              <p className="mt-1 text-sm text-sky-800 font-semibold">{mentor.title}</p>
-              <p className="mt-4 text-slate-700 leading-7">{mentor.gratitude}</p>
+              <h2 className="mt-2 text-2xl font-bold text-[color:var(--theme-text)]">Thank You, {mentor.name}</h2>
+              <p className="mt-1 text-sm font-semibold text-[color:var(--theme-primary-strong)]">{mentor.title}</p>
+              <p className="mt-4 leading-7 text-[color:var(--theme-text-muted)]">{mentor.gratitude}</p>
             </SurfaceCard>
           ))}
         </section>
@@ -124,9 +124,9 @@ export default function MentorsPage() {
         <section aria-label="Mentor Impact" className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {mentorImpactStats.map((item) => (
             <SurfaceCard key={item.label} className="h-full">
-              <p className="text-sm uppercase tracking-[0.12em] text-slate-500">{item.label}</p>
-              <p className="mt-2 text-4xl font-extrabold text-sky-700">{item.value}</p>
-              <p className="mt-3 text-sm text-slate-700 leading-6">{item.note}</p>
+              <p className="text-sm uppercase tracking-[0.12em] text-[color:var(--theme-text-soft)]">{item.label}</p>
+              <p className="mt-2 text-4xl font-extrabold text-[color:var(--theme-primary-strong)]">{item.value}</p>
+              <p className="mt-3 text-sm leading-6 text-[color:var(--theme-text-muted)]">{item.note}</p>
             </SurfaceCard>
           ))}
         </section>

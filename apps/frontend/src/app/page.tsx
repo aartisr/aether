@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import SocialShareLinks from '../components/SocialShareLinks';
+import AetherLogoLockup from '../components/brand/AetherLogoLockup';
 import { CardGrid, JsonLd, LinkCardGrid, SurfaceCard } from '../components/page/PagePrimitives';
 import { homeFaqs, homeFeatureHighlights, homeValueCards } from '../lib/home-page';
 import {
@@ -42,8 +42,7 @@ export default function Home() {
       return {
         href: page.path,
         label: 'Try Echo Chamber',
-        className:
-          'w-full rounded-lg bg-indigo-600 px-6 py-3 font-semibold text-white shadow transition hover:bg-indigo-700 sm:w-auto',
+        className: 'theme-button theme-button-accent w-full px-6 py-3 sm:w-auto',
       };
     }
 
@@ -51,18 +50,31 @@ export default function Home() {
       return {
         href: page.path,
         label: 'Open Resilience Hub',
-        className:
-          'w-full rounded-lg bg-teal-600 px-6 py-3 font-semibold text-white shadow transition hover:bg-teal-700 sm:w-auto',
+        className: 'theme-button theme-button-primary w-full px-6 py-3 sm:w-auto',
       };
     }
 
     return {
       href: page.path,
-      label: 'Learn More',
-      className:
-        'w-full rounded-lg border border-indigo-600 bg-white px-6 py-3 font-semibold text-indigo-700 shadow transition hover:bg-indigo-50 sm:w-auto',
+      label: 'Start with Aether',
+      className: 'theme-button theme-button-primary w-full px-6 py-3 sm:w-auto',
     };
   });
+
+  const returnLoopSignals = [
+    {
+      title: 'A calm first step',
+      description: 'Aether starts with orientation, not pressure, so students can understand what support is available.',
+    },
+    {
+      title: 'A reason to come back',
+      description: 'Reflection, peer connection, and guided pathways create a rhythm that grows with each visit.',
+    },
+    {
+      title: 'Trust in plain sight',
+      description: 'Privacy, safety boundaries, and source-backed AI guidance stay visible across the experience.',
+    },
+  ];
 
   const organizationJsonLd = {
     '@context': 'https://schema.org',
@@ -152,87 +164,111 @@ export default function Home() {
   };
 
   return (
-    <section className="min-h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 p-3 sm:p-4 md:p-6">
+    <section className="home-page space-y-12 overflow-hidden px-3 pb-12 sm:px-4 md:space-y-16 md:px-6">
       <JsonLd
         idPrefix="home-jsonld"
         data={[organizationJsonLd, webPageJsonLd, softwareApplicationJsonLd, itemListJsonLd, faqJsonLd]}
       />
-      <section className="max-w-6xl w-full text-center space-y-6 md:space-y-8">
-        <div className="mx-auto w-full max-w-3xl rounded-2xl border border-indigo-100 bg-white/70 p-3 shadow-soft">
-          <Image
-            src="/aether-logo.svg"
-            alt="Aether logo"
-            width={1080}
-            height={360}
-            priority
-            className="h-auto w-full"
-          />
-        </div>
-        <h1 className="mx-auto max-w-5xl text-balance text-2xl sm:text-4xl md:text-6xl font-extrabold text-indigo-800 drop-shadow-lg leading-tight">
-          Aether: Student Resiliency Ecosystem
-        </h1>
-        <p className="mx-auto max-w-3xl text-base sm:text-lg md:text-2xl text-gray-700">
-          A research-driven, privacy-first platform for student mental health, powered by
-          multi-modal AI and peer support.
-        </p>
-        <p className="mx-auto max-w-4xl text-sm sm:text-base text-slate-700">
-          {shareTagline} The platform makes every pathway easy for humans, search engines, and AI
-          assistants to understand.
-        </p>
-        <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap md:mt-8 md:gap-4">
-          {homepageCallToActions.map((callToAction) => (
-            <Link
-              key={callToAction.href}
-              href={callToAction.href}
-              className={callToAction.className}
-            >
-              {callToAction.label}
+      <section className="home-hero">
+        <div className="home-hero-inner">
+          <div className="home-logo-mark">
+            <AetherLogoLockup className="home-logo-svg" />
+          </div>
+          <p className="theme-kicker">Privacy-first student resilience</p>
+          <h1 className="home-hero-title">Aether</h1>
+          <p className="home-hero-copy">
+            A warm, evidence-informed resilience ecosystem where students can reflect, find direction, and return to
+            support that feels steady.
+          </p>
+          <div className="flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
+            {homepageCallToActions.map((callToAction) => (
+              <Link key={callToAction.href} href={callToAction.href} className={callToAction.className}>
+                {callToAction.label}
+              </Link>
+            ))}
+            <Link href="/ask" className="theme-button theme-button-secondary w-full px-6 py-3 sm:w-auto">
+              Ask Aether
             </Link>
+          </div>
+          <div className="flex flex-wrap justify-center gap-2">
+            {['Private by default', 'Peer-aware', 'Safety bounded', 'AI-readable'].map((signal) => (
+              <span key={signal} className="theme-pill">
+                {signal}
+              </span>
+            ))}
+          </div>
+          <SocialShareLinks path="/" title={siteTitle} />
+        </div>
+      </section>
+
+      <section className="home-journey-dock">
+        <div className="home-journey-grid theme-shell">
+          {returnLoopSignals.map((signal) => (
+            <article key={signal.title} className="home-journey-card theme-card">
+              <strong>{signal.title}</strong>
+              <span>{signal.description}</span>
+            </article>
           ))}
         </div>
-        <SocialShareLinks path="/" title={siteTitle} />
+      </section>
 
-        <CardGrid
-          items={homeFeatureHighlights}
-          columns="four"
-          titleLevel="h2"
-          className="mt-6 text-left md:mt-8"
-          itemClassName="border-indigo-100 bg-white/80 shadow-soft"
-        />
+      <section className="theme-shell space-y-6">
+        <div className="home-section-heading">
+          <p className="theme-kicker">Why it feels worth returning to</p>
+          <h2>Support that has a rhythm.</h2>
+          <p>
+            The strongest wellbeing products give people an immediate path, a safe sense of progress, and clear trust
+            markers. Aether now brings those patterns into a quieter, reusable interface system.
+          </p>
+        </div>
+        <CardGrid items={homeFeatureHighlights} columns="four" titleLevel="h2" className="text-left" />
+      </section>
 
-        <SurfaceCard className="border-sky-100 bg-white/85 text-left">
-          <div className="mx-auto max-w-4xl">
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Explore the Aether ecosystem</h2>
-            <p className="mt-3 text-slate-700">
-              Each section is intentionally linkable, readable, and self-describing so search
-              engines, AI assistants, and social previews can surface the right entry point for the
-              right question.
-            </p>
-            <LinkCardGrid
-              className="mt-6"
-              items={visibleSections.slice(1).map((section) => ({
-                title: section.name,
-                href: section.path,
-                description: section.description,
-              }))}
-            />
-          </div>
+      <section className="theme-shell home-return-loop">
+        <SurfaceCard className="home-return-panel">
+          <p className="theme-kicker">Explore Aether</p>
+          <h2 className="mt-2 text-3xl font-extrabold text-[color:var(--theme-text)] md:text-4xl">
+            Choose the path that matches the moment.
+          </h2>
+          <p className="mt-4 leading-7 text-[color:var(--theme-text-muted)]">
+            {shareTagline} Navigation stays simple even when admins turn features on and off.
+          </p>
+          <LinkCardGrid
+            className="mt-6"
+            items={visibleSections.slice(1).map((section) => ({
+              title: section.name,
+              href: section.path,
+              description: section.description,
+            }))}
+          />
         </SurfaceCard>
 
-        <CardGrid
-          items={homeValueCards}
-          columns="three"
-          titleLevel="h2"
-          className="text-left"
-          itemClassName="rounded-2xl border-indigo-100 bg-white/85 p-5 shadow-soft"
-        />
+        <SurfaceCard className="home-return-panel">
+          <p className="theme-kicker">Retention loop</p>
+          <h2 className="mt-2 text-3xl font-extrabold text-[color:var(--theme-text)] md:text-4xl">
+            Come back for clarity, not noise.
+          </h2>
+          <div className="home-signal-list mt-6">
+            {homeValueCards.map((card) => (
+              <article key={card.title} className="home-signal-item">
+                <strong>{card.title}</strong>
+                <span>{card.description}</span>
+              </article>
+            ))}
+          </div>
+        </SurfaceCard>
+      </section>
 
-        <SurfaceCard className="border-indigo-100 bg-white/85 text-left">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Frequently asked questions</h2>
+      <section className="theme-shell">
+        <SurfaceCard className="home-return-panel">
+          <div className="home-section-heading">
+            <p className="theme-kicker">Quick answers</p>
+            <h2>Frequently asked questions</h2>
+          </div>
           <CardGrid
             items={homeFaqs.map((faq) => ({ title: faq.question, description: faq.answer }))}
             columns="two"
-            className="mt-5"
+            className="mt-6"
           />
         </SurfaceCard>
       </section>

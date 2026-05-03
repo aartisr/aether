@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 :root {
-  --surface-bg: #f7fbff;
-  --text-main: #11263f;
-  --link-main: #0f6db1;
-  --link-hover: #0b4f82;
+  --surface-bg: var(--theme-bg, #f7fbf8);
+  --text-main: var(--theme-text, #17211f);
+  --link-main: var(--theme-primary, #156f70);
+  --link-hover: var(--theme-primary-strong, #0f4d4f);
 }
 
 html {
@@ -17,10 +17,6 @@ html {
 }
 
 body {
-  background:
-    radial-gradient(circle at 5% 0%, rgba(196, 232, 255, 0.35), transparent 28%),
-    radial-gradient(circle at 95% 15%, rgba(203, 241, 230, 0.34), transparent 22%),
-    linear-gradient(120deg, #f4f9ff 0%, #edf5ff 45%, #e8f2fb 100%);
   min-height: 100vh;
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
@@ -64,22 +60,22 @@ summary::-webkit-details-marker {
 }
 
 .social-share-link {
-  border: 1px solid #bfdbfe;
+  border: 1px solid var(--theme-border, #d8e6df);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.88);
-  color: #0f4dc7;
+  color: var(--theme-primary-strong, #0f4d4f);
   font-size: 0.86rem;
   font-weight: 800;
   padding: 0.48rem 0.78rem;
   text-decoration: none;
-  box-shadow: 0 10px 24px -20px rgba(15, 34, 66, 0.55);
+  box-shadow: var(--theme-shadow-sm, 0 10px 24px -20px rgba(15, 34, 66, 0.55));
   white-space: nowrap;
 }
 
 .social-share-link:hover,
 .social-share-link:focus {
   background: #eff6ff;
-  color: #0a2f80;
+  color: var(--theme-primary-strong, #0f4d4f);
 }
 
 
@@ -110,9 +106,9 @@ a:hover, a:focus {
 
 ::-webkit-scrollbar {
   width: 8px;
-  background: #f0f4ff;
+  background: var(--theme-bg-soft, #edf7f2);
 }
 ::-webkit-scrollbar-thumb {
-  background: #e6f0fa;
+  background: #d8e6df;
   border-radius: 8px;
 }

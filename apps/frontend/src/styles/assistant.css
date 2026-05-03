@@ -1,0 +1,91 @@
+.assistant-panel {
+  border: 1px solid rgb(216 230 223 / 0.88);
+  background: rgb(255 255 255 / 0.96);
+  box-shadow: var(--theme-shadow-lg);
+}
+
+.assistant-header {
+  border-bottom: 1px solid rgb(216 230 223 / 0.82);
+  background:
+    linear-gradient(135deg, var(--theme-bg-strong), #20342f),
+    linear-gradient(90deg, rgb(var(--theme-primary-rgb) / 0.25), rgb(var(--theme-accent-rgb) / 0.16));
+  color: white;
+}
+
+.assistant-transcript {
+  background:
+    linear-gradient(180deg, rgb(247 251 248 / 0.94), rgb(237 247 242 / 0.88)),
+    linear-gradient(90deg, rgb(var(--theme-primary-rgb) / 0.05) 0 1px, transparent 1px 100%);
+  background-size: auto, 42px 42px;
+}
+
+.assistant-message {
+  border-radius: var(--theme-radius-lg);
+  box-shadow: var(--theme-shadow-sm);
+}
+
+.assistant-message-user {
+  background: var(--theme-bg-strong);
+  color: white;
+}
+
+.assistant-message-ai {
+  border: 1px solid rgb(216 230 223 / 0.9);
+  background: rgb(255 255 255 / 0.94);
+  color: var(--theme-text);
+}
+
+.assistant-action-primary {
+  border: 1px solid var(--theme-primary-strong);
+  background: var(--theme-primary-strong);
+  color: white;
+}
+
+.assistant-action-secondary {
+  border: 1px solid rgb(var(--theme-primary-rgb) / 0.24);
+  background: rgb(237 247 242 / 0.9);
+  color: var(--theme-text);
+}
+
+.assistant-source {
+  border: 1px solid rgb(216 230 223 / 0.88);
+  background: rgb(255 255 255 / 0.88);
+}
+
+.assistant-source:hover,
+.assistant-source:focus-visible,
+.assistant-action-primary:hover,
+.assistant-action-primary:focus-visible,
+.assistant-action-secondary:hover,
+.assistant-action-secondary:focus-visible {
+  transform: translateY(-2px);
+}
+
+.assistant-composer {
+  border-top: 1px solid rgb(216 230 223 / 0.9);
+  background: rgb(255 255 255 / 0.98);
+}
+
+.assistant-input {
+  border: 1px solid rgb(167 201 189 / 0.9);
+  background: rgb(255 255 255 / 0.96);
+  color: var(--theme-text);
+}
+
+.assistant-input:focus {
+  border-color: rgb(var(--theme-primary-rgb) / 0.55);
+  box-shadow: var(--theme-focus);
+}
+
+.assistant-launcher {
+  border: 1px solid rgb(216 230 223 / 0.9);
+  background: var(--theme-bg-strong);
+  color: white;
+  box-shadow: var(--theme-shadow-lg);
+}
+
+.assistant-launcher:hover,
+.assistant-launcher:focus-visible {
+  background: var(--theme-primary-strong);
+  transform: translateY(-2px);
+}

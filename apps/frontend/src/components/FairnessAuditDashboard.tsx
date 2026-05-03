@@ -92,12 +92,12 @@ export default function FairnessAuditDashboard({
     : auditLog;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100 p-3 sm:p-6">
+    <div className="theme-section min-h-screen rounded-[2rem] p-3 sm:p-6">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-amber-900 mb-2 sm:text-4xl">Fairness Audit Dashboard</h1>
-          <p className="text-amber-700">Peer Matching System Governance & Transparency</p>
+          <h1 className="mb-2 text-3xl font-bold text-[color:var(--theme-text)] sm:text-4xl">Fairness Audit Dashboard</h1>
+          <p className="text-[color:var(--theme-text-muted)]">Peer Matching System Governance & Transparency</p>
         </div>
 
         {/* Policy Status */}

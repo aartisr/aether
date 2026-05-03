@@ -38,12 +38,12 @@ export default function NotFound() {
   return (
     <section className="mx-auto flex min-h-[68vh] w-full max-w-6xl items-center px-2 py-8">
       <div className="grid w-full gap-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
-        <article className="rounded-[2rem] border border-sky-100 bg-white/92 p-6 shadow-soft md:p-8">
-          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-sky-700">Page Not Found</p>
-          <h1 className="mt-3 max-w-3xl text-4xl font-extrabold leading-tight text-slate-950 md:text-6xl">
+        <article className="theme-band p-6 md:p-8">
+          <p className="theme-kicker">Page Not Found</p>
+          <h1 className="mt-3 max-w-3xl text-4xl font-extrabold leading-tight text-[color:var(--theme-text)] md:text-6xl">
             We could not find that page.
           </h1>
-          <p className="mt-4 max-w-2xl text-base leading-7 text-slate-700 md:text-lg">
+          <p className="mt-4 max-w-2xl text-base leading-7 text-[color:var(--theme-text-muted)] md:text-lg">
             The link may be old, the address may have been typed differently, or this section may not be active right now.
             The best next step is usually to return home and choose a current path.
           </p>
@@ -51,21 +51,21 @@ export default function NotFound() {
           <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
               href="/"
-              className="inline-flex items-center justify-center rounded-full bg-slate-950 px-5 py-3 text-sm font-extrabold text-white no-underline shadow-lg shadow-slate-900/10 transition hover:bg-sky-900"
+              className="theme-button theme-button-primary px-5 py-3 text-sm"
             >
               Go to homepage
             </Link>
             <Link
               href="/sitemap.xml"
-              className="inline-flex items-center justify-center rounded-full border border-sky-200 bg-white px-5 py-3 text-sm font-extrabold text-sky-900 no-underline transition hover:bg-sky-50"
+              className="theme-button theme-button-secondary px-5 py-3 text-sm"
             >
               View sitemap
             </Link>
           </div>
 
-          <div className="mt-7 rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
-            <h2 className="text-sm font-extrabold uppercase tracking-[0.12em] text-slate-700">Quick checks</h2>
-            <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
+          <div className="theme-card mt-7 p-4">
+            <h2 className="text-sm font-extrabold uppercase tracking-[0.12em] text-[color:var(--theme-text)]">Quick checks</h2>
+            <ul className="mt-3 space-y-2 text-sm leading-6 text-[color:var(--theme-text-muted)]">
               <li>Check the address for missing letters or extra symbols.</li>
               <li>If you followed a saved link, start from the homepage to find the current page.</li>
               <li>If a page was recently turned off in admin controls, it will intentionally show this screen.</li>
@@ -73,10 +73,10 @@ export default function NotFound() {
           </div>
         </article>
 
-        <aside className="rounded-[2rem] border border-emerald-100 bg-white/88 p-5 shadow-soft md:p-6">
-          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-emerald-700">Continue From Here</p>
-          <h2 className="mt-2 text-2xl font-extrabold text-slate-950">Available Aether paths</h2>
-          <p className="mt-2 text-sm leading-6 text-slate-600">
+        <aside className="theme-card p-5 md:p-6">
+          <p className="theme-kicker">Continue From Here</p>
+          <h2 className="mt-2 text-2xl font-extrabold text-[color:var(--theme-text)]">Available Aether paths</h2>
+          <p className="mt-2 text-sm leading-6 text-[color:var(--theme-text-muted)]">
             These links reflect the pages currently enabled for this browser session.
           </p>
 
@@ -85,19 +85,19 @@ export default function NotFound() {
               <Link
                 key={route.href}
                 href={route.href}
-                className="group rounded-2xl border border-slate-200 bg-white p-4 no-underline transition hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-lg"
+                className="theme-card-interactive group p-4 no-underline"
               >
-                <span className="block text-base font-extrabold text-slate-950 group-hover:text-sky-900">
+                <span className="block text-base font-extrabold text-[color:var(--theme-text)] group-hover:text-[color:var(--theme-primary-strong)]">
                   {route.label}
                 </span>
                 {route.description ? (
-                  <span className="mt-1 block text-sm leading-6 text-slate-600">{route.description}</span>
+                  <span className="mt-1 block text-sm leading-6 text-[color:var(--theme-text-muted)]">{route.description}</span>
                 ) : null}
               </Link>
             ))}
           </div>
 
-          <p className="mt-5 text-xs font-semibold text-slate-500">Error code: 404</p>
+          <p className="mt-5 text-xs font-semibold text-[color:var(--theme-text-soft)]">Error code: 404</p>
         </aside>
       </div>
     </section>
