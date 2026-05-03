@@ -14,7 +14,7 @@ import FairnessAuditDashboard, {
  */
 
 export default function FairnessGovernancePage() {
-  const { metrics, auditLog, policy } = generateMockFairnessData();
+  const { metrics, auditLog, policy, generatedAt } = generateMockFairnessData();
 
   const totalMatches = metrics.reduce((sum, m) => sum + m.matchCount, 0);
   const totalCycles = Math.ceil(totalMatches / 5); // Assume ~5 matches per cycle
@@ -26,6 +26,7 @@ export default function FairnessGovernancePage() {
       policy={policy}
       totalMatches={totalMatches}
       totalCycles={totalCycles}
+      lastUpdated={generatedAt}
     />
   );
 }

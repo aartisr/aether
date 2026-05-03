@@ -61,6 +61,7 @@ interface FairnessAuditDashboardProps {
   policy: FairnessPolicy;
   totalMatches: number;
   totalCycles: number;
+  lastUpdated: string;
 }
 
 export default function FairnessAuditDashboard({
@@ -69,6 +70,7 @@ export default function FairnessAuditDashboard({
   policy,
   totalMatches,
   totalCycles,
+  lastUpdated,
 }: FairnessAuditDashboardProps) {
   const [selectedCohort, setSelectedCohort] = useState<string | null>(null);
   const [showAuditDetail, setShowAuditDetail] = useState(false);
@@ -354,7 +356,7 @@ export default function FairnessAuditDashboard({
 
         {/* Footer */}
         <div className="text-center text-sm text-gray-600 pb-4">
-          <p>Last updated: {new Date().toLocaleString()}</p>
+          <p>Last updated: {lastUpdated}</p>
           <p>All data is anonymized and aggregated. Individual user information is never exposed.</p>
         </div>
       </div>
@@ -366,6 +368,9 @@ export default function FairnessAuditDashboard({
  * Mock data generator for demo purposes
  */
 export function generateMockFairnessData() {
+  const random = createSeededRandom(20260403);
+  const generatedAt = '2026-04-03 16:00 UTC';
+  const baseTimestamp = Date.UTC(2026, 3, 3, 16, 0, 0);
   const cohorts = [
     'First-generation College Student',
     'LGBTQ+',
@@ -377,30 +382,30 @@ export function generateMockFairnessData() {
 
   const metrics: FairnessMetrics[] = cohorts.map((cohort) => ({
     cohort,
-    populationShare: 1 / cohorts.length + (Math.random() - 0.5) * 0.05,
-    candidateExposure: 1 / cohorts.length + (Math.random() - 0.5) * 0.08,
-    matchExposure: 1 / cohorts.length + (Math.random() - 0.5) * 0.06,
-    exposureParity: (Math.random() - 0.5) * 0.1,
-    averageQuality: 0.72 + Math.random() * 0.15,
-    qualityAboveFloor: Math.floor(Math.random() * 35) + 25,
-    matchCount: Math.floor(Math.random() * 40) + 20,
-    fairnessAdjustmentCount: Math.floor(Math.random() * 8) + 2,
-    avgAdjustmentMagnitude: Math.random() * 0.08,
+    populationShare: 1 / cohorts.length + (random() - 0.5) * 0.05,
+    candidateExposure: 1 / cohorts.length + (random() - 0.5) * 0.08,
+    matchExposure: 1 / cohorts.length + (random() - 0.5) * 0.06,
+    exposureParity: (random() - 0.5) * 0.1,
+    averageQuality: 0.72 + random() * 0.15,
+    qualityAboveFloor: Math.floor(random() * 35) + 25,
+    matchCount: Math.floor(random() * 40) + 20,
+    fairnessAdjustmentCount: Math.floor(random() * 8) + 2,
+    avgAdjustmentMagnitude: random() * 0.08,
   }));
 
   const auditLog: AuditLogEntry[] = Array.from({ length: 15 }, (_, idx) => ({
-    timestamp: new Date(Date.now() - Math.random() * 86400000).toISOString(),
+    timestamp: new Date(baseTimestamp - random() * 86400000).toISOString(),
     cycleId: `cyc_${1000 + idx}`,
-    userA: `u_${Math.floor(Math.random() * 1000)}`,
-    userB: `u_${Math.floor(Math.random() * 1000)}`,
-    cohortA: cohorts[Math.floor(Math.random() * cohorts.length)],
-    cohortB: cohorts[Math.floor(Math.random() * cohorts.length)],
-    phase1Score: 0.65 + Math.random() * 0.3,
-    phase2Score: 0.68 + Math.random() * 0.28,
-    fairnessAdjustment: (Math.random() - 0.5) * 0.1,
-    adjustmentReason: Math.random() > 0.5 ? 'Under-exposure boost applied' : 'Over-exposure penalty applied',
-    finalScore: 0.70 + Math.random() * 0.2,
-    matchAccepted: Math.random() > 0.3,
+    userA: `u_${Math.floor(random() * 1000)}`,
+    userB: `u_${Math.floor(random() * 1000)}`,
+    cohortA: cohorts[Math.floor(random() * cohorts.length)],
+    cohortB: cohorts[Math.floor(random() * cohorts.length)],
+    phase1Score: 0.65 + random() * 0.3,
+    phase2Score: 0.68 + random() * 0.28,
+    fairnessAdjustment: (random() - 0.5) * 0.1,
+    adjustmentReason: random() > 0.5 ? 'Under-exposure boost applied' : 'Over-exposure penalty applied',
+    finalScore: 0.70 + random() * 0.2,
+    matchAccepted: random() > 0.3,
   }));
 
   const policy: FairnessPolicy = {
@@ -414,5 +419,15 @@ export function generateMockFairnessData() {
     approvalStatus: 'approved',
   };
 
-  return { metrics, auditLog, policy };
+  return { metrics, auditLog, policy, generatedAt };
+}
+
+function createSeededRandom(seed: number) {
+  let t = seed >>> 0;
+  return function seededRandom() {
+    t += 0x6D2B79F5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
 }
