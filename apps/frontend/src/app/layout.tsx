@@ -3,6 +3,7 @@ import React from 'react';
 import { Manrope, Playfair_Display } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 import AnalyticsProvider from '../components/AnalyticsProvider';
+import AetherAssistant from '../components/assistant/AetherAssistant';
 import SiteFooter from '../components/layout/SiteFooter';
 import SiteHeader from '../components/layout/SiteHeader';
 import { JsonLd } from '../components/page/PagePrimitives';
@@ -149,6 +150,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const visibleSections = getPrimarySiteSectionsForRequest();
+  const enabledPaths = visibleSections.map((section) => section.path);
   const blogEnabled = isPageEnabledForRequest('blog');
 
   const websiteJsonLd = {
@@ -213,6 +215,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         <main id="main-content" className="max-w-7xl mx-auto w-full px-3 sm:px-4 md:px-8 py-6 md:py-12" tabIndex={-1}>{children}</main>
         <SiteFooter />
+        <AetherAssistant enabledPaths={enabledPaths} />
         <AnalyticsProvider />
       </body>
     </html>

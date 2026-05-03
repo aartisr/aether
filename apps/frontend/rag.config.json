@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "siteName": "Aether",
+  "outputPath": "src/generated/rag-index.json",
+  "chunking": {
+    "targetWords": 420,
+    "overlapWords": 60
+  },
+  "sources": [
+    {
+      "id": "scientific-report",
+      "type": "file",
+      "path": "../../Aether_Journal_Scientific_Report.md",
+      "title": "Aether Journal Scientific Report",
+      "url": "https://github.com/aartisr/aether/blob/main/Aether_Journal_Scientific_Report.md",
+      "visibility": "knowledge-base"
+    },
+    {
+      "id": "docs",
+      "type": "directory",
+      "path": "../../docs",
+      "extensions": [".md"],
+      "exclude": ["assets"],
+      "urlPrefix": "https://github.com/aartisr/aether/blob/main/docs",
+      "visibility": "knowledge-base"
+    },
+    {
+      "id": "blog",
+      "type": "directory",
+      "path": "../../content/blog",
+      "extensions": [".md"],
+      "urlPrefix": "/blog",
+      "visibility": "public",
+      "pageId": "blog"
+    },
+    {
+      "id": "home-content",
+      "type": "file",
+      "path": "src/lib/home-page.ts",
+      "title": "Aether Home Content",
+      "url": "/",
+      "visibility": "public",
+      "pageId": "home"
+    },
+    {
+      "id": "info-pages",
+      "type": "file",
+      "path": "src/lib/info-pages.ts",
+      "title": "Aether Information Pages",
+      "url": "/about",
+      "visibility": "knowledge-base"
+    },
+    {
+      "id": "mentor-recognition",
+      "type": "file",
+      "path": "src/lib/mentor-recognition.ts",
+      "title": "Mentor Recognition Content",
+      "url": "/mentors",
+      "visibility": "public",
+      "pageId": "mentors"
+    },
+    {
+      "id": "resilience-model",
+      "type": "file",
+      "path": "src/lib/resilience-model.ts",
+      "title": "Aether Resilience Model",
+      "url": "/resilience-pathway",
+      "visibility": "knowledge-base",
+      "pageId": "resilience-pathway"
+    },
+    {
+      "id": "site-metadata",
+      "type": "file",
+      "path": "src/lib/site.ts",
+      "title": "Aether Site Metadata",
+      "url": "/",
+      "visibility": "public",
+      "pageId": "home"
+    }
+  ]
+}

@@ -8,8 +8,10 @@
   },
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run rag:index",
     "build": "next build",
     "start": "next start",
+    "rag:index": "node ./scripts/build-rag-index.mjs",
     "perf:smoke": "node ./scripts/perf-smoke.mjs",
     "perf:budget": "npm run build && npm run perf:smoke",
     "lint": "next lint",

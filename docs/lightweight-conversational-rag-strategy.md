@@ -23,6 +23,27 @@ Repo content
 
 This keeps the system part of the normal server deploy. No Postgres, Pinecone, Supabase, LangChain, queues, workers, or background indexing is required for MVP.
 
+## Free-First Provider Model
+
+The first implementation should not require an LLM key. It should use a free extractive provider:
+
+```txt
+RAG_ANSWER_PROVIDER=extractive-free
+```
+
+The provider reads top retrieved chunks, selects relevant excerpts, returns source cards, and recommends next steps. This is not as fluent as a hosted LLM, but it is free, deployable, and portable.
+
+The runtime should keep a provider interface so later adapters can be added without changing the UI:
+
+```txt
+extractive-free  -> static BM25 retrieval + cited excerpts
+hosted-llm       -> OpenAI, Anthropic, Gemini, or other hosted provider
+ollama-local     -> self-hosted local model through Ollama
+browser-webllm   -> client-side WebGPU model for capable browsers
+```
+
+Website-specific setup belongs in `rag.config.json`; the indexing and retrieval code should remain generic enough to move into another Next.js site.
+
 ## Why Static RAG Fits Aether
 
 Aether's content corpus is small and structured:
