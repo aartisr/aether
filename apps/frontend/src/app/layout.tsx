@@ -6,7 +6,7 @@ import React from 'react';
 import { Manrope, Playfair_Display } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 import AnalyticsProvider from '../components/AnalyticsProvider';
-import AetherAssistant from '../components/assistant/AetherAssistant';
+import FloatingAssistantLoader from '../components/assistant/FloatingAssistantLoader';
 import SiteFooter from '../components/layout/SiteFooter';
 import SiteHeader from '../components/layout/SiteHeader';
 import { JsonLd } from '../components/page/PagePrimitives';
@@ -216,9 +216,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd data={[websiteJsonLd, organizationJsonLd, navigationJsonLd]} idPrefix="root-layout-jsonld" />
         <a href="#main-content" className="sr-only focus:not-sr-only absolute top-2 left-2 bg-indigo-700 text-white px-4 py-2 rounded z-50">Skip to main content</a>
         <SiteHeader />
-        <main id="main-content" className="theme-app-main max-w-7xl mx-auto w-full px-3 sm:px-4 md:px-8 py-6 md:py-12" tabIndex={-1}>{children}</main>
+        <main
+          id="main-content"
+          className="theme-app-main mx-auto min-w-0 max-w-7xl px-3 pb-6 pt-3 sm:px-4 md:px-8 md:pb-10 md:pt-6"
+          tabIndex={-1}
+        >
+          {children}
+        </main>
         <SiteFooter />
-        <AetherAssistant enabledPaths={enabledPaths} />
+        <FloatingAssistantLoader enabledPaths={enabledPaths} />
         <AnalyticsProvider />
       </body>
     </html>

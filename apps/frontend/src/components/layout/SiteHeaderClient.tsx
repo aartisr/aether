@@ -254,7 +254,7 @@ export default function SiteHeaderClient({
       ref={headerRef}
       className="sticky top-0 z-50 border-b border-[color:var(--theme-border)] bg-[rgb(255_255_255/0.88)] shadow-[var(--theme-shadow-sm)] backdrop-blur-xl"
     >
-      <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-3 md:px-6">
+      <div className="mx-auto flex min-w-0 max-w-7xl items-center gap-3 px-4 py-3 md:px-6">
         <Link
           href="/"
           className="flex min-w-0 flex-none items-center gap-3 text-[color:var(--theme-text)] no-underline hover:text-[color:var(--theme-text)] hover:no-underline focus:text-[color:var(--theme-text)] focus:no-underline"
@@ -333,7 +333,7 @@ export default function SiteHeaderClient({
         <div id={explorePanelId} className="hidden border-t border-[color:var(--theme-border)] bg-[rgb(247_251_248/0.96)] lg:block">
           <nav
             aria-label="More site navigation"
-            className="mx-auto grid w-full max-w-7xl gap-3 px-6 py-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+            className="mx-auto grid min-w-0 max-w-7xl gap-3 px-6 py-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
           >
             {overflowNavigation.map((link) => (
               <PanelNavigationLink key={link.href} link={link} pathname={pathname} onNavigate={closeMenus} />
@@ -344,7 +344,7 @@ export default function SiteHeaderClient({
 
       {isMobileOpen && hasNavigation ? (
         <div id={mobilePanelId} className="border-t border-[color:var(--theme-border)] bg-[rgb(247_251_248/0.96)] lg:hidden">
-          <nav aria-label="Site navigation" className="mx-auto w-full max-w-7xl px-4 py-4 md:px-6">
+          <nav aria-label="Site navigation" className="mx-auto min-w-0 max-w-7xl px-4 py-4 md:px-6">
             <div className="grid gap-2 sm:grid-cols-2">
               {allNavigation.map((link) => (
                 <PanelNavigationLink key={link.href} link={link} pathname={pathname} onNavigate={closeMenus} />
@@ -355,9 +355,19 @@ export default function SiteHeaderClient({
       ) : null}
 
       <div className="border-t border-[color:var(--theme-border)] bg-[rgb(237_247_242/0.74)]">
-        <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-2 md:px-6">
+        <div className="mx-auto min-w-0 max-w-7xl px-4 py-2 md:flex md:items-center md:gap-3 md:px-6">
           <p className="hidden min-w-0 flex-1 truncate text-xs font-bold text-[color:var(--theme-text-muted)] md:block">{shareTagline}</p>
-          <div className="flex flex-wrap gap-1.5 md:ml-auto">
+          <div className="grid min-w-0 grid-cols-2 gap-1.5 md:hidden">
+            {trustSignals.map((signal) => (
+              <span
+                key={`header-mobile-${signal}`}
+                className="theme-pill min-h-0 w-full justify-center rounded-[var(--theme-radius-sm)] px-2 py-1 text-center text-[0.68rem]"
+              >
+                {signal}
+              </span>
+            ))}
+          </div>
+          <div className="hidden min-w-0 flex-wrap justify-end gap-1.5 md:ml-auto md:flex">
             {trustSignals.map((signal) => (
               <span
                 key={`header-${signal}`}

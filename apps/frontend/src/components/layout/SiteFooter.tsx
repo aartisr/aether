@@ -39,7 +39,7 @@ export default function SiteFooter() {
 
   return (
     <footer className="mt-14 border-t border-[color:var(--theme-border)] bg-[rgb(255_255_255/0.82)]" role="contentinfo">
-      <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-10 md:grid-cols-[1.2fr_2fr] md:px-6 lg:py-12">
+      <div className="mx-auto grid min-w-0 max-w-7xl gap-8 px-4 py-10 md:grid-cols-[1.2fr_2fr] md:px-6 lg:py-12">
         <section aria-label="Aether summary" className="space-y-5">
           <div>
             <p className="font-display text-3xl font-extrabold text-[color:var(--theme-text)]">{siteName}</p>
@@ -72,7 +72,7 @@ export default function SiteFooter() {
 
       <div className="relative overflow-hidden border-t border-[color:var(--theme-border)] bg-[color:var(--theme-bg-strong)] text-white">
         <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color:var(--theme-mint)] to-transparent" />
-        <div className="relative mx-auto grid w-full max-w-7xl gap-5 px-4 py-5 text-xs md:grid-cols-[minmax(0,1.4fr)_auto] md:items-center md:px-6">
+        <div className="relative mx-auto grid min-w-0 max-w-7xl gap-5 px-4 py-5 text-xs md:grid-cols-[minmax(0,1.4fr)_auto] md:items-center md:px-6">
           <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center">
             <a
               href={pcssIiUrl}

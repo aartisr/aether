@@ -9,18 +9,35 @@
   --link-hover: var(--theme-primary-strong, #0f4d4f);
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html {
   font-family: var(--font-body), 'Manrope', 'Avenir Next', 'Segoe UI', sans-serif;
   background: var(--surface-bg);
   color: var(--text-main);
-  overflow-x: clip;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
+  width: 100%;
+  max-width: 100%;
   min-height: 100vh;
-  overflow-x: clip;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+svg,
+canvas,
+video {
+  max-width: 100%;
 }
 
 h1,

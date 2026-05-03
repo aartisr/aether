@@ -34,11 +34,11 @@ const extractiveFreeProvider: RagAnswerProvider = {
 
     if (request.results.length === 0) {
       return {
-        answer: `I could not find enough information in the indexed ${metadata.siteName} content to answer that confidently. Try asking about a specific page, feature, document, or implementation detail.`,
+        answer: `I could not find enough information in the indexed ${metadata.siteName} content to answer that confidently. Try asking about where to start, which page to open, privacy, mentors, or Peer Navigator.`,
         citations: [],
         provider: 'extractive-free',
         confidence: 'low',
-        suggestions: ['What content is indexed?', 'Explain Aether simply', 'How does Peer Navigator work?'],
+        suggestions: ['Where should I start?', 'What pages can I use?', 'How does Aether help students?'],
       };
     }
 
@@ -83,9 +83,9 @@ function buildSuggestions(request: RagAnswerRequest) {
   const topTitle = request.results[0]?.chunk.title;
   const suggestions = [
     topTitle ? `Summarize ${topTitle}` : undefined,
-    'Show me the source trail',
+    'Which page should I open next?',
     'What should I do next?',
-    'Compare this with Peer Navigator',
+    'Explain this in simple words',
   ];
 
   return suggestions.filter((suggestion): suggestion is string => Boolean(suggestion)).slice(0, 3);

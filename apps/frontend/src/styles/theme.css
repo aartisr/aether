@@ -49,10 +49,14 @@ body {
 
 .theme-app-main {
   position: relative;
+  width: 100%;
+  max-width: 80rem;
+  overflow-x: hidden;
 }
 
 .theme-shell {
   width: min(100%, 76rem);
+  min-width: 0;
   margin-inline: auto;
 }
 
@@ -62,6 +66,7 @@ body {
 }
 
 .theme-band {
+  min-width: 0;
   border: 1px solid rgb(216 230 223 / 0.78);
   border-radius: var(--theme-radius-xl);
   background:
@@ -71,6 +76,7 @@ body {
 }
 
 .theme-card {
+  min-width: 0;
   border: 1px solid rgb(216 230 223 / 0.88);
   border-radius: var(--theme-radius-lg);
   background: rgb(255 255 255 / 0.9);
@@ -78,6 +84,7 @@ body {
 }
 
 .theme-card-interactive {
+  min-width: 0;
   border: 1px solid rgb(216 230 223 / 0.88);
   border-radius: var(--theme-radius-lg);
   background: rgb(255 255 255 / 0.9);
@@ -111,6 +118,7 @@ body {
 
 .theme-pill {
   display: inline-flex;
+  max-width: 100%;
   min-height: 2rem;
   align-items: center;
   gap: 0.35rem;
@@ -124,16 +132,19 @@ body {
   padding: 0.42rem 0.72rem;
   text-decoration: none;
   box-shadow: var(--theme-shadow-sm);
+  overflow-wrap: anywhere;
 }
 
 .theme-button {
   display: inline-flex;
+  max-width: 100%;
   min-height: 2.75rem;
   align-items: center;
   justify-content: center;
   border-radius: var(--theme-radius-md);
   font-weight: 900;
   line-height: 1.1;
+  text-align: center;
   text-decoration: none;
   transition:
     transform 180ms ease,
@@ -225,4 +236,15 @@ body {
   font-size: 0.78rem;
   font-weight: 800;
   line-height: 1.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

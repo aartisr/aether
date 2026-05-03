@@ -20,13 +20,13 @@ export default function AskAetherPage() {
   });
 
   return (
-    <section className="mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+    <section className="mx-auto grid min-w-0 max-w-7xl gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
       <JsonLd data={webPageJsonLd} idPrefix="ask-aether-jsonld" />
       <div className="min-w-0">
         <AetherAssistant variant="page" enabledPaths={enabledPaths} />
       </div>
 
-      <aside className="space-y-4">
+      <aside className="min-w-0 space-y-4">
         <section className="theme-band p-5">
           <p className="theme-kicker">Copilot workspace</p>
           <h1 className="mt-2 text-3xl font-extrabold text-[color:var(--theme-text)]">Ask Aether</h1>
@@ -39,10 +39,10 @@ export default function AskAetherPage() {
         <section className="theme-card p-5">
           <h2 className="text-lg font-extrabold text-[color:var(--theme-text)]">Good asks</h2>
           <ul className="mt-3 space-y-3 text-sm leading-6 text-[color:var(--theme-text-muted)]">
-            <li>Drive me through the best next step.</li>
-            <li>Explain this page and where I should go next.</li>
-            <li>How does Peer Navigator work?</li>
-            <li>How should static RAG be implemented here?</li>
+            <li>Where should I start?</li>
+            <li>What pages can I use right now?</li>
+            <li>Help me find the right support path.</li>
+            <li>Explain this page in simple words.</li>
           </ul>
         </section>
 

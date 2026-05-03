@@ -1288,7 +1288,7 @@
       "pattern": 3.578456,
       "paus": 3.779126,
       "pause": 2.542364,
-      "pcssii": 4.877739,
+      "pcss": 4.877739,
       "peak": 4.366913,
       "peer": 1.36123,
       "peercircle": 4.877739,
@@ -11943,7 +11943,7 @@
       "pageId": "mentors",
       "visibility": "public",
       "heading": "Mentor Recognition Content",
-      "text": "Mentor-informed product pivots Key architecture and UX decisions improved after mentor reviews. Feedback sessions incorporated Guidance translated into concrete accessibility, safety, and governance updates. Research and ethics checkpoints Mentor input strengthened evidence alignment and responsible AI boundaries. Clarity Under Pressure Mentors helped narrow broad ideas into practical, student-safe product pathways that teams can actually ship. Ethics Before Velocity Mentorship kept privacy, fairness, and duty-of-care considerations as non-negotiable guardrails. Research to Practice Mentors continuously translated theory into implementation details that survive real-world constraints. Critical reviews improved readability, accessibility, and the emotional tone of high-stress student journeys. Attribution by Design Major decisions are accompanied by mentorship context in internal changelogs, not just release notes. Mentor Credit Ledger Each milestone records who shaped the decision, what changed, and how the impact was measured. Every mentorship insight is converted into templates and guidance so future teams benefit too. Annual Gratitude Review A yearly review revisits mentor impact and updates recognition artifacts across docs and website. Why dedicate a full page to mentors? Because meaningful mentorship is not a footnote. It shaped the product strategy, safety model, and implementation quality of Aether. How should mentor names be displayed? Use explicit consent, preferred titles, and context about what each person contributed. Recognition should be accurate and respectful. Can this page support institutions and cohorts? Yes. The structure is designed to recognize individuals, faculty groups, and program cohorts with equal clarity. Mr. Shalif Shaoul Computer Science Teacher, PCSSII With gratitude for your guidance and encouragement throughout the Aether journey. Your mentorship strengthened both our technical direction and our confidence to keep building with purpose. Mr. Shalif Shaoul Computer Science Teacher Subasri Dorairaj & Ramanjanappa Ravikumar Parents and Lifelong Guides With deep gratitude for your unwavering support, guidance, sacrifices, and belief throughout the Aether journey. Your love, values, and steady encouragement made this work possible and gave it meaning beyond the project itself. Parent and Lifelong Guide Parent and Lifelong Guide Consistent direction during key architectural and product choices. Support that sustained momentum through complex and ambiguous milestones. Feedback that improved quality, clarity, and implementation discipline. Values-based coaching that reinforced privacy, safety, and fairness choices.",
+      "text": "Mentor-informed product pivots Key architecture and UX decisions improved after mentor reviews. Feedback sessions incorporated Guidance translated into concrete accessibility, safety, and governance updates. Research and ethics checkpoints Mentor input strengthened evidence alignment and responsible AI boundaries. Clarity Under Pressure Mentors helped narrow broad ideas into practical, student-safe product pathways that teams can actually ship. Ethics Before Velocity Mentorship kept privacy, fairness, and duty-of-care considerations as non-negotiable guardrails. Research to Practice Mentors continuously translated theory into implementation details that survive real-world constraints. Critical reviews improved readability, accessibility, and the emotional tone of high-stress student journeys. Attribution by Design Major decisions are accompanied by mentorship context in internal changelogs, not just release notes. Mentor Credit Ledger Each milestone records who shaped the decision, what changed, and how the impact was measured. Every mentorship insight is converted into templates and guidance so future teams benefit too. Annual Gratitude Review A yearly review revisits mentor impact and updates recognition artifacts across docs and website. Why dedicate a full page to mentors? Because meaningful mentorship is not a footnote. It shaped the product strategy, safety model, and implementation quality of Aether. How should mentor names be displayed? Use explicit consent, preferred titles, and context about what each person contributed. Recognition should be accurate and respectful. Can this page support institutions and cohorts? Yes. The structure is designed to recognize individuals, faculty groups, and program cohorts with equal clarity. Mr. Shalif Shaoul Computer Science Teacher, PCSS II With gratitude for your guidance and encouragement throughout the Aether journey. Your mentorship strengthened both our technical direction and our confidence to keep building with purpose. Mr. Shalif Shaoul Computer Science Teacher Subasri Dorairaj & Ramanjanappa Ravikumar Parents and Lifelong Guides With deep gratitude for your unwavering support, guidance, sacrifices, and belief throughout the Aether journey. Your love, values, and steady encouragement made this work possible and gave it meaning beyond the project itself. Parent and Lifelong Guide Parent and Lifelong Guide Consistent direction during key architectural and product choices. Support that sustained momentum through complex and ambiguous milestones. Feedback that improved quality, clarity, and implementation discipline. Values-based coaching that reinforced privacy, safety, and fairness choices.",
       "terms": {
         "mentor": 9,
         "inform": 1,
@@ -12081,7 +12081,7 @@
         "computer": 2,
         "science": 2,
         "teacher": 2,
-        "pcssii": 1,
+        "pcss": 1,
         "encouragement": 2,
         "throughout": 2,
         "technical": 1,
@@ -12124,7 +12124,7 @@
         "reinforc": 1
       },
       "termCount": 253,
-      "contentHash": "e25de42eb3ef68126380de741ca38b625d2349ef45fdb57abcfdd9af92c4b23c"
+      "contentHash": "3630fa94cfa99501c777c04b35b6d6b3d6b53665dc547ecb305d6d1d85e4a896"
     },
     {
       "id": "resilience-model-resilience-model-01",

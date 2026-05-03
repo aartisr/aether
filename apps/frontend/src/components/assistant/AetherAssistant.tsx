@@ -84,12 +84,12 @@ function canOpenHref(href: string, enabledPathSet: Set<string>) {
 function SourceLink({ source, enabledPathSet }: { source: AssistantSource; enabledPathSet: Set<string> }) {
   const isReachable = canOpenHref(source.href, enabledPathSet);
   const className =
-    'assistant-source block rounded-xl p-3 text-left no-underline shadow-sm transition';
+    'assistant-source block min-w-0 rounded-xl p-3 text-left no-underline shadow-sm transition';
   const content = (
     <>
       <span className="theme-kicker block">Source</span>
-      <span className="mt-1 block text-sm font-bold text-[color:var(--theme-text)]">{source.title}</span>
-      <span className="mt-1 block text-xs leading-5 text-[color:var(--theme-text-muted)]">{source.description}</span>
+      <span className="mt-1 block break-words text-sm font-bold text-[color:var(--theme-text)]">{source.title}</span>
+      <span className="mt-1 block break-words text-xs leading-5 text-[color:var(--theme-text-muted)]">{source.description}</span>
       {!isReachable ? (
         <span className="mt-2 block text-xs font-bold text-amber-700">Page is currently off in navigation.</span>
       ) : null}
@@ -120,15 +120,16 @@ function ActionLink({ action, enabledPathSet }: { action: AssistantAction; enabl
   const isPrimary = action.priority === 'primary';
   const className = cx(
     'block rounded-xl border p-3 text-left no-underline shadow-sm transition',
+    'min-w-0',
     isPrimary ? 'assistant-action-primary' : 'assistant-action-secondary',
     !isReachable && 'cursor-not-allowed opacity-70 hover:translate-y-0',
   );
   const content = (
     <>
-      <span className={cx('block text-sm font-extrabold', isPrimary ? 'text-white' : 'text-[color:var(--theme-text)]')}>
+      <span className={cx('block break-words text-sm font-extrabold', isPrimary ? 'text-white' : 'text-[color:var(--theme-text)]')}>
         {action.label}
       </span>
-      <span className={cx('mt-1 block text-xs leading-5', isPrimary ? 'text-emerald-50' : 'text-[color:var(--theme-text-muted)]')}>
+      <span className={cx('mt-1 block break-words text-xs leading-5', isPrimary ? 'text-emerald-50' : 'text-[color:var(--theme-text-muted)]')}>
         {isReachable ? action.description : 'This page is currently off. An admin can enable it when ready.'}
       </span>
     </>
@@ -167,11 +168,11 @@ function AssistantMessageBubble({
     <div className={cx('flex', isUser ? 'justify-end' : 'justify-start')}>
       <div
         className={cx(
-          'max-w-[92%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm',
+          'min-w-0 max-w-[92%] rounded-2xl px-4 py-3 text-sm leading-6 shadow-sm',
           isUser ? 'assistant-message assistant-message-user' : 'assistant-message assistant-message-ai',
         )}
       >
-        <p className="whitespace-pre-line">{message.content}</p>
+        <p className="whitespace-pre-line break-words">{message.content}</p>
         {!isUser && visibleActions.length > 0 ? (
           <div className="mt-4 grid gap-2">
             <p className="text-[0.7rem] font-extrabold uppercase tracking-[0.14em] text-[color:var(--theme-text-soft)]">
@@ -315,7 +316,7 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
                 priority: 'primary',
               },
             ],
-            suggestions: ['What is Aether?', 'How does Peer Navigator work?', 'How would static RAG work?'],
+            suggestions: ['Where should I start?', 'What pages are available?', 'How does Aether help students?'],
             confidence: 'low',
           },
         ]);
@@ -349,10 +350,10 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
       aria-label="Ask Aether assistant"
       aria-modal={isFullPage ? undefined : true}
       className={cx(
-        'flex min-h-0 flex-col overflow-hidden border border-slate-200 bg-white shadow-2xl',
+        'flex min-h-0 min-w-0 max-w-full flex-col overflow-hidden border border-slate-200 bg-white shadow-2xl',
         'assistant-panel',
         isFullPage
-          ? 'h-[min(760px,calc(100vh-10rem))] rounded-3xl'
+          ? 'h-[min(760px,calc(100vh-10rem))] w-full rounded-3xl'
           : 'max-h-[min(720px,calc(100vh-7rem))] w-[min(440px,calc(100vw-1.5rem))] rounded-3xl',
       )}
     >
@@ -378,7 +379,7 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
         </div>
       </header>
 
-      <div ref={transcriptRef} className="assistant-transcript min-h-0 flex-1 space-y-4 overflow-y-auto p-4">
+      <div ref={transcriptRef} className="assistant-transcript min-h-0 min-w-0 flex-1 space-y-4 overflow-y-auto p-4">
         {messages.map((message) => (
           <AssistantMessageBubble key={message.id} message={message} enabledPathSet={enabledPathSet} />
         ))}
@@ -391,9 +392,9 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
         ) : null}
       </div>
 
-      <div className="assistant-composer p-4">
+      <div className="assistant-composer min-w-0 p-4">
         {latestAssistantSuggestions && latestAssistantSuggestions.length > 0 ? (
-          <div className="mb-3 flex gap-2 overflow-x-auto pb-1">
+          <div className="mb-3 flex min-w-0 gap-2 overflow-x-auto pb-1">
             {latestAssistantSuggestions.slice(0, 3).map((suggestion) => (
               <button
                 key={suggestion}
@@ -407,7 +408,7 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
           </div>
         ) : null}
 
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="min-w-0 space-y-3">
           <label htmlFor={isFullPage ? 'ask-aether-page-input' : 'ask-aether-floating-input'} className="sr-only">
             Ask Aether
           </label>
@@ -417,17 +418,17 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
             onChange={(event) => setInput(event.target.value)}
             onKeyDown={handleInputKeyDown}
             rows={isFullPage ? 3 : 2}
-            placeholder="Ask about this page, Peer Navigator, privacy, RAG, or where to start..."
+            placeholder="Ask where to start, what this page means, or which Aether path fits you..."
             className="assistant-input max-h-36 min-h-[4.5rem] w-full resize-none rounded-2xl px-4 py-3 text-sm leading-6 shadow-inner outline-none transition placeholder:text-slate-400"
           />
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-[0.72rem] leading-5 text-[color:var(--theme-text-soft)]">
+          <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="min-w-0 text-[0.72rem] leading-5 text-[color:var(--theme-text-soft)]">
               Informational only. Not emergency, clinical, legal, or crisis care.
             </p>
             <button
               type="submit"
               disabled={isSending || input.trim().length === 0}
-              className="theme-button theme-button-primary shrink-0 px-4 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-45"
+              className="theme-button theme-button-primary w-full px-4 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-45 sm:w-auto sm:shrink-0"
             >
               Send
             </button>
@@ -446,7 +447,7 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-[70] flex flex-col items-end gap-3 sm:bottom-6 sm:right-6">
+    <div className="fixed bottom-4 right-3 z-[70] flex max-w-[calc(100vw-1.5rem)] flex-col items-end gap-3 sm:bottom-6 sm:right-6 sm:max-w-[calc(100vw-3rem)]">
       {isOpen ? assistantPanel : null}
       <button
         type="button"

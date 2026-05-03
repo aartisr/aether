@@ -164,11 +164,12 @@ export default function Home() {
   };
 
   return (
-    <section className="home-page space-y-12 overflow-hidden px-3 pb-12 sm:px-4 md:space-y-16 md:px-6">
+    <>
       <JsonLd
         idPrefix="home-jsonld"
         data={[organizationJsonLd, webPageJsonLd, softwareApplicationJsonLd, itemListJsonLd, faqJsonLd]}
       />
+      <section className="home-page space-y-10 overflow-hidden px-3 pb-12 sm:px-4 md:space-y-12 md:px-6">
       <section className="home-hero">
         <div className="home-hero-inner">
           <div className="home-logo-mark">
@@ -180,7 +181,7 @@ export default function Home() {
             A warm, evidence-informed resilience ecosystem where students can reflect, find direction, and return to
             support that feels steady.
           </p>
-          <div className="flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
+          <div className="mx-auto flex w-full max-w-sm flex-col justify-center gap-3 sm:max-w-none sm:flex-row sm:flex-wrap">
             {homepageCallToActions.map((callToAction) => (
               <Link key={callToAction.href} href={callToAction.href} className={callToAction.className}>
                 {callToAction.label}
@@ -197,7 +198,9 @@ export default function Home() {
               </span>
             ))}
           </div>
-          <SocialShareLinks path="/" title={siteTitle} />
+          <div className="home-hero-share">
+            <SocialShareLinks path="/" title={siteTitle} />
+          </div>
         </div>
       </section>
 
@@ -272,6 +275,7 @@ export default function Home() {
           />
         </SurfaceCard>
       </section>
-    </section>
+      </section>
+    </>
   );
 }

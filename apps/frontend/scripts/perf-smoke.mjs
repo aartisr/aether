@@ -7,7 +7,10 @@ const port = Number(process.env.PERF_PORT ?? '4010');
 const host = process.env.PERF_HOST ?? '127.0.0.1';
 const baseUrl = `http://${host}:${port}`;
 
-const routeList = (process.env.PERF_ROUTES ?? '/,/blog,/sitemap.xml,/llms.txt,/feed.xml,/image-sitemap.xml,/robots.txt')
+const routeList = (
+  process.env.PERF_ROUTES ??
+  '/,/about,/mentors,/ask,/api/health,/sitemap.xml,/llms.txt,/image-sitemap.xml,/robots.txt,/manifest.webmanifest'
+)
   .split(',')
   .map((route) => route.trim())
   .filter(Boolean);

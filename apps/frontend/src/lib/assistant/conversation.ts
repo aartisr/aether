@@ -165,9 +165,9 @@ const actionLibrary = {
     priority: 'secondary',
   },
   ragPlan: {
-    label: 'Open RAG strategy',
+    label: 'Read AI approach',
     href: sourceLibrary.ragPlan.href,
-    description: 'Review the lightweight static RAG rollout plan.',
+    description: 'See how Aether keeps assistant answers grounded in approved content.',
     priority: 'primary',
   },
   privacy: {
@@ -229,8 +229,8 @@ const contextProfiles: AssistantContextProfile[] = [
     label: 'Privacy',
     path: '/privacy',
     summary: 'You are on the Privacy page. This context is about local-first design, minimized data, and trust boundaries.',
-    suggestions: ['Explain Aether privacy simply', 'What data should not be collected?', 'How should RAG avoid secrets?'],
-    actions: [actionLibrary.ragPlan, actionLibrary.ask],
+    suggestions: ['Explain Aether privacy simply', 'What information stays protected?', 'How does Aether keep answers trustworthy?'],
+    actions: [actionLibrary.ask, actionLibrary.about],
     source: sourceLibrary.privacy,
   },
   {
@@ -261,9 +261,9 @@ const contextProfiles: AssistantContextProfile[] = [
     label: 'Ask Aether',
     path: '/ask',
     summary: 'You are in the full assistant workspace. This context is best for broad questions across Aether content.',
-    suggestions: ['What can you answer?', 'What are the best sources to index?', 'How would static RAG work here?'],
-    actions: [actionLibrary.ragPlan, actionLibrary.about, actionLibrary.mentors],
-    source: sourceLibrary.ragPlan,
+    suggestions: ['Where should I start?', 'What pages can I use right now?', 'Help me find the right support path'],
+    actions: [actionLibrary.about, actionLibrary.mentors, actionLibrary.privacy],
+    source: sourceLibrary.home,
   },
 ];
 
@@ -325,8 +325,8 @@ const topics: AssistantTopic[] = [
     label: 'Privacy and trust',
     keywords: ['privacy', 'safe', 'safety', 'data', 'consent', 'secret', 'env', 'hipaa', 'ferpa', 'governance'],
     sources: [sourceLibrary.privacy, sourceLibrary.ragPlan, sourceLibrary.peerNetworkPlan],
-    actions: [actionLibrary.privacy, actionLibrary.ragPlan],
-    suggestions: ['What data should not be collected?', 'How should the assistant handle secrets?', 'Explain privacy-first design'],
+    actions: [actionLibrary.privacy, actionLibrary.about],
+    suggestions: ['What information stays protected?', 'How does Aether keep answers trustworthy?', 'Explain privacy-first design'],
     answer: () =>
       'Aether should collect the minimum useful data, separate public display fields from private matching fields, and never index secrets such as `.env` files. For the assistant, public users should only get answers from approved content with citations. Sensitive or admin-only content should be filtered before retrieval.',
   },

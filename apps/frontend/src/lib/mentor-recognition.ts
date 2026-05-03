@@ -83,14 +83,14 @@ export const mentorFAQs = [
 export const featuredMentors = [
   {
     name: 'Mr. Shalif Shaoul',
-    title: 'Computer Science Teacher, PCSSII',
+    title: 'Computer Science Teacher, PCSS II',
     gratitude:
       'With gratitude for your guidance and encouragement throughout the Aether journey. Your mentorship strengthened both our technical direction and our confidence to keep building with purpose.',
     people: [
       {
         name: 'Mr. Shalif Shaoul',
         jobTitle: 'Computer Science Teacher',
-        worksFor: 'PCSSII',
+        worksFor: 'PCSS II',
       },
     ],
   },
