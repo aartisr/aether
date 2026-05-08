@@ -286,7 +286,6 @@ export default function SiteHeaderClient({
                     ? 'border-[color:var(--theme-bg-strong)] bg-[color:var(--theme-bg-strong)] text-white shadow-sm'
                     : 'border-[color:var(--theme-border)] bg-white text-[color:var(--theme-text-muted)] hover:border-[color:var(--theme-border-strong)] hover:text-[color:var(--theme-text)]',
                 )}
-                aria-expanded={isExploreOpen}
                 aria-controls={explorePanelId}
                 onClick={() => {
                   setIsExploreOpen((current) => !current);
@@ -313,7 +312,6 @@ export default function SiteHeaderClient({
                   ? 'border-[color:var(--theme-bg-strong)] bg-[color:var(--theme-bg-strong)] text-white shadow-sm'
                   : 'border-[color:var(--theme-border)] bg-white text-[color:var(--theme-text)] hover:border-[color:var(--theme-border-strong)]',
               )}
-              aria-expanded={isMobileOpen}
               aria-controls={mobilePanelId}
               onClick={() => {
                 setIsMobileOpen((current) => !current);
