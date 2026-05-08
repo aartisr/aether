@@ -3,14 +3,6 @@ import { cookies } from 'next/headers';
 
 export type AppPageId =
   | 'home'
-  | 'resilience-pathway'
-  | 'echo'
-  | 'peer-navigator'
-  | 'blog'
-  | 'fairness-governance'
-  | 'privacy'
-  | 'accessibility'
-  | 'about'
   | 'mentors';
 
 export type AppPageDefinition = {
@@ -33,7 +25,7 @@ type PageOverridesJson = {
 
 export const PAGE_FLAGS_COOKIE_NAME = 'aether_page_flags';
 
-export const DEFAULT_ENABLED_PAGE_IDS = ['home', 'about', 'mentors'] as const satisfies readonly AppPageId[];
+export const DEFAULT_ENABLED_PAGE_IDS = ['home', 'mentors'] as const satisfies readonly AppPageId[];
 
 const appPages: readonly AppPageDefinition[] = [
   {
@@ -41,54 +33,6 @@ const appPages: readonly AppPageDefinition[] = [
     path: '/',
     name: 'Homepage',
     description: 'Overview of the Aether student resilience ecosystem and core product pathways.',
-  },
-  {
-    id: 'resilience-pathway',
-    path: '/resilience-pathway',
-    name: 'Resilience Pathway',
-    description: 'Interactive resilience hub covering check-ins, safety planning, navigation, peer circles, and habits.',
-  },
-  {
-    id: 'echo',
-    path: '/echo',
-    name: 'Echo Chamber',
-    description: 'Private, on-device voice reflection with transcript and sentiment mapping.',
-  },
-  {
-    id: 'peer-navigator',
-    path: '/peer-navigator',
-    name: 'Peer-Navigator',
-    description: 'Privacy-aware peer matching demo for identity-safe student support.',
-  },
-  {
-    id: 'fairness-governance',
-    path: '/fairness-governance',
-    name: 'Fairness & Governance',
-    description: 'Transparency layer for fairness metrics, policy, and auditability.',
-  },
-  {
-    id: 'privacy',
-    path: '/privacy',
-    name: 'Privacy',
-    description: 'Privacy-by-design approach including federated learning, minimized data exposure, and safety guardrails.',
-  },
-  {
-    id: 'accessibility',
-    path: '/accessibility',
-    name: 'Accessibility',
-    description: 'Accessibility commitments, inclusive design approach, and SAFE-AI guidance.',
-  },
-  {
-    id: 'about',
-    path: '/about',
-    name: 'About',
-    description: 'Background, positioning, and product summary for Aether.',
-  },
-  {
-    id: 'blog',
-    path: '/blog',
-    name: 'Blog',
-    description: 'Evidence-informed resilience articles, product notes, and practical student guidance.',
   },
   {
     id: 'mentors',

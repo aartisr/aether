@@ -211,8 +211,8 @@ export default function SiteHeaderClient({
     () => selectDesktopNavigation(allNavigation, pathname),
     [allNavigation, pathname],
   );
-  const ctaLink = { href: '/ask', label: 'Ask Aether', description: 'Open the guided copilot workspace.' };
-  const ctaLabel = 'Ask Aether';
+  const ctaLink = { href: '/mentors', label: 'Mentors', description: 'View project mentor acknowledgements.' };
+  const ctaLabel = 'Mentors';
   const hasNavigation = allNavigation.length > 0;
   const hasOverflowNavigation = overflowNavigation.length > 0;
 

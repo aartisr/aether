@@ -37,29 +37,11 @@ export const metadata = createPageMetadata({
 export default function Home() {
   const visibleSections = getPrimarySiteSectionsForRequest();
 
-  const homepageCallToActions = getEnabledPagesForRequest(['echo', 'resilience-pathway', 'about']).map((page) => {
-    if (page.id === 'echo') {
-      return {
-        href: page.path,
-        label: 'Try Echo Chamber',
-        className: 'theme-button theme-button-accent w-full px-6 py-3 sm:w-auto',
-      };
-    }
-
-    if (page.id === 'resilience-pathway') {
-      return {
-        href: page.path,
-        label: 'Open Resilience Hub',
-        className: 'theme-button theme-button-primary w-full px-6 py-3 sm:w-auto',
-      };
-    }
-
-    return {
-      href: page.path,
-      label: 'Start with Aether',
-      className: 'theme-button theme-button-primary w-full px-6 py-3 sm:w-auto',
-    };
-  });
+  const homepageCallToActions = getEnabledPagesForRequest(['mentors']).map((page) => ({
+    href: page.path,
+    label: 'Meet Our Mentors',
+    className: 'theme-button theme-button-primary w-full px-6 py-3 sm:w-auto',
+  }));
 
   const returnLoopSignals = [
     {
@@ -187,9 +169,6 @@ export default function Home() {
                 {callToAction.label}
               </Link>
             ))}
-            <Link href="/ask" className="theme-button theme-button-secondary w-full px-6 py-3 sm:w-auto">
-              Ask Aether
-            </Link>
           </div>
           <div className="flex flex-wrap justify-center gap-2">
             {['Private by default', 'Peer-aware', 'Safety bounded', 'AI-readable'].map((signal) => (

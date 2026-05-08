@@ -10,7 +10,6 @@ import FloatingAssistantLoader from '../components/assistant/FloatingAssistantLo
 import SiteFooter from '../components/layout/SiteFooter';
 import SiteHeader from '../components/layout/SiteHeader';
 import { JsonLd } from '../components/page/PagePrimitives';
-import { isPageEnabled, isPageEnabledForRequest } from '../lib/page-flags';
 import {
   authorName,
   authorUrl,
@@ -45,10 +44,7 @@ const playfair = Playfair_Display({
   display: 'swap',
 });
 
-const metadataAlternatesTypes = {
-  ...(isPageEnabled('blog') ? { 'application/rss+xml': '/feed.xml' } : {}),
-  'text/plain': '/llms.txt',
-};
+const metadataAlternatesTypes = {};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -154,7 +150,6 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const visibleSections = getPrimarySiteSectionsForRequest();
   const enabledPaths = visibleSections.map((section) => section.path);
-  const blogEnabled = isPageEnabledForRequest('blog');
 
   const websiteJsonLd = {
     '@context': 'https://schema.org',
@@ -170,15 +165,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       url: toAbsoluteUrl(section.path),
       description: section.description,
     })),
-    ...(blogEnabled
-      ? {
-          potentialAction: {
-            '@type': 'SearchAction',
-            target: `${siteUrl}/blog?query={search_term_string}`,
-            'query-input': 'required name=search_term_string',
-          },
-        }
-      : {}),
     publisher: {
       '@type': 'Organization',
       name: siteName,

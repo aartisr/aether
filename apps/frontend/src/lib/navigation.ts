@@ -24,55 +24,10 @@ type ConfigurableNavigationLink = NavigationLink & {
 
 const primaryNavigationConfig: ConfigurableNavigationLink[] = [
   {
-    href: '/resilience-pathway',
-    label: 'Resilience Hub',
-    description: 'Guided check-ins, safety planning, resource routing, peer circles, and habits.',
-    requiresPage: 'resilience-pathway',
-  },
-  {
-    href: '/echo',
-    label: 'Echo',
-    description: 'Private reflection with on-device transcript and sentiment mapping.',
-    requiresPage: 'echo',
-  },
-  {
-    href: '/peer-navigator',
-    label: 'Peer Navigator',
-    description: 'Privacy-aware peer matching with explainable fairness controls.',
-    requiresPage: 'peer-navigator',
-  },
-  {
-    href: '/blog',
-    label: 'Journal',
-    description: 'Practical, evidence-informed student resilience guides.',
-    requiresPage: 'blog',
-  },
-];
-
-const secondaryNavigationConfig: ConfigurableNavigationLink[] = [
-  {
-    href: '/fairness-governance',
-    label: 'Governance',
-    description: 'Fairness metrics, policy posture, and auditability.',
-    requiresPage: 'fairness-governance',
-  },
-  {
-    href: '/privacy',
-    label: 'Privacy',
-    description: 'Local-first design, minimized data exposure, and identity safety.',
-    requiresPage: 'privacy',
-  },
-  {
-    href: '/accessibility',
-    label: 'Accessibility',
-    description: 'Inclusive design commitments and SAFE-AI guidance.',
-    requiresPage: 'accessibility',
-  },
-  {
-    href: '/about',
-    label: 'About',
-    description: 'Mission, architecture, and product context.',
-    requiresPage: 'about',
+    href: '/',
+    label: 'Home',
+    description: 'Overview of the Aether platform and supported pages.',
+    requiresPage: 'home',
   },
   {
     href: '/mentors',
@@ -81,6 +36,8 @@ const secondaryNavigationConfig: ConfigurableNavigationLink[] = [
     requiresPage: 'mentors',
   },
 ];
+
+const secondaryNavigationConfig: ConfigurableNavigationLink[] = [];
 
 export const trustSignals = [
   'Privacy-first',
@@ -96,35 +53,14 @@ const footerNavigationConfig: Array<{
   {
     title: 'Product',
     links: [
-      { href: '/resilience-pathway', label: 'Resilience Hub', requiresPage: 'resilience-pathway' },
-      { href: '/echo', label: 'Echo Chamber', requiresPage: 'echo' },
-      { href: '/peer-navigator', label: 'Peer Navigator', requiresPage: 'peer-navigator' },
-      { href: '/blog', label: 'Aether Journal', requiresPage: 'blog' },
-    ],
-  },
-  {
-    title: 'Trust',
-    links: [
-      { href: '/privacy', label: 'Privacy', requiresPage: 'privacy' },
-      { href: '/accessibility', label: 'Accessibility', requiresPage: 'accessibility' },
-      { href: '/fairness-governance', label: 'Fairness Governance', requiresPage: 'fairness-governance' },
-      { href: 'https://988lifeline.org/', label: '988 Lifeline', external: true },
-    ],
-  },
-  {
-    title: 'About',
-    links: [
-      { href: '/about', label: 'About Aether', requiresPage: 'about' },
+      { href: '/', label: 'Home', requiresPage: 'home' },
       { href: '/mentors', label: 'Mentors', requiresPage: 'mentors' },
-      { href: '/feed.xml', label: 'RSS Feed', requiresPage: 'blog' },
-      { href: '/llms.txt', label: 'AI Guide' },
     ],
   },
   {
     title: 'Machine-Readable',
     links: [
       { href: '/sitemap.xml', label: 'Sitemap' },
-      { href: '/image-sitemap.xml', label: 'Image Sitemap' },
       { href: '/robots.txt', label: 'Robots' },
       { href: '/manifest.webmanifest', label: 'Web Manifest' },
     ],
