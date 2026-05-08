@@ -18,11 +18,11 @@ Write 4–6 sentences below, explaining:
         •       What parts of your program are working
         •       What you are most proud of so far
 
-So far, I have built Aether as a monorepo with a Next.js frontend and a Node.js backend, with TypeScript and Jest integrated into the workflow.
-I also created a focused longterm_project branch where the site keeps only the Home and Mentors pages, along with all required support files for routing, layout, metadata, and navigation.
-I updated page flags and navigation logic so behavior stays consistent across the header, footer, sitemap, and robots configuration.
-At this point, both frontend and backend tests are passing, and the frontend production build compiles successfully.
-What I am most proud of is reducing project complexity without breaking functionality, while preserving the same core tech stack.
+In this reporting period, I made measurable progress by building Aether as a monorepo with a Next.js frontend and a Node.js backend, and integrating TypeScript and Jest into the workflow.
+I created and validated a focused longterm_project branch where the website scope is intentionally reduced to the Home and Mentors pages, while preserving required support files for routing, layout, metadata, and navigation.
+I completed technical cleanup by aligning page-flag logic and shared navigation behavior across UI and machine-readable routes, including sitemap and robots.
+Current quality results confirm stability: frontend and backend tests pass, and the frontend production build compiles successfully.
+The result I am most proud of is simplifying scope without losing reliability, which shows clear progress toward a maintainable final project.
 
 
 
@@ -38,9 +38,9 @@ Write 2–4 sentences below, explaining:
         •       What feature are you building right now?
         •       What is your next step?
 
-Right now, I am polishing the simplified Home + Mentors version so it is clean, stable, and ready for submission.
-My next step is to improve the content and copy on those two pages, then add updated screenshots and deployment notes.
-After that, I plan to add features incrementally so each update is tested and easier to maintain.
+I am currently polishing the simplified Home + Mentors experience to ensure it is clean, stable, and submission-ready.
+My immediate next step is improving content quality and page copy on those routes, followed by updated screenshots and deployment notes for evidence.
+After this pass, I will add features incrementally so each change can be tested, reviewed, and stabilized before moving forward.
 
 
 
@@ -51,11 +51,11 @@ Write at least 1 specific challenge (or more!) that you are currently facing, su
         •       A bug you can’t fix
 Note: Be specific. Don’t just type “this feature is hard because I don’t know how to do it.”
 
-One challenge I am actively working through is keeping a consistent look and feel while the project is still changing quickly.
-Because I want the UI to stay generic and reusable, I rely on shared theme tokens, reusable layout components, and common section patterns instead of page-specific styling.
-The difficult part is that when one theme variable or reusable component changes, it can affect multiple areas at once (for example spacing, contrast, or visual hierarchy).
-I am addressing this iteratively by making smaller UI updates, validating each change in the Home and Mentors flow, and then stabilizing before introducing new design changes.
-This approach is helping me move toward a cleaner, more stable interface without losing consistency.
+One active challenge is maintaining a consistent visual language while the project is still evolving quickly.
+To keep the interface generic and reusable, I am using shared theme tokens, layout components, and common section patterns instead of page-specific styling.
+The specific issue is that one theme or component change can affect multiple areas at once (for example spacing, contrast, and hierarchy), which can introduce instability.
+I am addressing this through iterative stabilization: apply a small UI change, validate Home and Mentors behavior, then proceed only after confirming the previous change is stable.
+This method is improving consistency and reducing regression risk over time.
 
 
 
@@ -88,11 +88,11 @@ const itemListJsonLd = {
         }))}
 />
 
-I picked this Home page section because it was one of the hardest parts for me to design in a clean, reusable way.
-What makes it interesting is that one source of truth (visibleSections) controls both what users see on the screen and what search engines read through JSON-LD.
-That matters to me because I did not want the app to "say" one thing to students and a different thing to search engines.
-I also put real effort into keeping Header and Footer global through layout components, because they make the app feel stable: the Header gives students predictable navigation and trust cues, and the Footer keeps safety messaging and important links visible from every page.
-Personally, this section taught me how strong architecture choices can reduce future bugs, since adding or updating sections in one place now automatically flows into navigation, metadata, and page structure.
+I selected this Home page section because it demonstrates one of the most challenging and valuable architectural patterns in the project.
+The key idea is a single source of truth (`visibleSections`) that drives both user-facing navigation content and structured JSON-LD metadata for search engines.
+This is important because it keeps what students see and what search engines index aligned, improving trust, clarity, and discoverability.
+The global Header and Footer design reinforces this architecture: the Header provides consistent navigation and trust cues, while the Footer keeps safety guidance, machine-readable links, and project identity visible on every page.
+From a technical standpoint, this pattern reduces regression risk because updates in one location propagate automatically to UI structure, navigation behavior, and metadata outputs.
 
 
 
@@ -118,7 +118,7 @@ pass 4
 fail 0
 
 Current runtime behavior:
-When I run npm run dev, the frontend starts at http://localhost:3000 and serves only the Home and Mentors pages, with working navigation and metadata routes.
+When I run npm run dev, the frontend starts at http://localhost:3000 and serves only the Home and Mentors pages, with functioning navigation and metadata routes.
 
 
 

@@ -211,11 +211,20 @@ async function collectSourceFiles(source) {
   const absolutePath = path.resolve(frontendRoot, source.path);
 
   if (source.type === 'file') {
+    if (!(await pathExists(absolutePath))) {
+      console.warn(`Skipping missing RAG source file: ${toPosix(path.relative(frontendRoot, absolutePath))}`);
+      return [];
+    }
     return [absolutePath];
   }
 
   if (source.type !== 'directory') {
     throw new Error(`Unsupported RAG source type: ${source.type}`);
+  }
+
+  if (!(await pathExists(absolutePath))) {
+    console.warn(`Skipping missing RAG source directory: ${toPosix(path.relative(frontendRoot, absolutePath))}`);
+    return [];
   }
 
   const extensions = new Set(source.extensions ?? ['.md', '.txt']);
@@ -229,6 +238,15 @@ async function collectSourceFiles(source) {
       return !relativeParts.some((part) => excludedParts.has(part));
     })
     .sort();
+}
+
+async function pathExists(targetPath) {
+  try {
+    await fs.access(targetPath);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 async function walk(directory) {
