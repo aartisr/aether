@@ -46,12 +46,13 @@ afterAll(() => {
 });
 
 describe('page flags', () => {
-  it('defaults to Home and Mentors only', async () => {
+  it('defaults to Home, Mentors, and Journal', async () => {
     const pageFlags = await loadPageFlags();
 
-    expect(pageFlags.getEnabledPages().map((page) => page.id)).toEqual(['home', 'mentors']);
+    expect(pageFlags.getEnabledPages().map((page) => page.id)).toEqual(['home', 'mentors', 'blog']);
     expect(pageFlags.isPageEnabled('home')).toBe(true);
     expect(pageFlags.isPageEnabled('mentors')).toBe(true);
+    expect(pageFlags.isPageEnabled('blog')).toBe(true);
   });
 
   it('uses environment disabled lists only against default enabled pages', async () => {

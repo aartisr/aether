@@ -3,7 +3,8 @@ import { cookies } from 'next/headers';
 
 export type AppPageId =
   | 'home'
-  | 'mentors';
+  | 'mentors'
+  | 'blog';
 
 export type AppPageDefinition = {
   id: AppPageId;
@@ -25,7 +26,7 @@ type PageOverridesJson = {
 
 export const PAGE_FLAGS_COOKIE_NAME = 'aether_page_flags';
 
-export const DEFAULT_ENABLED_PAGE_IDS = ['home', 'mentors'] as const satisfies readonly AppPageId[];
+export const DEFAULT_ENABLED_PAGE_IDS = ['home', 'mentors', 'blog'] as const satisfies readonly AppPageId[];
 
 const appPages: readonly AppPageDefinition[] = [
   {
@@ -39,6 +40,12 @@ const appPages: readonly AppPageDefinition[] = [
     path: '/mentors',
     name: 'Mentor Appreciation',
     description: 'A public acknowledgment of mentors who shaped strategy, ethics, and implementation.',
+  },
+  {
+    id: 'blog',
+    path: '/blog',
+    name: 'Aether Journal',
+    description: 'Evidence-informed student resilience guides, product notes, and practical reflection resources.',
   },
 ] as const;
 

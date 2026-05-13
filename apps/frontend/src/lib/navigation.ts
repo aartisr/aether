@@ -35,6 +35,12 @@ const primaryNavigationConfig: ConfigurableNavigationLink[] = [
     description: 'Public gratitude for the guidance behind Aether.',
     requiresPage: 'mentors',
   },
+  {
+    href: '/blog',
+    label: 'Journal',
+    description: 'Practical, evidence-informed student resilience guides.',
+    requiresPage: 'blog',
+  },
 ];
 
 const secondaryNavigationConfig: ConfigurableNavigationLink[] = [];
@@ -55,6 +61,7 @@ const footerNavigationConfig: Array<{
     links: [
       { href: '/', label: 'Home', requiresPage: 'home' },
       { href: '/mentors', label: 'Mentors', requiresPage: 'mentors' },
+      { href: '/blog', label: 'Aether Journal', requiresPage: 'blog' },
     ],
   },
   {
