@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import { peerCircles } from '../../lib/resilience-model';
+import { HubSection, hubInputClass } from './ResilienceHubPrimitives';
 
 const focusOptions = ['belonging', 'focus', 'sleep', 'identity', 'academic stress', 'care navigation'];
 
@@ -20,18 +21,20 @@ export default function PeerCircleMatcher() {
   );
 
   return (
-    <section className="rounded-2xl bg-white p-4 sm:p-6 shadow-soft border border-indigo-100">
-      <h2 className="text-xl sm:text-2xl font-bold text-indigo-800">Peer Circle Matcher</h2>
-      <p className="mt-2 text-sm text-gray-600">Find the most relevant support cohort for your current challenge.</p>
-
-      <label htmlFor="focus" className="block text-sm font-medium text-indigo-900 mt-4">
+    <HubSection
+      tone="belong"
+      eyebrow="Belonging engine"
+      title="Peer Circle Matcher"
+      description="Find the most relevant support cohort for your current challenge."
+    >
+      <label htmlFor="focus" className="block text-sm font-bold text-slate-900 mt-4">
         Primary focus area
       </label>
       <select
         id="focus"
         value={selection}
         onChange={(event) => setSelection(event.target.value)}
-        className="mt-2 w-full sm:max-w-sm rounded-xl border border-indigo-200 p-2.5"
+        className={`${hubInputClass('belong')} sm:max-w-sm`}
       >
         {focusOptions.map((focus) => (
           <option key={focus} value={focus}>
@@ -42,14 +45,14 @@ export default function PeerCircleMatcher() {
 
       <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
         {ranked.map((circle) => (
-          <article key={circle.id} className="rounded-xl border border-indigo-100 p-4 bg-indigo-50/30">
-            <h3 className="font-semibold text-indigo-900 text-sm sm:text-base">{circle.name}</h3>
-            <p className="text-sm text-gray-700 mt-1">{circle.audience}</p>
-            <p className="text-xs text-gray-500 mt-2">Format: {circle.format}</p>
-            <p className="text-xs text-gray-500">Focus: {circle.focus.join(', ')}</p>
+          <article key={circle.id} className="rounded-xl border border-slate-200 p-4 bg-emerald-50/40">
+            <h3 className="font-black text-slate-950 text-sm sm:text-base">{circle.name}</h3>
+            <p className="text-sm text-slate-700 mt-1">{circle.audience}</p>
+            <p className="text-xs text-slate-500 mt-2">Format: {circle.format}</p>
+            <p className="text-xs text-slate-500">Focus: {circle.focus.join(', ')}</p>
           </article>
         ))}
       </div>
-    </section>
+    </HubSection>
   );
 }

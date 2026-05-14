@@ -72,7 +72,7 @@ export default async function BlogIndexPage() {
       </section>
 
       {latestPosts.length > 0 ? (
-        <section className="rounded-2xl border border-indigo-200 bg-white/80 p-5 shadow-soft">
+        <section className="rounded-2xl border border-emerald-200 bg-white/80 p-5 shadow-soft">
           <h2 className="text-xl font-semibold text-slate-900">Start with these essentials</h2>
           <ul className="mt-4 space-y-3">
             {latestPosts.map((post) => (
