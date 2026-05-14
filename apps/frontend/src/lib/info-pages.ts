@@ -5,28 +5,67 @@ export const aboutPageConfig: InfoPageConfig = {
   kicker: 'Aether Platform',
   title: 'About Aether',
   description:
-    'A research-driven student resilience platform that blends private reflection, practical intervention workflows, and peer support.',
+    'Aether is a privacy-first student resilience ecosystem that helps students reflect, understand what kind of support fits the moment, and move toward safer next steps without pretending to be therapy or emergency care.',
+  primaryAction: {
+    href: '/blog',
+    label: 'Open Aether Journal',
+  },
+  secondaryAction: {
+    href: '/privacy',
+    label: 'Review Privacy Model',
+  },
+  metrics: [
+    {
+      value: '5',
+      label: 'support modules',
+      description: 'Reflection, check-ins, safety planning, resource routing, and peer connection.',
+    },
+    {
+      value: '0',
+      label: 'diagnostic claims',
+      description: 'Aether supports awareness and navigation; it does not diagnose, treat, or replace care.',
+    },
+    {
+      value: 'Local',
+      label: 'privacy posture',
+      description: 'Sensitive reflection experiences are designed around data minimization and local-first patterns.',
+    },
+    {
+      value: 'Modular',
+      label: 'deployment model',
+      description: 'Campuses and teams can enable, disable, or swap pathways without rebuilding the product.',
+    },
+  ],
+  itemSection: {
+    eyebrow: 'Platform map',
+    title: 'How Aether fits together',
+    description:
+      'Each public page can stand alone, but the complete surface gives students, mentors, and reviewers a coherent path from context to trust details.',
+  },
   items: [
     {
-      title: 'Echo Chamber',
+      title: 'Aether Journal',
       description:
-        'A private voice reflection space where students can process stress and receive on-device sentiment and safety cues.',
-      href: '/echo',
-      hrefLabel: 'Explore Echo Chamber',
+        'Practical, evidence-informed student resilience guides and product notes for low-pressure reflection and support navigation.',
+      href: '/blog',
+      hrefLabel: 'Read the Journal',
+      eyebrow: 'Learn',
     },
     {
-      title: 'Peer-Navigator',
+      title: 'Mentor Appreciation',
       description:
-        'A privacy-aware matching experience designed to improve belonging while preserving identity safety.',
-      href: '/peer-navigator',
-      hrefLabel: 'Open Peer-Navigator',
+        'Public gratitude for the guidance behind Aether, including strategy, ethics, and implementation support.',
+      href: '/mentors',
+      hrefLabel: 'Meet the Mentors',
+      eyebrow: 'Context',
     },
     {
-      title: 'Resilience Pathway',
+      title: 'Accessibility and SAFE-AI Compliance',
       description:
-        'A modular intervention flow covering check-ins, safety planning, resource routing, peer circles, and sustainable habits.',
-      href: '/resilience-pathway',
-      hrefLabel: 'View Resilience Pathway',
+        'Accessibility commitments, inclusive interaction patterns, and SAFE-AI boundaries for student-facing experiences.',
+      href: '/accessibility',
+      hrefLabel: 'Review Accessibility',
+      eyebrow: 'Access',
     },
     {
       title: 'Privacy and Governance',
@@ -34,21 +73,98 @@ export const aboutPageConfig: InfoPageConfig = {
         'Designed with local-first processing, transparent policy boundaries, and fairness-focused auditability.',
       href: '/privacy',
       hrefLabel: 'Read Privacy Commitments',
+      eyebrow: 'Trust',
     },
   ],
-  footerNote: 'See documentation for technical details and implementation notes.',
+  sections: [
+    {
+      eyebrow: 'Mission',
+      title: 'Why Aether exists',
+      description:
+        'Students often need help before a crisis, but traditional support pathways can feel hard to find, stigmatizing, or too heavy for early stress. Aether fills the space between doing nothing and formal care by making small, responsible next steps easier to reach.',
+      columns: 'three',
+      items: [
+        {
+          title: 'Lower the first step',
+          description:
+            'The product starts with low-pressure reflection and simple routing so students can name what is happening before they need a formal appointment.',
+        },
+        {
+          title: 'Protect dignity',
+          description:
+            'Aether avoids shame-heavy language, diagnostic labels, and hidden surveillance patterns. The student remains a person, not a risk score.',
+        },
+        {
+          title: 'Support real handoffs',
+          description:
+            'The experience points toward peer support, campus services, trusted people, and crisis resources when the situation calls for more than self-guided tools.',
+        },
+      ],
+    },
+    {
+      eyebrow: 'Operating principles',
+      title: 'What makes the system safe to reuse',
+      description:
+        'The About page should make the product boundaries obvious. These principles keep Aether generic enough for many institutions while preserving a serious safety posture.',
+      columns: 'four',
+      items: [
+        {
+          title: 'Non-clinical by default',
+          description:
+            'Aether provides education, reflection, and navigation support. It is not a medical device, therapist, counselor, emergency responder, or diagnostic tool.',
+        },
+        {
+          title: 'Privacy before personalization',
+          description:
+            'Personalization should come from explicit context and local interactions where possible, not broad collection of sensitive student data.',
+        },
+        {
+          title: 'Human pathways stay visible',
+          description:
+            'Crisis support, trusted contacts, campus resources, and peer pathways remain visible instead of being buried behind AI chat or long intake flows.',
+        },
+        {
+          title: 'Config over rewrites',
+          description:
+            'Content, resources, page availability, and support pathways are modeled as swappable configuration wherever possible.',
+        },
+      ],
+    },
+    {
+      eyebrow: 'Boundaries',
+      title: 'What Aether is and is not',
+      description:
+        'A clear About page should build trust by saying where the product helps and where it must step aside.',
+      columns: 'two',
+      items: [
+        {
+          title: 'Aether is a resilience layer',
+          description:
+            'It helps students reflect, practice coping habits, organize support plans, and find the next appropriate resource.',
+        },
+        {
+          title: 'Aether is not emergency care',
+          description:
+            'If someone may be in immediate danger, the right path is local emergency services or a crisis line such as 988 in the United States.',
+          href: 'https://988lifeline.org/',
+          hrefLabel: 'Visit 988 Lifeline',
+        },
+      ],
+    },
+  ],
+  footerNote: 'Aether is designed as a humane support layer: practical, privacy-aware, and careful about its limits.',
   jsonLd: [
     createWebPageJsonLd({
       name: 'About Aether',
       path: '/about',
       description:
-        'Background and mission of Aether, a privacy-first student resilience platform combining guided pathways, AI support, and peer support.',
-      about: ['student resilience', 'privacy-first AI', 'peer support'],
+        'Background, mission, operating principles, and product boundaries for Aether, a privacy-first student resilience ecosystem.',
+      about: ['student resilience', 'privacy-first AI', 'peer support', 'student wellbeing navigation'],
     }),
     createItemListJsonLd([
-      { name: 'Echo Chamber', url: toAbsoluteUrl('/echo') },
-      { name: 'Peer-Navigator', url: toAbsoluteUrl('/peer-navigator') },
-      { name: 'Resilience Pathway', url: toAbsoluteUrl('/resilience-pathway') },
+      { name: 'Aether Journal', url: toAbsoluteUrl('/blog') },
+      { name: 'Mentor Appreciation', url: toAbsoluteUrl('/mentors') },
+      { name: 'Accessibility and SAFE-AI Compliance', url: toAbsoluteUrl('/accessibility') },
       { name: 'Privacy and Governance', url: toAbsoluteUrl('/privacy') },
     ]),
   ],

@@ -16,16 +16,16 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ['education', 'health', 'productivity'],
     shortcuts: [
       {
-        name: 'Resilience Pathway',
-        short_name: 'Pathway',
-        description: 'Open the guided resilience support hub.',
-        url: '/resilience-pathway',
+        name: 'About Aether',
+        short_name: 'About',
+        description: 'Review the mission, boundaries, and product context for Aether.',
+        url: '/about',
       },
       {
-        name: 'Echo Chamber',
-        short_name: 'Echo',
-        description: 'Open private reflection and sentiment mapping.',
-        url: '/echo',
+        name: 'Privacy and Data Ethics',
+        short_name: 'Privacy',
+        description: 'Review Aether privacy commitments and data ethics posture.',
+        url: '/privacy',
       },
       {
         name: 'Aether Journal',

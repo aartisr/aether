@@ -4,7 +4,14 @@ import { cookies } from 'next/headers';
 export type AppPageId =
   | 'home'
   | 'mentors'
-  | 'blog';
+  | 'blog'
+  | 'about'
+  | 'privacy'
+  | 'accessibility'
+  | 'resilience-pathway'
+  | 'echo'
+  | 'peer-navigator'
+  | 'fairness-governance';
 
 export type AppPageDefinition = {
   id: AppPageId;
@@ -26,7 +33,7 @@ type PageOverridesJson = {
 
 export const PAGE_FLAGS_COOKIE_NAME = 'aether_page_flags';
 
-export const DEFAULT_ENABLED_PAGE_IDS = ['home', 'mentors', 'blog'] as const satisfies readonly AppPageId[];
+export const DEFAULT_ENABLED_PAGE_IDS = ['home', 'mentors', 'blog', 'about', 'privacy', 'accessibility'] as const satisfies readonly AppPageId[];
 
 const appPages: readonly AppPageDefinition[] = [
   {
@@ -46,6 +53,48 @@ const appPages: readonly AppPageDefinition[] = [
     path: '/blog',
     name: 'Aether Journal',
     description: 'Evidence-informed student resilience guides, product notes, and practical reflection resources.',
+  },
+  {
+    id: 'about',
+    path: '/about',
+    name: 'About',
+    description: 'Background, positioning, and product summary for Aether.',
+  },
+  {
+    id: 'privacy',
+    path: '/privacy',
+    name: 'Privacy',
+    description: 'Privacy-by-design approach including minimized data exposure and safety guardrails.',
+  },
+  {
+    id: 'accessibility',
+    path: '/accessibility',
+    name: 'Accessibility',
+    description: 'Accessibility commitments, inclusive design approach, and SAFE-AI guidance.',
+  },
+  {
+    id: 'resilience-pathway',
+    path: '/resilience-pathway',
+    name: 'Resilience Pathway',
+    description: 'Interactive resilience hub covering check-ins, safety planning, navigation, peer circles, and habits.',
+  },
+  {
+    id: 'echo',
+    path: '/echo',
+    name: 'Echo Chamber',
+    description: 'Private, on-device voice reflection with transcript and sentiment mapping.',
+  },
+  {
+    id: 'peer-navigator',
+    path: '/peer-navigator',
+    name: 'Peer-Navigator',
+    description: 'Privacy-aware peer matching demo for identity-safe student support.',
+  },
+  {
+    id: 'fairness-governance',
+    path: '/fairness-governance',
+    name: 'Fairness & Governance',
+    description: 'Transparency layer for fairness metrics, policy, and auditability.',
   },
 ] as const;
 

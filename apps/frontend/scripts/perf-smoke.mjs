@@ -20,6 +20,9 @@ const warmups = Number(process.env.PERF_WARMUPS ?? '2');
 const timeoutMs = Number(process.env.PERF_TIMEOUT_MS ?? '4000');
 const startupTimeoutMs = Number(process.env.PERF_STARTUP_TIMEOUT_MS ?? '45000');
 const p95BudgetMs = Number(process.env.PERF_BUDGET_P95_MS ?? '900');
+const readyRoute =
+  process.env.PERF_READY_ROUTE ??
+  (routeList.includes('/api/health') ? '/api/health' : routeList[0] ?? '/');
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -72,14 +75,14 @@ function average(values) {
 async function waitForServerReady() {
   const deadline = Date.now() + startupTimeoutMs;
   while (Date.now() < deadline) {
-    const probe = await fetchWithTiming(`${baseUrl}/api/health`);
+    const probe = await fetchWithTiming(`${baseUrl}${readyRoute}`);
     if (probe.ok) {
       return;
     }
     await sleep(500);
   }
 
-  throw new Error(`Server did not become ready within ${startupTimeoutMs}ms`);
+  throw new Error(`Server did not become ready at ${readyRoute} within ${startupTimeoutMs}ms`);
 }
 
 function printSummary(results) {

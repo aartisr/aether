@@ -41,9 +41,28 @@ const primaryNavigationConfig: ConfigurableNavigationLink[] = [
     description: 'Practical, evidence-informed student resilience guides.',
     requiresPage: 'blog',
   },
+  {
+    href: '/about',
+    label: 'About',
+    description: 'Mission, boundaries, and product context.',
+    requiresPage: 'about',
+  },
 ];
 
-const secondaryNavigationConfig: ConfigurableNavigationLink[] = [];
+const secondaryNavigationConfig: ConfigurableNavigationLink[] = [
+  {
+    href: '/privacy',
+    label: 'Privacy',
+    description: 'Local-first design, minimized data exposure, and identity safety.',
+    requiresPage: 'privacy',
+  },
+  {
+    href: '/accessibility',
+    label: 'Accessibility',
+    description: 'Inclusive design commitments and SAFE-AI guidance.',
+    requiresPage: 'accessibility',
+  },
+];
 
 export const trustSignals = [
   'Privacy-first',
@@ -62,6 +81,15 @@ const footerNavigationConfig: Array<{
       { href: '/', label: 'Home', requiresPage: 'home' },
       { href: '/mentors', label: 'Mentors', requiresPage: 'mentors' },
       { href: '/blog', label: 'Aether Journal', requiresPage: 'blog' },
+      { href: '/about', label: 'About Aether', requiresPage: 'about' },
+    ],
+  },
+  {
+    title: 'Trust',
+    links: [
+      { href: '/privacy', label: 'Privacy', requiresPage: 'privacy' },
+      { href: '/accessibility', label: 'Accessibility', requiresPage: 'accessibility' },
+      { href: 'https://988lifeline.org/', label: '988 Lifeline', external: true },
     ],
   },
   {
