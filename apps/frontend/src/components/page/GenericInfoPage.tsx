@@ -160,14 +160,16 @@ export default function GenericInfoPage({ config }: { config: InfoPageConfig }) 
         })}
 
         {config.footerNote ? (
-          <div className="text-center text-xs text-slate-500">
-            <p>{config.footerNote}</p>
+          <div className="theme-card mx-auto max-w-3xl p-5 text-center">
+            <p className="theme-kicker">Continue with context</p>
+            <p className="mt-2 text-sm leading-6 text-[color:var(--theme-text-muted)]">{config.footerNote}</p>
             {config.footerLink && shouldShowFooterLink ? (
               <div className="mt-1">
                 <ActionLink
                   href={config.footerLink.href}
                   label={config.footerLink.label}
                   external={config.footerLink.external}
+                  className="mt-3 justify-center rounded-[var(--theme-radius-md)] border border-[color:var(--theme-border)] bg-white px-4 py-2 text-[color:var(--theme-primary-strong)] hover:bg-[color:var(--theme-bg-soft)] hover:no-underline"
                 />
               </div>
             ) : null}

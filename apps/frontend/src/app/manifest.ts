@@ -33,6 +33,18 @@ export default function manifest(): MetadataRoute.Manifest {
         description: 'Read practical student resilience guides.',
         url: '/blog',
       },
+      {
+        name: 'Ask Aether',
+        short_name: 'Ask',
+        description: 'Ask source-grounded questions across Aether content.',
+        url: '/ask',
+      },
+      {
+        name: 'Feedback',
+        short_name: 'Feedback',
+        description: 'Report an issue or suggest a useful improvement.',
+        url: '/feedback',
+      },
     ],
     icons: [
       {

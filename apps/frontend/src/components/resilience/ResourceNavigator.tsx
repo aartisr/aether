@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 
 import { supportResources } from '../../lib/resilience-model';
+import { HubAction, HubLinkAction, HubSection } from './ResilienceHubPrimitives';
 
 const needTags = ['stress', 'sleep', 'focus', 'belonging', 'crisis', 'professional', 'campus'];
 
@@ -15,43 +16,45 @@ export default function ResourceNavigator() {
   );
 
   return (
-    <section className="rounded-2xl bg-white p-4 sm:p-6 shadow-soft border border-indigo-100">
-      <h2 className="text-xl sm:text-2xl font-bold text-indigo-800">Resource Navigator</h2>
-      <p className="mt-2 text-sm text-gray-600">Match support options to what you need right now.</p>
-
+    <HubSection
+      tone="navigate"
+      eyebrow="Care routing"
+      title="Resource Navigator"
+      description="Match support options to what you need right now."
+    >
       <div className="mt-4 flex flex-wrap gap-2">
         {needTags.map((tag) => (
-          <button
+          <HubAction
             key={tag}
             type="button"
             onClick={() => setSelectedTag(tag)}
-            className={`px-3 py-2.5 rounded-lg text-sm border transition ${
-              selectedTag === tag
-                ? 'bg-indigo-600 text-white border-indigo-600'
-                : 'bg-white text-indigo-700 border-indigo-200 hover:bg-indigo-50'
-            }`}
+            tone="navigate"
+            variant={selectedTag === tag ? 'solid' : 'outline'}
+            className="min-h-10 px-3"
           >
             {tag}
-          </button>
+          </HubAction>
         ))}
       </div>
 
       <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
         {matches.map((resource) => (
-          <article key={resource.id} className="border border-indigo-100 rounded-xl p-4 bg-indigo-50/40">
-            <p className="text-xs uppercase tracking-wide text-indigo-700 font-semibold">{resource.type}</p>
-            <h3 className="text-lg font-semibold text-indigo-900 mt-1">{resource.title}</h3>
-            <p className="text-sm text-gray-700 mt-2">{resource.description}</p>
-            <p className="text-xs text-gray-500 mt-2">Availability: {resource.availability}</p>
-            <a
+          <article key={resource.id} className="border border-slate-200 rounded-xl p-4 bg-slate-50">
+            <p className="text-xs uppercase tracking-wide text-sky-700 font-black">{resource.type}</p>
+            <h3 className="text-lg font-black text-slate-950 mt-1">{resource.title}</h3>
+            <p className="text-sm text-slate-700 mt-2">{resource.description}</p>
+            <p className="text-xs text-slate-500 mt-2">Availability: {resource.availability}</p>
+            <HubLinkAction
               href={resource.actionHref}
-              className="inline-block mt-3 w-full sm:w-auto text-center px-3 py-2.5 rounded-lg border border-indigo-300 text-indigo-700 font-medium no-underline hover:bg-indigo-100"
+              tone="navigate"
+              variant="outline"
+              className="mt-3 w-full sm:w-auto"
             >
               {resource.actionLabel}
-            </a>
+            </HubLinkAction>
           </article>
         ))}
       </div>
-    </section>
+    </HubSection>
   );
 }

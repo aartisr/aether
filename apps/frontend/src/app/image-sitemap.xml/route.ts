@@ -12,13 +12,20 @@ export async function GET() {
     image: `${siteUrl}/opengraph-image`,
     title: `${siteName} - ${section.name}`,
   }));
+  const utilityEntries = [
+    {
+      loc: `${siteUrl}/ask`,
+      image: `${siteUrl}/opengraph-image`,
+      title: `${siteName} - Ask Aether`,
+    },
+  ];
   const blogEntries = posts.map((post) => ({
     loc: `${siteUrl}/blog/${post.slug}`,
     image: `${siteUrl}/opengraph-image`,
     title: post.title,
   }));
 
-  const entries = [...staticEntries, ...blogEntries]
+  const entries = [...staticEntries, ...utilityEntries, ...blogEntries]
     .map(
       (entry) => `<url>
   <loc>${escapeXml(entry.loc)}</loc>

@@ -137,26 +137,26 @@ export default function VoiceRecorder({
     <div className={`flex flex-col items-center gap-4 ${className}`}>
       <div className="flex items-center gap-2">
         <button
-          className={`px-6 py-3 rounded-lg font-semibold shadow transition focus:outline-none focus:ring-2 focus:ring-indigo-400 ${recording ? 'bg-red-600 text-white animate-pulse' : 'bg-indigo-500 text-white hover:bg-indigo-600'}`}
+          className={`px-6 py-3 rounded-lg font-semibold shadow transition focus:outline-none focus:ring-2 focus:ring-emerald-300 ${recording ? 'bg-rose-700 text-white animate-pulse hover:bg-rose-800' : 'bg-emerald-800 text-white hover:bg-emerald-900'}`}
           onClick={recording ? stopRecording : startRecording}
           aria-label={recording ? stopButtonLabel : recordButtonLabel}
         >
           {recording ? stopButtonLabel : recordButtonLabel}
         </button>
-        <span className="text-gray-500 text-sm" aria-live="polite">{recording ? formatTime(elapsed) : ''}</span>
+        <span className="text-slate-600 text-sm" aria-live="polite">{recording ? formatTime(elapsed) : ''}</span>
       </div>
       {audioURL && (
         <audio controls src={audioURL} className="w-full mt-2" aria-label="Playback recorded audio" />
       )}
       {transcript && (
-        <div className="w-full rounded-lg border border-indigo-100 bg-indigo-50/80 p-3 text-left text-sm text-slate-700">
-          <div className="font-semibold text-indigo-700">Transcript Preview</div>
+        <div className="w-full rounded-lg border border-emerald-100 bg-emerald-50/80 p-3 text-left text-sm text-slate-700">
+          <div className="font-semibold text-emerald-900">Transcript Preview</div>
           <p className="mt-1 whitespace-pre-wrap">{transcript}</p>
         </div>
       )}
       {error && <div className="text-red-500 text-sm" role="alert">{error}</div>}
-      <div className="text-xs text-gray-400 mt-2 text-center max-w-xs">
-        <span role="img" aria-label="lock">🔒</span> Your voice is never sent to a server. All processing is local for privacy and anonymization.
+      <div className="text-xs text-slate-600 mt-2 text-center max-w-xs">
+        Your voice is never sent to a server. All processing is local for privacy and anonymization.
       </div>
     </div>
   );

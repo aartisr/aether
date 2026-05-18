@@ -221,7 +221,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </section>
       ) : null}
 
-      <section className="rounded-2xl border border-indigo-200 bg-white/85 p-5 shadow-soft">
+      <section className="rounded-2xl border border-emerald-200 bg-white/85 p-5 shadow-soft">
         <h2 className="text-xl font-semibold text-slate-900">Quick FAQ</h2>
         <CardGrid
           items={faqEntries.map((entry) => ({ title: entry.question, description: entry.answer }))}

@@ -14,7 +14,7 @@ type SiteHeaderClientProps = {
   siteName: string;
 };
 
-const MAX_VISIBLE_NAVIGATION_ITEMS = 4;
+const MAX_VISIBLE_NAVIGATION_ITEMS = 5;
 const explorePanelId = 'site-header-explore-panel';
 const mobilePanelId = 'site-header-mobile-panel';
 
@@ -118,6 +118,40 @@ function HeaderNavigationLink({
   );
 }
 
+function NavigationSection({
+  title,
+  description,
+  links,
+  pathname,
+  onNavigate,
+}: {
+  title: string;
+  description: string;
+  links: NavigationLink[];
+  pathname: string;
+  onNavigate: () => void;
+}) {
+  if (links.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="min-w-0">
+      <div className="mb-3">
+        <h2 className="text-xs font-black uppercase tracking-[0.14em] text-[color:var(--theme-primary-strong)]">
+          {title}
+        </h2>
+        <p className="mt-1 text-xs leading-5 text-[color:var(--theme-text-muted)]">{description}</p>
+      </div>
+      <div className="grid gap-2">
+        {links.map((link) => (
+          <PanelNavigationLink key={`${title}-${link.href}`} link={link} pathname={pathname} onNavigate={onNavigate} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function PanelNavigationLink({
   link,
   pathname,
@@ -129,15 +163,17 @@ function PanelNavigationLink({
 }) {
   const current = isCurrentPath(pathname, link.href);
   const className = cx(
-    'theme-card-interactive block p-3 no-underline transition hover:no-underline focus:no-underline',
+    'group block rounded-[var(--theme-radius-md)] border bg-white p-3 no-underline shadow-sm transition hover:-translate-y-0.5 hover:no-underline focus:no-underline',
     current
-      ? 'ring-2 ring-teal-100'
-      : '',
+      ? 'border-[color:var(--theme-primary)] ring-2 ring-teal-100'
+      : 'border-[color:var(--theme-border)] hover:border-[color:var(--theme-border-strong)] hover:shadow-[var(--theme-shadow-sm)]',
   );
   const content = (
     <>
       <span className="flex items-center justify-between gap-3">
-        <span className="text-sm font-extrabold">{link.label}</span>
+        <span className="text-sm font-extrabold text-[color:var(--theme-text)] group-hover:text-[color:var(--theme-primary-strong)]">
+          {link.label}
+        </span>
         {current ? (
           <span className="rounded-lg bg-[rgba(21,111,112,0.1)] px-2 py-0.5 text-[0.68rem] font-extrabold uppercase tracking-[0.08em] text-[color:var(--theme-primary-strong)]">
             Current
@@ -211,10 +247,18 @@ export default function SiteHeaderClient({
     () => selectDesktopNavigation(allNavigation, pathname),
     [allNavigation, pathname],
   );
-  const ctaLink = { href: '/mentors', label: 'Mentors', description: 'View project mentor acknowledgements.' };
-  const ctaLabel = 'Mentors';
+  const ctaLink = { href: '/ask', label: 'Ask Aether', description: 'Open the guided copilot workspace.' };
+  const feedbackLink = allNavigation.find((link) => link.href === '/feedback') ?? {
+    href: '/feedback',
+    label: 'Feedback',
+    description: 'Report an issue or suggest an improvement.',
+  };
+  const ctaLabel = 'Ask Aether';
   const hasNavigation = allNavigation.length > 0;
   const hasOverflowNavigation = overflowNavigation.length > 0;
+  const currentNavigationItem = allNavigation.find((link) => isCurrentPath(pathname, link.href));
+  const panelPrimaryNavigation = primaryNavigation.filter((link) => link.href !== feedbackLink.href);
+  const panelSecondaryNavigation = secondaryNavigation;
 
   const closeMenus = useCallback(() => {
     setIsExploreOpen(false);
@@ -298,7 +342,7 @@ export default function SiteHeaderClient({
                 </span>
               </button>
             ) : null}
-          </nav>
+        </nav>
         ) : null}
 
         <div className="ml-auto flex flex-none items-center gap-2 lg:ml-0">
@@ -331,11 +375,35 @@ export default function SiteHeaderClient({
         <div id={explorePanelId} className="hidden border-t border-[color:var(--theme-border)] bg-[rgb(247_251_248/0.96)] lg:block">
           <nav
             aria-label="More site navigation"
-            className="mx-auto grid min-w-0 max-w-7xl gap-3 px-6 py-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+            className="mx-auto grid min-w-0 max-w-7xl gap-5 px-6 py-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_18rem]"
           >
-            {overflowNavigation.map((link) => (
-              <PanelNavigationLink key={link.href} link={link} pathname={pathname} onNavigate={closeMenus} />
-            ))}
+            <NavigationSection
+              title="Build resilience"
+              description="Core product experiences for reflection, guidance, support, and learning."
+              links={panelPrimaryNavigation}
+              pathname={pathname}
+              onNavigate={closeMenus}
+            />
+            <NavigationSection
+              title="Trust and context"
+              description="Understand the principles, people, and safeguards behind Aether."
+              links={panelSecondaryNavigation}
+              pathname={pathname}
+              onNavigate={closeMenus}
+            />
+            <section className="rounded-[var(--theme-radius-lg)] border border-[color:var(--theme-border)] bg-white p-4 shadow-[var(--theme-shadow-sm)]">
+              <p className="theme-kicker">You are here</p>
+              <h2 className="mt-2 text-xl font-extrabold text-[color:var(--theme-text)]">
+                {currentNavigationItem?.label ?? siteName}
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-[color:var(--theme-text-muted)]">
+                {currentNavigationItem?.description ?? shareTagline}
+              </p>
+              <div className="mt-4 grid gap-2">
+                <HeaderActionLink link={feedbackLink} label="Share feedback" onNavigate={closeMenus} />
+                <HeaderActionLink link={ctaLink} label={ctaLabel} onNavigate={closeMenus} />
+              </div>
+            </section>
           </nav>
         </div>
       ) : null}
@@ -343,10 +411,24 @@ export default function SiteHeaderClient({
       {isMobileOpen && hasNavigation ? (
         <div id={mobilePanelId} className="border-t border-[color:var(--theme-border)] bg-[rgb(247_251_248/0.96)] lg:hidden">
           <nav aria-label="Site navigation" className="mx-auto min-w-0 max-w-7xl px-4 py-4 md:px-6">
-            <div className="grid gap-2 sm:grid-cols-2">
-              {allNavigation.map((link) => (
-                <PanelNavigationLink key={link.href} link={link} pathname={pathname} onNavigate={closeMenus} />
-              ))}
+            <div className="mb-4">
+              <PanelNavigationLink link={ctaLink} pathname={pathname} onNavigate={closeMenus} />
+            </div>
+            <div className="grid gap-5 md:grid-cols-2">
+              <NavigationSection
+                title="Build resilience"
+                description="Start with the most useful product surfaces."
+                links={panelPrimaryNavigation}
+                pathname={pathname}
+                onNavigate={closeMenus}
+              />
+              <NavigationSection
+                title="Trust and context"
+                description="Review privacy, accessibility, mentors, and governance."
+                links={panelSecondaryNavigation}
+                pathname={pathname}
+                onNavigate={closeMenus}
+              />
             </div>
           </nav>
         </div>

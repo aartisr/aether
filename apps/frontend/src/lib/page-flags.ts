@@ -3,15 +3,16 @@ import { cookies } from 'next/headers';
 
 export type AppPageId =
   | 'home'
-  | 'mentors'
-  | 'blog'
-  | 'about'
-  | 'privacy'
-  | 'accessibility'
   | 'resilience-pathway'
   | 'echo'
   | 'peer-navigator'
-  | 'fairness-governance';
+  | 'blog'
+  | 'fairness-governance'
+  | 'privacy'
+  | 'accessibility'
+  | 'feedback'
+  | 'about'
+  | 'mentors';
 
 export type AppPageDefinition = {
   id: AppPageId;
@@ -33,7 +34,15 @@ type PageOverridesJson = {
 
 export const PAGE_FLAGS_COOKIE_NAME = 'aether_page_flags';
 
-export const DEFAULT_ENABLED_PAGE_IDS = ['home', 'mentors', 'blog', 'about', 'privacy', 'accessibility'] as const satisfies readonly AppPageId[];
+export const DEFAULT_ENABLED_PAGE_IDS = [
+  'home',
+  'about',
+  'mentors',
+  'blog',
+  'privacy',
+  'accessibility',
+  'feedback',
+] as const satisfies readonly AppPageId[];
 
 const appPages: readonly AppPageDefinition[] = [
   {
@@ -41,36 +50,6 @@ const appPages: readonly AppPageDefinition[] = [
     path: '/',
     name: 'Homepage',
     description: 'Overview of the Aether student resilience ecosystem and core product pathways.',
-  },
-  {
-    id: 'mentors',
-    path: '/mentors',
-    name: 'Mentor Appreciation',
-    description: 'A public acknowledgment of mentors who shaped strategy, ethics, and implementation.',
-  },
-  {
-    id: 'blog',
-    path: '/blog',
-    name: 'Aether Journal',
-    description: 'Evidence-informed student resilience guides, product notes, and practical reflection resources.',
-  },
-  {
-    id: 'about',
-    path: '/about',
-    name: 'About',
-    description: 'Background, positioning, and product summary for Aether.',
-  },
-  {
-    id: 'privacy',
-    path: '/privacy',
-    name: 'Privacy',
-    description: 'Privacy-by-design approach including minimized data exposure and safety guardrails.',
-  },
-  {
-    id: 'accessibility',
-    path: '/accessibility',
-    name: 'Accessibility',
-    description: 'Accessibility commitments, inclusive design approach, and SAFE-AI guidance.',
   },
   {
     id: 'resilience-pathway',
@@ -95,6 +74,42 @@ const appPages: readonly AppPageDefinition[] = [
     path: '/fairness-governance',
     name: 'Fairness & Governance',
     description: 'Transparency layer for fairness metrics, policy, and auditability.',
+  },
+  {
+    id: 'privacy',
+    path: '/privacy',
+    name: 'Privacy',
+    description: 'Privacy-by-design approach including federated learning, minimized data exposure, and safety guardrails.',
+  },
+  {
+    id: 'accessibility',
+    path: '/accessibility',
+    name: 'Accessibility',
+    description: 'Accessibility commitments, inclusive design approach, and SAFE-AI guidance.',
+  },
+  {
+    id: 'about',
+    path: '/about',
+    name: 'About',
+    description: 'Background, positioning, and product summary for Aether.',
+  },
+  {
+    id: 'blog',
+    path: '/blog',
+    name: 'Blog',
+    description: 'Evidence-informed resilience articles, product notes, and practical student guidance.',
+  },
+  {
+    id: 'mentors',
+    path: '/mentors',
+    name: 'Mentor Appreciation',
+    description: 'A public acknowledgment of mentors who shaped strategy, ethics, and implementation.',
+  },
+  {
+    id: 'feedback',
+    path: '/feedback',
+    name: 'Feedback',
+    description: 'A structured way to report page issues, suggest fixes, and request useful additions.',
   },
 ] as const;
 
@@ -210,14 +225,26 @@ export function getPageByPath(path: string): AppPageDefinition | undefined {
   return pageByPath.get(path);
 }
 
+export function getPageIdForPath(path: string): AppPageId | undefined {
+  const normalizedPath = path.split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
+  const exact = pageByPath.get(normalizedPath);
+  if (exact) {
+    return exact.id;
+  }
+
+  return appPages
+    .filter((page) => page.path !== '/' && normalizedPath.startsWith(`${page.path}/`))
+    .sort((left, right) => right.path.length - left.path.length)[0]?.id;
+}
+
 export function isPathEnabled(path: string): boolean {
-  const page = getPageByPath(path);
-  return page ? isPageEnabled(page.id) : true;
+  const pageId = getPageIdForPath(path);
+  return pageId ? isPageEnabled(pageId) : true;
 }
 
 export function isPathEnabledForRequest(path: string): boolean {
-  const page = getPageByPath(path);
-  return page ? isPageEnabledForRequest(page.id) : true;
+  const pageId = getPageIdForPath(path);
+  return pageId ? isPageEnabledForRequest(pageId) : true;
 }
 
 export function assertPageEnabled(pageId: AppPageId): void {

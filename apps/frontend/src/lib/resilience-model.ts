@@ -40,6 +40,59 @@ export interface PeerCircle {
   format: string;
 }
 
+export interface HubBenchmarkInsight {
+  title: string;
+  source: string;
+  insight: string;
+}
+
+export interface HubSupportLane {
+  title: string;
+  description: string;
+}
+
+export const hubBenchmarkInsights: HubBenchmarkInsight[] = [
+  {
+    title: 'One-tap access',
+    source: 'MindLink / campus access hubs',
+    insight: 'The first useful action should be available before login, intake, or explanation.',
+  },
+  {
+    title: 'Safeguarded peer belonging',
+    source: 'TalkCampus / Togetherall',
+    insight: 'Peer support is strongest when belonging, moderation, and escalation pathways are designed together.',
+  },
+  {
+    title: 'Structured self-guided care',
+    source: 'SilverCloud / Headspace / Calm',
+    insight: 'Students need short pathways that turn stress, sleep, and focus signals into doable routines.',
+  },
+  {
+    title: 'Privacy-forward signal use',
+    source: 'University wellbeing toolkits',
+    insight: 'Aggregate trends can help teams improve services without exposing private student reflections.',
+  },
+];
+
+export const hubSupportLanes: HubSupportLane[] = [
+  {
+    title: 'Stabilize',
+    description: 'When a student needs immediate grounding, safety planning, or crisis support.',
+  },
+  {
+    title: 'Navigate',
+    description: 'When the hard part is finding the right next door: peer, campus, self-guided, or professional.',
+  },
+  {
+    title: 'Belong',
+    description: 'When isolation is the risk signal and a moderated peer pathway can restore connection.',
+  },
+  {
+    title: 'Practice',
+    description: 'When resilience needs repetition through tiny actions that fit a real student week.',
+  },
+];
+
 export const resiliencePathwayStages = [
   {
     title: 'Early Signal Detection',
@@ -149,6 +202,18 @@ export const researchReferences: ResearchReference[] = [
     evidenceSignal: 'Anonymous community-based support with moderated safety model.',
   },
   {
+    name: 'TalkCampus',
+    url: 'https://www.talkcampus.com/',
+    category: 'platform',
+    evidenceSignal: 'Higher-education peer support with 24/7 safeguarding and multilingual access patterns.',
+  },
+  {
+    name: 'MindLink',
+    url: 'https://mindl.ink/',
+    category: 'platform',
+    evidenceSignal: 'One-tap university wellbeing access hub with no app, no login, and low-friction support routing.',
+  },
+  {
     name: 'Kooth',
     url: 'https://www.kooth.com/',
     category: 'platform',
@@ -165,6 +230,24 @@ export const researchReferences: ResearchReference[] = [
     url: 'https://silvercloud.amwell.com/',
     category: 'platform',
     evidenceSignal: 'Evidence-based digital CBT-style pathways and higher-ed support models.',
+  },
+  {
+    name: 'YOU at College',
+    url: 'https://youatcollege.com/',
+    category: 'platform',
+    evidenceSignal: 'Campus-specific wellbeing pathways built with student involvement and behavior-change research.',
+  },
+  {
+    name: 'Inner Peak',
+    url: 'https://www.innerpeak.ai/',
+    category: 'platform',
+    evidenceSignal: 'Student-facing digital support reporting wellbeing gains and long-term value markers.',
+  },
+  {
+    name: 'VIWELL Student Wellbeing',
+    url: 'https://www.viwell.com/product-student-wellbeing',
+    category: 'platform',
+    evidenceSignal: 'Short student activities, school-wide planning support, and privacy-aware wellbeing programs.',
   },
   {
     name: 'Headspace',

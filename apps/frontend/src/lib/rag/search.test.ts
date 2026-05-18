@@ -1,4 +1,5 @@
 import { answerWithConfiguredRagProvider } from './answer-providers';
+import { createFreeRagAssistantReply } from './assistant';
 import { getRagIndexMetadata, searchRagIndex } from './search';
 
 describe('free RAG search', () => {
@@ -26,6 +27,17 @@ describe('free RAG search', () => {
     });
 
     expect(results.some((result) => result.chunk.pageId === 'blog')).toBe(false);
+  });
+
+  it('keeps new registered pages controllable through enabled page ids', () => {
+    const reply = createFreeRagAssistantReply({
+      message: 'How do I submit feedback?',
+      enabledPageIds: ['home', 'about', 'mentors'],
+      includeKnowledgeBase: false,
+      maxResults: 8,
+    });
+
+    expect(reply.sources.every((source) => source.href !== '/feedback')).toBe(true);
   });
 
   it('creates a free extractive answer from search results', () => {

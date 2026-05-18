@@ -127,7 +127,10 @@ exports[`site metadata snapshots matches article metadata snapshot 1`] = `
     "card": "summary_large_image",
     "description": "Practical checklist for stabilizing during stress spikes.",
     "images": [
-      "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline/opengraph-image",
+      {
+        "alt": "How to Stabilize Your Baseline",
+        "url": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline/opengraph-image",
+      },
     ],
     "title": "How to Stabilize Your Baseline",
   },
@@ -206,7 +209,10 @@ exports[`site metadata snapshots matches page metadata snapshot 1`] = `
     "card": "summary_large_image",
     "description": "Accessibility commitments and support resources.",
     "images": [
-      "https://aether-resilience.vercel.app/opengraph-image",
+      {
+        "alt": "Accessibility",
+        "url": "https://aether-resilience.vercel.app/opengraph-image",
+      },
     ],
     "title": "Accessibility",
   },

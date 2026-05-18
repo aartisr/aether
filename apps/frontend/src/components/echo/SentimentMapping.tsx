@@ -194,13 +194,13 @@ export default function SentimentMapping({
       </label>
       <textarea
         id="echo-transcript"
-        className="min-h-32 w-full max-w-xl rounded-lg border border-slate-200 px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+        className="min-h-32 w-full max-w-xl rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
         value={editableTranscript}
         onChange={(event) => setEditableTranscript(event.target.value)}
         placeholder="Your local transcript will appear here. You can also type or edit it manually."
       />
       <button
-        className="px-4 py-2 bg-indigo-400 text-white rounded shadow hover:bg-indigo-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
+        className="px-4 py-2 bg-emerald-800 text-white rounded shadow hover:bg-emerald-900 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-emerald-300 transition"
         onClick={handleAnalyze}
         disabled={!canAnalyze || loading}
         aria-label={analyzeLabel}
@@ -220,14 +220,14 @@ export default function SentimentMapping({
         </p>
       )}
       {result && (
-        <div className="mt-2 w-full max-w-xl rounded-xl border border-indigo-100 bg-white p-4 shadow-sm" aria-live="polite">
+        <div className="mt-2 w-full max-w-xl rounded-xl border border-emerald-100 bg-white p-4 shadow-sm" aria-live="polite">
           {(result.safety.label === 'medium' || result.safety.label === 'high') && (
             <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
               Elevated safety signal detected. Suggested support actions are prioritized below.
             </div>
           )}
 
-          <div className="text-lg font-semibold text-indigo-700">
+          <div className="text-lg font-semibold text-emerald-900">
             Sentiment Rail
           </div>
 
@@ -257,8 +257,8 @@ export default function SentimentMapping({
                 cx={6 + (valencePercent * 0.88)}
                 cy="14"
                 r="4.6"
-                fill={confidence < 0.5 ? '#ffffff' : '#c7d2fe'}
-                stroke={confidence < 0.5 ? '#64748b' : '#4338ca'}
+                fill={confidence < 0.5 ? '#ffffff' : '#a7f3d0'}
+                stroke={confidence < 0.5 ? '#64748b' : '#047857'}
                 strokeWidth="1.8"
               />
             </svg>
@@ -326,15 +326,15 @@ export default function SentimentMapping({
                     cx={valencePercent}
                     cy={energyPercentFromTop}
                     r={confidenceBandRadius}
-                    fill="#818cf8"
+                    fill="#34d399"
                     opacity={confidenceBandOpacity}
-                    stroke="#6366f1"
+                    stroke="#047857"
                     strokeOpacity={0.38}
                     strokeWidth="0.8"
                     strokeDasharray="2 2"
                   />
-                  <circle cx={valencePercent} cy={energyPercentFromTop} r="5.2" fill="#ffffff" stroke="#4338ca" strokeWidth="1.4" />
-                  <circle cx={valencePercent} cy={energyPercentFromTop} r="2.6" fill="#818cf8" />
+                  <circle cx={valencePercent} cy={energyPercentFromTop} r="5.2" fill="#ffffff" stroke="#047857" strokeWidth="1.4" />
+                  <circle cx={valencePercent} cy={energyPercentFromTop} r="2.6" fill="#34d399" />
                 </svg>
               </div>
               <div className="mt-2 text-center text-sm text-slate-700">
@@ -344,7 +344,7 @@ export default function SentimentMapping({
                 {formatValenceTone(valence)} • {formatEnergyTone(energy)}
               </div>
               <div className="mt-2 flex items-center justify-center gap-2 text-xs text-slate-500">
-                <span className="inline-block h-2.5 w-2.5 rounded-full border border-indigo-500 bg-indigo-300/40" aria-hidden="true" />
+                <span className="inline-block h-2.5 w-2.5 rounded-full border border-emerald-700 bg-emerald-300/60" aria-hidden="true" />
                 <span>Confidence band: {formatConfidence(confidence)}</span>
               </div>
             </div>
@@ -382,7 +382,7 @@ export default function SentimentMapping({
             <ul className="mt-2 space-y-2 text-sm text-slate-700">
               {result.escalation.resources.map((resource) => (
                 <li key={resource.id}>
-                  <a className="font-medium text-indigo-700 hover:text-indigo-800" href={resource.actionHref}>
+                  <a className="font-medium text-emerald-800 hover:text-emerald-900" href={resource.actionHref}>
                     {resource.actionLabel}
                   </a>
                   <div className="text-xs text-slate-500">
@@ -394,8 +394,8 @@ export default function SentimentMapping({
           </div>
         </div>
       )}
-      <div className="text-xs text-gray-400 max-w-sm text-center mt-1">
-        <span role="img" aria-label="lock">🔒</span> All analysis is performed locally for privacy. No audio or data is sent to a server.
+      <div className="text-xs text-slate-600 max-w-sm text-center mt-1">
+        All analysis is performed locally for privacy. No audio or data is sent to a server.
       </div>
     </div>
   );

@@ -7,8 +7,8 @@ export const aboutPageConfig: InfoPageConfig = {
   description:
     'Aether is a privacy-first student resilience ecosystem that helps students reflect, understand what kind of support fits the moment, and move toward safer next steps without pretending to be therapy or emergency care.',
   primaryAction: {
-    href: '/blog',
-    label: 'Open Aether Journal',
+    href: '/resilience-pathway',
+    label: 'Open Resilience Hub',
   },
   secondaryAction: {
     href: '/privacy',
@@ -40,32 +40,32 @@ export const aboutPageConfig: InfoPageConfig = {
     eyebrow: 'Platform map',
     title: 'How Aether fits together',
     description:
-      'Each public page can stand alone, but the complete surface gives students, mentors, and reviewers a coherent path from context to trust details.',
+      'Each capability can stand alone, but the complete system gives students a coherent path from reflection to support.',
   },
   items: [
     {
       title: 'Aether Journal',
       description:
-        'Practical, evidence-informed student resilience guides and product notes for low-pressure reflection and support navigation.',
-      href: '/blog',
-      hrefLabel: 'Read the Journal',
-      eyebrow: 'Learn',
+        'A private voice reflection space where students can process stress and receive local sentiment and safety cues without turning reflection into a public record.',
+      href: '/echo',
+      hrefLabel: 'Explore Echo Chamber',
+      eyebrow: 'Reflect',
     },
     {
       title: 'Mentor Appreciation',
       description:
-        'Public gratitude for the guidance behind Aether, including strategy, ethics, and implementation support.',
-      href: '/mentors',
-      hrefLabel: 'Meet the Mentors',
-      eyebrow: 'Context',
+        'A privacy-aware matching experience designed to improve belonging while preserving identity safety and fairness review.',
+      href: '/peer-navigator',
+      hrefLabel: 'Open Peer-Navigator',
+      eyebrow: 'Connect',
     },
     {
       title: 'Accessibility and SAFE-AI Compliance',
       description:
-        'Accessibility commitments, inclusive interaction patterns, and SAFE-AI boundaries for student-facing experiences.',
-      href: '/accessibility',
-      hrefLabel: 'Review Accessibility',
-      eyebrow: 'Access',
+        'A modular intervention flow covering check-ins, safety planning, resource routing, peer circles, and sustainable habits.',
+      href: '/resilience-pathway',
+      hrefLabel: 'View Resilience Pathway',
+      eyebrow: 'Navigate',
     },
     {
       title: 'Privacy and Governance',

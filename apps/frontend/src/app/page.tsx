@@ -3,7 +3,7 @@ import Link from 'next/link';
 import SocialShareLinks from '../components/SocialShareLinks';
 import AetherLogoLockup from '../components/brand/AetherLogoLockup';
 import { CardGrid, JsonLd, LinkCardGrid, SurfaceCard } from '../components/page/PagePrimitives';
-import { homeFaqs, homeFeatureHighlights, homeValueCards } from '../lib/home-page';
+import { homeFaqs, homeFeatureHighlights, homeStartOptions, homeValueCards } from '../lib/home-page';
 import {
   authorName,
   authorUrl,
@@ -36,6 +36,23 @@ export const metadata = createPageMetadata({
 
 export default function Home() {
   const visibleSections = getPrimarySiteSectionsForRequest();
+  const visibleSectionPaths = new Set(visibleSections.map((section) => section.path));
+  const visibleStartOptions = homeStartOptions.filter((option) => visibleSectionPaths.has(option.href));
+  const startCards =
+    visibleStartOptions.length > 0
+      ? visibleStartOptions.map((option) => ({
+          title: option.title,
+          href: option.href,
+          description: option.description,
+        }))
+      : visibleSections
+          .filter((section) => section.path !== '/' && section.path !== '/feedback')
+          .slice(0, 3)
+          .map((section) => ({
+            title: section.name,
+            href: section.path,
+            description: section.description,
+          }));
 
   const homepageCallToActions = getEnabledPagesForRequest(['mentors']).map((page) => ({
     href: page.path,
@@ -56,6 +73,12 @@ export default function Home() {
       title: 'Trust in plain sight',
       description: 'Privacy, safety boundaries, and source-backed AI guidance stay visible across the experience.',
     },
+  ];
+
+  const proofPoints = [
+    { value: 'Private', label: 'Reflection patterns are designed around minimized exposure.' },
+    { value: 'Guided', label: 'The first action is always clearer than the surrounding stress.' },
+    { value: 'Safe', label: 'Boundaries, crisis notes, and trust cues stay visible.' },
   ];
 
   const organizationJsonLd = {
@@ -154,29 +177,46 @@ export default function Home() {
       <section className="home-page space-y-10 overflow-hidden px-3 pb-12 sm:px-4 md:space-y-12 md:px-6">
       <section className="home-hero">
         <div className="home-hero-inner">
-          <div className="home-logo-mark">
-            <AetherLogoLockup className="home-logo-svg" />
-          </div>
-          <p className="theme-kicker">Privacy-first student resilience</p>
-          <h1 className="home-hero-title">Aether</h1>
-          <p className="home-hero-copy">
-            A warm, evidence-informed resilience ecosystem where students can reflect, find direction, and return to
-            support that feels steady.
-          </p>
-          <div className="mx-auto flex w-full max-w-sm flex-col justify-center gap-3 sm:max-w-none sm:flex-row sm:flex-wrap">
-            {homepageCallToActions.map((callToAction) => (
-              <Link key={callToAction.href} href={callToAction.href} className={callToAction.className}>
-                {callToAction.label}
+          <div className="home-hero-copy-block">
+            <p className="theme-kicker">Privacy-first student resilience</p>
+            <h1 className="home-hero-title">Aether</h1>
+            <p className="home-hero-copy">
+              A calm resilience ecosystem for students who need a private place to reflect, find direction, and return
+              to support that feels steady.
+            </p>
+            <div className="home-hero-actions">
+              {homepageCallToActions.map((callToAction) => (
+                <Link key={callToAction.href} href={callToAction.href} className={callToAction.className}>
+                  {callToAction.label}
+                </Link>
+              ))}
+              <Link href="/ask" className="theme-button theme-button-secondary w-full px-6 py-3 sm:w-auto">
+                Ask Aether
               </Link>
-            ))}
+            </div>
+            <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
+              {['Private by default', 'Peer-aware', 'Safety bounded', 'AI-readable'].map((signal) => (
+                <span key={signal} className="theme-pill">
+                  {signal}
+                </span>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap justify-center gap-2">
-            {['Private by default', 'Peer-aware', 'Safety bounded', 'AI-readable'].map((signal) => (
-              <span key={signal} className="theme-pill">
-                {signal}
-              </span>
-            ))}
-          </div>
+
+          <aside className="home-hero-compass" aria-label="Aether resilience compass">
+            <div className="home-logo-mark">
+              <AetherLogoLockup className="home-logo-svg" />
+            </div>
+            <div className="home-proof-grid">
+              {proofPoints.map((point) => (
+                <article key={point.value} className="home-proof-card">
+                  <strong>{point.value}</strong>
+                  <span>{point.label}</span>
+                </article>
+              ))}
+            </div>
+          </aside>
+
           <div className="home-hero-share">
             <SocialShareLinks path="/" title={siteTitle} />
           </div>
@@ -196,11 +236,23 @@ export default function Home() {
 
       <section className="theme-shell space-y-6">
         <div className="home-section-heading">
+          <p className="theme-kicker">Start where you are</p>
+          <h2>A first step should feel obvious.</h2>
+          <p>
+            Aether keeps the first decision simple: get oriented, reflect privately, or understand the trust model
+            before going deeper.
+          </p>
+        </div>
+        <LinkCardGrid items={startCards} />
+      </section>
+
+      <section className="theme-shell space-y-6">
+        <div className="home-section-heading">
           <p className="theme-kicker">Why it feels worth returning to</p>
           <h2>Support that has a rhythm.</h2>
           <p>
-            The strongest wellbeing products give people an immediate path, a safe sense of progress, and clear trust
-            markers. Aether now brings those patterns into a quieter, reusable interface system.
+            The strongest wellbeing tools give people an immediate path, a safe sense of progress, and visible trust
+            markers. Aether brings those patterns into a quieter interface system.
           </p>
         </div>
         <CardGrid items={homeFeatureHighlights} columns="four" titleLevel="h2" className="text-left" />

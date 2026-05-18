@@ -9,7 +9,9 @@ import AnalyticsProvider from '../components/AnalyticsProvider';
 import FloatingAssistantLoader from '../components/assistant/FloatingAssistantLoader';
 import SiteFooter from '../components/layout/SiteFooter';
 import SiteHeader from '../components/layout/SiteHeader';
+import SiteReturnLoop from '../components/layout/SiteReturnLoop';
 import { JsonLd } from '../components/page/PagePrimitives';
+import { getAllPages } from '../lib/page-flags';
 import {
   authorName,
   authorUrl,
@@ -44,7 +46,10 @@ const playfair = Playfair_Display({
   display: 'swap',
 });
 
-const metadataAlternatesTypes = {};
+const metadataAlternatesTypes = {
+  'application/rss+xml': '/feed.xml',
+  'text/plain': '/llms.txt',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -150,6 +155,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const visibleSections = getPrimarySiteSectionsForRequest();
   const enabledPaths = visibleSections.map((section) => section.path);
+  const controlledPaths = getAllPages().map((page) => page.path);
 
   const websiteJsonLd = {
     '@context': 'https://schema.org',
@@ -200,7 +206,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${manrope.variable} ${playfair.variable}`}>
       <body className="min-h-screen font-sans antialiased">
         <JsonLd data={[websiteJsonLd, organizationJsonLd, navigationJsonLd]} idPrefix="root-layout-jsonld" />
-        <a href="#main-content" className="sr-only focus:not-sr-only absolute top-2 left-2 bg-indigo-700 text-white px-4 py-2 rounded z-50">Skip to main content</a>
+        <a href="#main-content" className="sr-only focus:not-sr-only absolute top-2 left-2 bg-emerald-800 text-white px-4 py-2 rounded z-50">Skip to main content</a>
         <SiteHeader />
         <main
           id="main-content"
@@ -209,8 +215,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           {children}
         </main>
+        <SiteReturnLoop sections={visibleSections} />
         <SiteFooter />
-        <FloatingAssistantLoader enabledPaths={enabledPaths} />
+        <FloatingAssistantLoader enabledPaths={enabledPaths} controlledPaths={controlledPaths} />
         <AnalyticsProvider />
       </body>
     </html>

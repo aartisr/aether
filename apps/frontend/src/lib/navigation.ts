@@ -62,6 +62,24 @@ const secondaryNavigationConfig: ConfigurableNavigationLink[] = [
     description: 'Inclusive design commitments and SAFE-AI guidance.',
     requiresPage: 'accessibility',
   },
+  {
+    href: '/about',
+    label: 'About',
+    description: 'Mission, architecture, and product context.',
+    requiresPage: 'about',
+  },
+  {
+    href: '/mentors',
+    label: 'Mentors',
+    description: 'Public gratitude for the guidance behind Aether.',
+    requiresPage: 'mentors',
+  },
+  {
+    href: '/feedback',
+    label: 'Feedback',
+    description: 'Report an issue, request a fix, or suggest what Aether should add next.',
+    requiresPage: 'feedback',
+  },
 ];
 
 export const trustSignals = [
@@ -90,6 +108,16 @@ const footerNavigationConfig: Array<{
       { href: '/privacy', label: 'Privacy', requiresPage: 'privacy' },
       { href: '/accessibility', label: 'Accessibility', requiresPage: 'accessibility' },
       { href: 'https://988lifeline.org/', label: '988 Lifeline', external: true },
+    ],
+  },
+  {
+    title: 'About',
+    links: [
+      { href: '/about', label: 'About Aether', requiresPage: 'about' },
+      { href: '/mentors', label: 'Mentors', requiresPage: 'mentors' },
+      { href: '/feedback', label: 'Feedback', requiresPage: 'feedback' },
+      { href: '/feed.xml', label: 'RSS Feed', requiresPage: 'blog' },
+      { href: '/llms.txt', label: 'AI Guide' },
     ],
   },
   {
