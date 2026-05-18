@@ -80,6 +80,12 @@ const secondaryNavigationConfig: ConfigurableNavigationLink[] = [
     description: 'Public gratitude for the guidance behind Aether.',
     requiresPage: 'mentors',
   },
+  {
+    href: '/feedback',
+    label: 'Feedback',
+    description: 'Report an issue, request a fix, or suggest what Aether should add next.',
+    requiresPage: 'feedback',
+  },
 ];
 
 export const trustSignals = [
@@ -116,6 +122,7 @@ const footerNavigationConfig: Array<{
     links: [
       { href: '/about', label: 'About Aether', requiresPage: 'about' },
       { href: '/mentors', label: 'Mentors', requiresPage: 'mentors' },
+      { href: '/feedback', label: 'Feedback', requiresPage: 'feedback' },
       { href: '/feed.xml', label: 'RSS Feed', requiresPage: 'blog' },
       { href: '/llms.txt', label: 'AI Guide' },
     ],

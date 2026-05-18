@@ -13,6 +13,7 @@ export const metadata = createPageMetadata({
   description: 'Authenticate to access Aether administrative controls.',
   path: '/admin/login',
   keywords: ['admin authentication', 'admin login'],
+  index: false,
 });
 
 function sanitizeNextPath(nextPath: string | undefined): string {

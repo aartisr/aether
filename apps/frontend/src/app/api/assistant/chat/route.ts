@@ -7,6 +7,9 @@ type ChatRequestBody = {
   message?: unknown;
   contextPath?: unknown;
   history?: unknown;
+  includeKnowledgeBase?: unknown;
+  maxResults?: unknown;
+  minScore?: unknown;
 };
 
 export async function POST(request: Request) {
@@ -27,11 +30,22 @@ export async function POST(request: Request) {
     : [];
 
   const enabledPageIds = getEnabledPagesForRequest().map((page) => page.id);
+  const maxResults =
+    typeof body.maxResults === 'number' && Number.isFinite(body.maxResults)
+      ? Math.min(Math.max(Math.round(body.maxResults), 1), 10)
+      : undefined;
+  const minScore =
+    typeof body.minScore === 'number' && Number.isFinite(body.minScore)
+      ? Math.min(Math.max(body.minScore, 0), 10)
+      : undefined;
   const reply = createFreeRagAssistantReply({
     message: body.message,
     contextPath: typeof body.contextPath === 'string' ? body.contextPath : '/',
     history,
     enabledPageIds,
+    includeKnowledgeBase: typeof body.includeKnowledgeBase === 'boolean' ? body.includeKnowledgeBase : undefined,
+    maxResults,
+    minScore,
   });
 
   return NextResponse.json(reply, {

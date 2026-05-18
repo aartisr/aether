@@ -14,6 +14,7 @@ export const metadata = createPageMetadata({
   description: 'Enable or disable Aether pages at runtime using plug-and-play configuration controls.',
   path: '/admin/page-controls',
   keywords: ['admin controls', 'feature toggles', 'page configuration'],
+  index: false,
 });
 
 export default async function AdminPageControlsPage({
@@ -95,6 +96,12 @@ export default async function AdminPageControlsPage({
         <h2 className="text-lg font-bold text-slate-900">Quick Presets</h2>
         <p className="text-sm text-slate-600">One-click profiles inspired by modern dashboard workflows.</p>
         <div className="flex flex-wrap gap-3">
+          <a
+            href="/admin/feedback"
+            className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-900 no-underline transition hover:bg-emerald-100"
+          >
+            Review Feedback
+          </a>
           <form action={applyPresetAction}>
             <input type="hidden" name="preset" value="default" />
             <button
@@ -138,7 +145,7 @@ export default async function AdminPageControlsPage({
         <div>
           <h2 className="text-lg font-bold text-slate-900">Enable Pages</h2>
           <p className="mt-1 text-sm text-slate-600">
-            Home always stays enabled. About and Mentors are checked by default; select any additional pages you want active.
+            Home always stays enabled. Default pages are checked automatically; select any additional pages you want active.
           </p>
         </div>
 

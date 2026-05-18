@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 type FloatingAssistantLoaderProps = {
   enabledPaths: string[];
+  controlledPaths: string[];
 };
 
 type WindowWithIdleCallback = Window & {
@@ -17,7 +18,7 @@ const AetherAssistant = dynamic(() => import('./AetherAssistant'), {
   loading: () => null,
 });
 
-export default function FloatingAssistantLoader({ enabledPaths }: FloatingAssistantLoaderProps) {
+export default function FloatingAssistantLoader({ enabledPaths, controlledPaths }: FloatingAssistantLoaderProps) {
   const [canRender, setCanRender] = useState(false);
 
   useEffect(() => {
@@ -36,5 +37,5 @@ export default function FloatingAssistantLoader({ enabledPaths }: FloatingAssist
     return null;
   }
 
-  return <AetherAssistant enabledPaths={enabledPaths} />;
+  return <AetherAssistant enabledPaths={enabledPaths} controlledPaths={controlledPaths} />;
 }

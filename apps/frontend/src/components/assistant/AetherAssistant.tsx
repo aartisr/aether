@@ -23,9 +23,11 @@ type AssistantUiMessage = AssistantMessageInput & {
 type AetherAssistantProps = {
   variant?: 'floating' | 'page';
   enabledPaths?: string[];
+  controlledPaths?: string[];
+  starterPrompts?: string[];
 };
 
-const pageControlledPaths = [
+const fallbackControlledPaths = [
   '/',
   '/about',
   '/mentors',
@@ -36,6 +38,7 @@ const pageControlledPaths = [
   '/fairness-governance',
   '/privacy',
   '/accessibility',
+  '/feedback',
 ];
 
 function cx(...classes: Array<string | false | undefined>) {
@@ -65,24 +68,32 @@ function normalizeHrefPath(href: string) {
   return normalized.replace(/\/+$/, '') || '/';
 }
 
-function getControlledPath(href: string) {
+function getControlledPath(href: string, controlledPaths: string[]) {
   const normalized = normalizeHrefPath(href);
-  return pageControlledPaths
+  return controlledPaths
     .filter((path) => normalized === path || (path !== '/' && normalized.startsWith(`${path}/`)))
     .sort((left, right) => right.length - left.length)[0];
 }
 
-function canOpenHref(href: string, enabledPathSet: Set<string>) {
+function canOpenHref(href: string, enabledPathSet: Set<string>, controlledPaths: string[]) {
   if (isExternalHref(href) || href === '/ask') {
     return true;
   }
 
-  const controlledPath = getControlledPath(href);
+  const controlledPath = getControlledPath(href, controlledPaths);
   return controlledPath ? enabledPathSet.has(controlledPath) : true;
 }
 
-function SourceLink({ source, enabledPathSet }: { source: AssistantSource; enabledPathSet: Set<string> }) {
-  const isReachable = canOpenHref(source.href, enabledPathSet);
+function SourceLink({
+  source,
+  enabledPathSet,
+  controlledPaths,
+}: {
+  source: AssistantSource;
+  enabledPathSet: Set<string>;
+  controlledPaths: string[];
+}) {
+  const isReachable = canOpenHref(source.href, enabledPathSet, controlledPaths);
   const className =
     'assistant-source block min-w-0 rounded-xl p-3 text-left no-underline shadow-sm transition';
   const content = (
@@ -115,8 +126,16 @@ function SourceLink({ source, enabledPathSet }: { source: AssistantSource; enabl
   );
 }
 
-function ActionLink({ action, enabledPathSet }: { action: AssistantAction; enabledPathSet: Set<string> }) {
-  const isReachable = canOpenHref(action.href, enabledPathSet);
+function ActionLink({
+  action,
+  enabledPathSet,
+  controlledPaths,
+}: {
+  action: AssistantAction;
+  enabledPathSet: Set<string>;
+  controlledPaths: string[];
+}) {
+  const isReachable = canOpenHref(action.href, enabledPathSet, controlledPaths);
   const isPrimary = action.priority === 'primary';
   const className = cx(
     'block rounded-xl border p-3 text-left no-underline shadow-sm transition',
@@ -157,9 +176,11 @@ function ActionLink({ action, enabledPathSet }: { action: AssistantAction; enabl
 function AssistantMessageBubble({
   message,
   enabledPathSet,
+  controlledPaths,
 }: {
   message: AssistantUiMessage;
   enabledPathSet: Set<string>;
+  controlledPaths: string[];
 }) {
   const isUser = message.role === 'user';
   const visibleActions = message.actions?.slice(0, 3) ?? [];
@@ -179,14 +200,24 @@ function AssistantMessageBubble({
               Copilot next steps
             </p>
             {visibleActions.map((action) => (
-              <ActionLink key={`${message.id}-${action.href}`} action={action} enabledPathSet={enabledPathSet} />
+              <ActionLink
+                key={`${message.id}-${action.href}`}
+                action={action}
+                enabledPathSet={enabledPathSet}
+                controlledPaths={controlledPaths}
+              />
             ))}
           </div>
         ) : null}
         {!isUser && message.sources && message.sources.length > 0 ? (
           <div className="mt-3 grid gap-2">
             {message.sources.slice(0, 2).map((source) => (
-              <SourceLink key={`${message.id}-${source.href}`} source={source} enabledPathSet={enabledPathSet} />
+              <SourceLink
+                key={`${message.id}-${source.href}`}
+                source={source}
+                enabledPathSet={enabledPathSet}
+                controlledPaths={controlledPaths}
+              />
             ))}
           </div>
         ) : null}
@@ -195,7 +226,12 @@ function AssistantMessageBubble({
   );
 }
 
-export default function AetherAssistant({ variant = 'floating', enabledPaths = [] }: AetherAssistantProps) {
+export default function AetherAssistant({
+  variant = 'floating',
+  enabledPaths = [],
+  controlledPaths = fallbackControlledPaths,
+  starterPrompts = [],
+}: AetherAssistantProps) {
   const pathname = usePathname() || '/';
   const isFullPage = variant === 'page';
   const shouldHideFloating = !isFullPage && pathname === '/ask';
@@ -203,6 +239,10 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
   const enabledPathSet = useMemo(
     () => new Set(['/', ...enabledPaths, '/ask'].map(normalizeHrefPath)),
     [enabledPaths],
+  );
+  const controlledPathList = useMemo(
+    () => Array.from(new Set(controlledPaths.map(normalizeHrefPath))),
+    [controlledPaths],
   );
   const [isOpen, setIsOpen] = useState(isFullPage);
   const [input, setInput] = useState('');
@@ -380,8 +420,30 @@ export default function AetherAssistant({ variant = 'floating', enabledPaths = [
       </header>
 
       <div ref={transcriptRef} className="assistant-transcript min-h-0 min-w-0 flex-1 space-y-4 overflow-y-auto p-4">
+        {isFullPage && starterPrompts.length > 0 && messages.length === 1 ? (
+          <section className="assistant-starter-panel">
+            <p className="theme-kicker">Start with a useful question</p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              {starterPrompts.slice(0, 4).map((prompt) => (
+                <button
+                  key={prompt}
+                  type="button"
+                  onClick={() => void sendMessage(prompt)}
+                  className="assistant-starter-button"
+                >
+                  {prompt}
+                </button>
+              ))}
+            </div>
+          </section>
+        ) : null}
         {messages.map((message) => (
-          <AssistantMessageBubble key={message.id} message={message} enabledPathSet={enabledPathSet} />
+          <AssistantMessageBubble
+            key={message.id}
+            message={message}
+            enabledPathSet={enabledPathSet}
+            controlledPaths={controlledPathList}
+          />
         ))}
         {isSending ? (
           <div className="flex justify-start">

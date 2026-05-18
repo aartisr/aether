@@ -101,8 +101,10 @@ type PageMetadataInput = {
   path: string;
   keywords?: string[];
   imagePath?: string;
+  imageAlt?: string;
   absoluteTitle?: boolean;
   type?: 'website' | 'article';
+  index?: boolean;
 };
 
 type ArticleMetadataInput = {
@@ -149,8 +151,10 @@ export function createPageMetadata({
   path,
   keywords = [],
   imagePath = socialPreviewImage,
+  imageAlt = title,
   absoluteTitle = false,
   type = 'website',
+  index = true,
 }: PageMetadataInput): Metadata {
   const mergedKeywords = Array.from(new Set([...siteKeywords, ...keywords]));
   const normalizedHandle = normalizedTwitterHandle(twitterHandle);
@@ -168,11 +172,11 @@ export function createPageMetadata({
       languages: createLanguageAlternates(path),
     },
     robots: {
-      index: true,
-      follow: true,
+      index,
+      follow: index,
       googleBot: {
-        index: true,
-        follow: true,
+        index,
+        follow: index,
         'max-image-preview': 'large',
         'max-snippet': -1,
         'max-video-preview': -1,
@@ -190,7 +194,7 @@ export function createPageMetadata({
           url: toAbsoluteUrl(imagePath),
           width: 1200,
           height: 630,
-          alt: title,
+          alt: imageAlt,
         },
       ],
     },
@@ -198,7 +202,12 @@ export function createPageMetadata({
       card: 'summary_large_image',
       title,
       description,
-      images: [toAbsoluteUrl(imagePath)],
+      images: [
+        {
+          url: toAbsoluteUrl(imagePath),
+          alt: imageAlt,
+        },
+      ],
       ...(normalizedHandle ? { creator: normalizedHandle, site: normalizedHandle } : {}),
     },
     other: {

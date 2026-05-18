@@ -38,6 +38,7 @@ packages/*/node_modules/
 apps/*/dist/
 apps/*/build/
 apps/*/.next/
+apps/*/.data/
 packages/*/dist/
 packages/*/build/
 

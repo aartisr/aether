@@ -5,6 +5,7 @@ import {
   type AssistantReply,
   type AssistantSource,
 } from '../assistant/conversation';
+import { getPageIdForPath } from '../page-flags';
 import { answerWithConfiguredRagProvider } from './answer-providers';
 import { searchRagIndex } from './search';
 
@@ -13,21 +14,12 @@ export type FreeRagAssistantRequest = {
   contextPath?: string;
   history?: AssistantMessageInput[];
   enabledPageIds?: string[];
+  includeKnowledgeBase?: boolean;
+  maxResults?: number;
+  minScore?: number;
 };
 
 const crisisPattern = /\b(suicide|kill myself|hurt myself|self harm|self-harm|immediate danger|emergency|crisis)\b/i;
-const pageIdByHref: Record<string, string> = {
-  '/': 'home',
-  '/about': 'about',
-  '/mentors': 'mentors',
-  '/resilience-pathway': 'resilience-pathway',
-  '/echo': 'echo',
-  '/peer-navigator': 'peer-navigator',
-  '/blog': 'blog',
-  '/fairness-governance': 'fairness-governance',
-  '/privacy': 'privacy',
-  '/accessibility': 'accessibility',
-};
 
 export function createFreeRagAssistantReply(request: FreeRagAssistantRequest): AssistantReply {
   const baseReply = createAssistantReply(request);
@@ -38,8 +30,9 @@ export function createFreeRagAssistantReply(request: FreeRagAssistantRequest): A
 
   const results = searchRagIndex(request.message, {
     enabledPageIds: request.enabledPageIds,
-    includeKnowledgeBase: true,
-    maxResults: 6,
+    includeKnowledgeBase: request.includeKnowledgeBase ?? true,
+    maxResults: request.maxResults ?? 6,
+    minScore: request.minScore,
   });
   const ragAnswer = answerWithConfiguredRagProvider({
     question: request.message,
@@ -99,7 +92,7 @@ function isHrefAllowed(href: string, enabledPageIds: string[]) {
   }
 
   const normalizedHref = href.split('?')[0].split('#')[0].replace(/\/+$/, '') || '/';
-  const pageId = pageIdByHref[normalizedHref];
+  const pageId = getPageIdForPath(normalizedHref);
   return pageId ? enabledPageIds.includes(pageId) : true;
 }
 

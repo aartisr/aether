@@ -46,16 +46,28 @@ afterAll(() => {
 });
 
 describe('page flags', () => {
-  it('defaults to Home, About, and Mentors only', async () => {
+  it('defaults to the public discovery and trust pages', async () => {
     const pageFlags = await loadPageFlags();
 
-    expect(pageFlags.getEnabledPages().map((page) => page.id)).toEqual(['home', 'about', 'mentors']);
+    expect(pageFlags.getEnabledPages().map((page) => page.id)).toEqual([
+      'home',
+      'privacy',
+      'accessibility',
+      'about',
+      'blog',
+      'mentors',
+      'feedback',
+    ]);
     expect(pageFlags.isPageEnabled('home')).toBe(true);
+    expect(pageFlags.isPageEnabled('feedback')).toBe(true);
     expect(pageFlags.isPageEnabled('about')).toBe(true);
     expect(pageFlags.isPageEnabled('mentors')).toBe(true);
+    expect(pageFlags.isPageEnabled('blog')).toBe(true);
+    expect(pageFlags.isPageEnabled('privacy')).toBe(true);
+    expect(pageFlags.isPageEnabled('accessibility')).toBe(true);
     expect(pageFlags.isPageEnabled('peer-navigator')).toBe(false);
-    expect(pageFlags.isPageEnabled('blog')).toBe(false);
-    expect(pageFlags.isPageEnabled('privacy')).toBe(false);
+    expect(pageFlags.getPageIdForPath('/blog/practical-path-01-stabilize-your-baseline')).toBe('blog');
+    expect(pageFlags.getPageIdForPath('/feedback?from=/ask')).toBe('feedback');
   });
 
   it('lets admin runtime enabled-list cookies turn additional pages on', async () => {
@@ -66,6 +78,7 @@ describe('page flags', () => {
     const pageFlags = await loadPageFlags({ cookie });
 
     expect(pageFlags.isPageEnabledForRequest('home')).toBe(true);
+    expect(pageFlags.isPageEnabledForRequest('feedback')).toBe(false);
     expect(pageFlags.isPageEnabledForRequest('about')).toBe(true);
     expect(pageFlags.isPageEnabledForRequest('mentors')).toBe(true);
     expect(pageFlags.isPageEnabledForRequest('peer-navigator')).toBe(true);
@@ -80,6 +93,7 @@ describe('page flags', () => {
     });
 
     expect(pageFlags.isPageEnabled('home')).toBe(true);
+    expect(pageFlags.isPageEnabled('feedback')).toBe(false);
     expect(pageFlags.isPageEnabled('about')).toBe(true);
     expect(pageFlags.isPageEnabled('mentors')).toBe(true);
     expect(pageFlags.isPageEnabled('peer-navigator')).toBe(true);
@@ -94,8 +108,11 @@ describe('page flags', () => {
     });
 
     expect(pageFlags.isPageEnabled('home')).toBe(true);
+    expect(pageFlags.isPageEnabled('feedback')).toBe(true);
     expect(pageFlags.isPageEnabled('about')).toBe(true);
     expect(pageFlags.isPageEnabled('mentors')).toBe(false);
+    expect(pageFlags.isPageEnabled('blog')).toBe(true);
+    expect(pageFlags.isPageEnabled('privacy')).toBe(true);
     expect(pageFlags.isPageEnabled('peer-navigator')).toBe(false);
   });
 });

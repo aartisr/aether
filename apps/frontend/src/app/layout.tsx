@@ -9,8 +9,9 @@ import AnalyticsProvider from '../components/AnalyticsProvider';
 import FloatingAssistantLoader from '../components/assistant/FloatingAssistantLoader';
 import SiteFooter from '../components/layout/SiteFooter';
 import SiteHeader from '../components/layout/SiteHeader';
+import SiteReturnLoop from '../components/layout/SiteReturnLoop';
 import { JsonLd } from '../components/page/PagePrimitives';
-import { isPageEnabled, isPageEnabledForRequest } from '../lib/page-flags';
+import { getAllPages, isPageEnabled, isPageEnabledForRequest } from '../lib/page-flags';
 import {
   authorName,
   authorUrl,
@@ -154,6 +155,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const visibleSections = getPrimarySiteSectionsForRequest();
   const enabledPaths = visibleSections.map((section) => section.path);
+  const controlledPaths = getAllPages().map((page) => page.path);
   const blogEnabled = isPageEnabledForRequest('blog');
 
   const websiteJsonLd = {
@@ -223,8 +225,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           {children}
         </main>
+        <SiteReturnLoop sections={visibleSections} />
         <SiteFooter />
-        <FloatingAssistantLoader enabledPaths={enabledPaths} />
+        <FloatingAssistantLoader enabledPaths={enabledPaths} controlledPaths={controlledPaths} />
         <AnalyticsProvider />
       </body>
     </html>

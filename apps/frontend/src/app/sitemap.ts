@@ -24,6 +24,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/resilience-pathway', pageId: 'resilience-pathway' as const, changeFrequency: 'weekly' as const, priority: 0.9 },
     { path: '/mentors', pageId: 'mentors' as const, changeFrequency: 'monthly' as const, priority: 0.85 },
     { path: '/blog', pageId: 'blog' as const, changeFrequency: 'daily' as const, priority: 0.9 },
+    { path: '/feedback', pageId: 'feedback' as const, changeFrequency: 'monthly' as const, priority: 0.45 },
+    { path: '/ask', changeFrequency: 'weekly' as const, priority: 0.75 },
+    { path: '/feed.xml', changeFrequency: 'daily' as const, priority: 0.35 },
     { path: '/llms.txt', changeFrequency: 'weekly' as const, priority: 0.4 },
   ].filter((route) => (route.pageId ? isPageEnabled(route.pageId) : true));
 

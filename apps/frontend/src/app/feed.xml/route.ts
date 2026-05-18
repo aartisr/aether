@@ -38,6 +38,8 @@ export async function GET() {
           <guid>${escapeXml(link)}</guid>
           <description>${escapeXml(post.excerpt)}</description>
           <pubDate>${safeDate.toUTCString()}</pubDate>
+          <author>${escapeXml('aether@aether.org (Aether)')}</author>
+          <source url="${escapeXml(`${siteUrl}/feed.xml`)}">${escapeXml(siteTitle)}</source>
           ${post.tags.map((tag) => `<category>${escapeXml(tag)}</category>`).join('')}
           ${html ? `<content:encoded>${wrapCdata(html)}</content:encoded>` : ''}
         </item>`;

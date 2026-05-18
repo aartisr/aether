@@ -26,6 +26,7 @@ export async function GET() {
     ...primarySiteSections.map(
       (section) => `- ${siteUrl}${section.path} - ${section.name}: ${section.description}`,
     ),
+    `- ${siteUrl}/ask - Ask Aether: source-grounded assistant workspace for Aether content and pathways.`,
     '',
     '## Recent Blog Posts',
     ...(posts.length > 0
@@ -64,6 +65,8 @@ export async function GET() {
     `- Image Sitemap: ${siteUrl}/image-sitemap.xml`,
     `- RSS: ${siteUrl}/feed.xml`,
     `- Robots: ${siteUrl}/robots.txt`,
+    `- Ask Aether: ${siteUrl}/ask`,
+    `- Feedback: ${siteUrl}/feedback`,
     '',
     `## Last Updated`,
     `- ${new Date().toISOString()}`,
