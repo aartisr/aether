@@ -456,13 +456,13 @@ export default function AetherAssistant({
 
       <div className="assistant-composer min-w-0 p-4">
         {latestAssistantSuggestions && latestAssistantSuggestions.length > 0 ? (
-          <div className="mb-3 flex min-w-0 gap-2 overflow-x-auto pb-1">
+          <div className="mb-3 flex min-w-0 flex-wrap gap-2">
             {latestAssistantSuggestions.slice(0, 3).map((suggestion) => (
               <button
                 key={suggestion}
                 type="button"
                 onClick={() => void sendMessage(suggestion)}
-                className="theme-pill shrink-0 px-3 py-1.5 text-xs"
+                className="theme-pill max-w-full px-3 py-1.5 text-left text-xs leading-5"
               >
                 {suggestion}
               </button>

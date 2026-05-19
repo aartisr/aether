@@ -436,7 +436,7 @@ export default function SiteHeaderClient({
 
       <div className="border-t border-[color:var(--theme-border)] bg-[rgb(237_247_242/0.74)]">
         <div className="mx-auto min-w-0 max-w-7xl px-4 py-2 md:flex md:items-center md:gap-3 md:px-6">
-          <p className="hidden min-w-0 flex-1 truncate text-xs font-bold text-[color:var(--theme-text-muted)] md:block">{shareTagline}</p>
+          <p className="hidden min-w-0 flex-1 text-xs font-bold leading-snug text-[color:var(--theme-text-muted)] md:block">{shareTagline}</p>
           <div className="grid min-w-0 grid-cols-2 gap-1.5 md:hidden">
             {trustSignals.map((signal) => (
               <span
