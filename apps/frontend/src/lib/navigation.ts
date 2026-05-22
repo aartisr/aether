@@ -30,6 +30,18 @@ const primaryNavigationConfig: ConfigurableNavigationLink[] = [
     requiresPage: 'home',
   },
   {
+    href: '/echo',
+    label: 'Echo Chamber',
+    description: 'Private, on-device voice reflection with transcript and sentiment mapping.',
+    requiresPage: 'echo',
+  },
+  {
+    href: '/peer-navigator',
+    label: 'Peer-Navigator',
+    description: 'Privacy-aware peer matching demo for identity-safe student support.',
+    requiresPage: 'peer-navigator',
+  },
+  {
     href: '/mentors',
     label: 'Mentors',
     description: 'Public gratitude for the guidance behind Aether.',

@@ -14,7 +14,7 @@ type SiteHeaderClientProps = {
   siteName: string;
 };
 
-const MAX_VISIBLE_NAVIGATION_ITEMS = 5;
+const MAX_VISIBLE_NAVIGATION_ITEMS = 6;
 const explorePanelId = 'site-header-explore-panel';
 const mobilePanelId = 'site-header-mobile-panel';
 
