@@ -4,7 +4,7 @@
   "private": true,
   "author": "Aarti Sri Ravikumar",
   "engines": {
-    "node": "20.x"
+    "node": "22.19.0"
   },
   "scripts": {
     "dev": "next dev",

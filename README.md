@@ -28,7 +28,7 @@ production-ready monorepo.
 
 ## Tech Stack
 
-- Node.js 20.x
+- Node.js 22.19.0
 - npm 10+
 - Next.js 14.2.x
 - React 18
@@ -39,7 +39,7 @@ production-ready monorepo.
 
 ### Prerequisites
 
-- Node.js `20.x`
+- Node.js `22.19.0`
 - npm `>=10`
 
 ### Install
@@ -230,7 +230,7 @@ npm run check
 ```bash
 git clone <your-repository-url>
 cd aether
-nvm use 20 || echo "Install/use Node 20.x before continuing"
+nvm use 22.19.0 || echo "Install/use Node 22.19.0 before continuing"
 npm install
 npm run check
 npm run dev
