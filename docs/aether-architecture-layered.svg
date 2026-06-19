@@ -1,0 +1,525 @@
+<svg viewBox="0 0 1400 1800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: bold; fill: #0b132b; }
+      .layer-title { font-family: 'Manrope', sans-serif; font-size: 19px; font-weight: 800; fill: #0b132b; }
+      .component-title { font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 600; fill: #1a1a2e; }
+      .component-desc { font-family: 'Manrope', sans-serif; font-size: 11px; fill: #334155; }
+      .layer-desc { font-family: 'Manrope', sans-serif; font-size: 12px; fill: #334155; font-weight: 600; }
+      .arrow { stroke: #475569; stroke-width: 2.4; fill: none; marker-end: url(#arrowhead); }
+      .arrow-label { font-family: 'Manrope', sans-serif; font-size: 10px; fill: #334155; }
+      
+      /* Layer backgrounds */
+      .layer-ui { fill: #eef4ff; stroke: #bfdbfe; stroke-width: 2; }
+      .layer-core { fill: #effcf5; stroke: #bbf7d0; stroke-width: 2; }
+      .layer-data { fill: #fff7ed; stroke: #fed7aa; stroke-width: 2; }
+      .layer-backend { fill: #fef2f2; stroke: #fecaca; stroke-width: 2; }
+      .layer-infra { fill: #f0fdfa; stroke: #99f6e4; stroke-width: 2; }
+      
+      /* Component boxes */
+      .component-box { stroke-width: 2; rx: 6; }
+      .page-box { fill: #dbeafe; stroke: #1d4ed8; }
+      .feature-box { fill: #dcfce7; stroke: #15803d; }
+      .utility-box { fill: #f3e8ff; stroke: #7e22ce; }
+      .data-box { fill: #ffedd5; stroke: #c2410c; }
+      .api-box { fill: #fee2e2; stroke: #b91c1c; }
+      .service-box { fill: #ccfbf1; stroke: #0f766e; }
+      .external-box { fill: #e5e7eb; stroke: #374151; }
+      .system-box { stroke-dasharray: 8 4; }
+      
+      .component-text { font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 700; fill: #0f172a; }
+      .component-icon { font-size: 20px; }
+      .legend-label { font-family: 'Manrope', sans-serif; font-size: 11px; fill: #0f172a; font-weight: 700; }
+      
+      .grid-line { stroke: #ddd; stroke-width: 0.5; opacity: 0.3; }
+    </style>
+    
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#475569" />
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1400" height="1800" fill="#f8fafc"/>
+  
+  <!-- Title -->
+  <text x="700" y="45" class="title" text-anchor="middle">Aether Architecture: Layered System Design</text>
+  <text x="700" y="70" class="layer-desc" text-anchor="middle" font-size="14">Privacy-First Student Resilience Platform | Production Monorepo</text>
+  
+  <!-- LAYER 1: USER INTERFACE LAYER -->
+  <g id="layer-ui">
+    <rect x="20" y="100" width="1360" height="280" class="layer-ui" />
+    <text x="40" y="125" class="layer-title" fill="#1a1a2e" font-size="16">🎨 LAYER 1: USER INTERFACE &amp; PAGES</text>
+    <text x="40" y="145" class="layer-desc">Public-facing pages, entry points, and primary user interactions. Next.js App Router with Server &amp; Client components.</text>
+    
+    <!-- Pages Row 1 -->
+    <g id="page-home">
+      <rect x="40" y="165" width="140" height="90" class="component-box page-box" />
+      <text x="110" y="190" class="component-text" text-anchor="middle" font-size="11" font-weight="700">🏠 Home</text>
+      <text x="110" y="205" class="component-text" text-anchor="middle" font-size="10">Landing, hero,</text>
+      <text x="110" y="218" class="component-text" text-anchor="middle" font-size="10">call-to-action</text>
+      <text x="110" y="235" class="component-desc" text-anchor="middle">SEO optimized</text>
+      <text x="110" y="245" class="component-desc" text-anchor="middle">metadata &amp; sitemap</text>
+    </g>
+    
+    <g id="page-about">
+      <rect x="200" y="165" width="140" height="90" class="component-box page-box" />
+      <text x="270" y="190" class="component-text" text-anchor="middle" font-size="11" font-weight="700">ℹ️ About</text>
+      <text x="270" y="205" class="component-text" text-anchor="middle" font-size="10">Mission, vision,</text>
+      <text x="270" y="218" class="component-text" text-anchor="middle" font-size="10">team, impact</text>
+      <text x="270" y="235" class="component-desc" text-anchor="middle">Static content</text>
+      <text x="270" y="245" class="component-desc" text-anchor="middle">with social proof</text>
+    </g>
+    
+    <g id="page-echo">
+      <rect x="360" y="165" width="140" height="90" class="component-box page-box" />
+      <text x="430" y="190" class="component-text" text-anchor="middle" font-size="11" font-weight="700">🎵 Echo</text>
+      <text x="430" y="205" class="component-text" text-anchor="middle" font-size="10">Voice journaling,</text>
+      <text x="430" y="218" class="component-text" text-anchor="middle" font-size="10">sentiment analysis</text>
+      <text x="430" y="235" class="component-desc" text-anchor="middle">MediaRecorder,</text>
+      <text x="430" y="245" class="component-desc" text-anchor="middle">emotion profiling</text>
+    </g>
+    
+    <g id="page-peer-nav">
+      <rect x="520" y="165" width="140" height="90" class="component-box page-box" />
+      <text x="590" y="190" class="component-text" text-anchor="middle" font-size="11" font-weight="700">👥 Peer Navigator</text>
+      <text x="590" y="205" class="component-text" text-anchor="middle" font-size="10">Profile, matching,</text>
+      <text x="590" y="218" class="component-text" text-anchor="middle" font-size="10">conversations</text>
+      <text x="590" y="235" class="component-desc" text-anchor="middle">RCSM algorithm,</text>
+      <text x="590" y="245" class="component-desc" text-anchor="middle">consent-first</text>
+    </g>
+    
+    <g id="page-resilience">
+      <rect x="680" y="165" width="140" height="90" class="component-box page-box" />
+      <text x="750" y="190" class="component-text" text-anchor="middle" font-size="11" font-weight="700">🌱 Resilience Path</text>
+      <text x="750" y="205" class="component-text" text-anchor="middle" font-size="10">Guided pathways,</text>
+      <text x="750" y="218" class="component-text" text-anchor="middle" font-size="10">interventions</text>
+      <text x="750" y="235" class="component-desc" text-anchor="middle">RAG-enhanced</text>
+      <text x="750" y="245" class="component-desc" text-anchor="middle">personalized guidance</text>
+    </g>
+    
+    <!-- Pages Row 2 -->
+    <g id="page-blog">
+      <rect x="840" y="165" width="140" height="90" class="component-box page-box" />
+      <text x="910" y="190" class="component-text" text-anchor="middle" font-size="11" font-weight="700">📝 Blog</text>
+      <text x="910" y="205" class="component-text" text-anchor="middle" font-size="10">Articles, insights,</text>
+      <text x="910" y="218" class="component-text" text-anchor="middle" font-size="10">resources</text>
+      <text x="910" y="235" class="component-desc" text-anchor="middle">Markdown or</text>
+      <text x="910" y="245" class="component-desc" text-anchor="middle">remote JSON</text>
+    </g>
+    
+    <g id="page-ask">
+      <rect x="1000" y="165" width="140" height="90" class="component-box page-box" />
+      <text x="1070" y="190" class="component-text" text-anchor="middle" font-size="11" font-weight="700">❓ Ask</text>
+      <text x="1070" y="205" class="component-text" text-anchor="middle" font-size="10">Q&amp;A, help,</text>
+      <text x="1070" y="218" class="component-text" text-anchor="middle" font-size="10">triage</text>
+      <text x="1070" y="235" class="component-desc" text-anchor="middle">LLM-powered,</text>
+      <text x="1070" y="245" class="component-desc" text-anchor="middle">safety-gated</text>
+    </g>
+    
+    <g id="page-feedback">
+      <rect x="1160" y="165" width="140" height="90" class="component-box page-box" />
+      <text x="1230" y="190" class="component-text" text-anchor="middle" font-size="11" font-weight="700">💬 Feedback</text>
+      <text x="1230" y="205" class="component-text" text-anchor="middle" font-size="10">User surveys,</text>
+      <text x="1230" y="218" class="component-text" text-anchor="middle" font-size="10">bug reports</text>
+      <text x="1230" y="235" class="component-desc" text-anchor="middle">Form submission</text>
+      <text x="1230" y="245" class="component-desc" text-anchor="middle">&amp; validation</text>
+    </g>
+
+    <!-- Governance + System Route Coverage -->
+    <text x="40" y="282" class="component-desc" fill="#1a1a2e" font-size="12">Complete route coverage (governance, trust, platform/system endpoints)</text>
+
+    <g id="page-governance-suite">
+      <rect x="40" y="292" width="300" height="72" class="component-box page-box" />
+      <text x="190" y="314" class="component-text" text-anchor="middle" font-size="11" font-weight="700">🛡️ Governance &amp; Safety Suite</text>
+      <text x="190" y="330" class="component-text" text-anchor="middle" font-size="10">/admin, /fairness-governance</text>
+      <text x="190" y="344" class="component-text" text-anchor="middle" font-size="10">/privacy, /accessibility, /mentors</text>
+      <text x="190" y="357" class="component-desc" text-anchor="middle">Policy, audit, trust operations</text>
+    </g>
+
+    <g id="page-system-routes">
+      <rect x="360" y="292" width="520" height="72" class="component-box page-box system-box" />
+      <text x="620" y="314" class="component-text" text-anchor="middle" font-size="11" font-weight="700">🧭 Discovery, SEO &amp; Machine-Readable Routes</text>
+      <text x="620" y="330" class="component-text" text-anchor="middle" font-size="10">/sitemap.xml, /image-sitemap.xml, /robots.txt, /feed.xml</text>
+      <text x="620" y="344" class="component-text" text-anchor="middle" font-size="10">/manifest.webmanifest, /llms.txt, /opengraph-image, /twitter-image</text>
+      <text x="620" y="357" class="component-desc" text-anchor="middle">Search indexing, social cards, AI/crawler discoverability</text>
+    </g>
+
+    <g id="page-platform-routes">
+      <rect x="900" y="292" width="400" height="72" class="component-box page-box system-box" />
+      <text x="1100" y="314" class="component-text" text-anchor="middle" font-size="11" font-weight="700">⚙️ Platform &amp; Resilience Routes</text>
+      <text x="1100" y="330" class="component-text" text-anchor="middle" font-size="10">/api/*, global-error.tsx, not-found.tsx</text>
+      <text x="1100" y="344" class="component-text" text-anchor="middle" font-size="10">layout.tsx, globals.css (cross-page shell)</text>
+      <text x="1100" y="357" class="component-desc" text-anchor="middle">Runtime reliability, fallback UX, API surface</text>
+    </g>
+  </g>
+  
+  <!-- LAYER 2: CORE FEATURES & SERVICES -->
+  <g id="layer-core">
+    <rect x="20" y="420" width="1360" height="300" class="layer-core" />
+    <text x="40" y="445" class="layer-title" fill="#1a1a2e" font-size="16">⚙️  LAYER 2: CORE FEATURES &amp; AI SERVICES</text>
+    <text x="40" y="465" class="layer-desc">Business logic, algorithms, and intelligent systems. React components + TypeScript utilities.</text>
+    
+    <!-- Echo Feature Box -->
+    <g id="echo-feature">
+      <rect x="40" y="485" width="280" height="200" class="component-box feature-box" />
+      <text x="180" y="510" class="component-text" text-anchor="middle" font-size="13" font-weight="700">🎵 Echo: Voice Journaling Engine</text>
+      
+      <rect x="50" y="525" width="260" height="155" fill="rgba(255,255,255,0.1)" rx="4" />
+      
+      <text x="60" y="543" class="component-text" font-size="11" font-weight="600">• Audio Capture &amp; Transcription</text>
+      <text x="65" y="558" class="component-desc" font-size="10">MediaRecorder API, optional browser models</text>
+      
+      <text x="60" y="575" class="component-text" font-size="11" font-weight="600">• SentimentMapping</text>
+      <text x="65" y="590" class="component-desc" font-size="10">Emotion profiling from transcribed text</text>
+      
+      <text x="60" y="607" class="component-text" font-size="11" font-weight="600">• Journal Entry Storage</text>
+      <text x="65" y="622" class="component-desc" font-size="10">Privacy-preserving, timestamped entries</text>
+      
+      <text x="60" y="639" class="component-text" font-size="11" font-weight="600">• Callback Lifecycle</text>
+      <text x="65" y="654" class="component-desc" font-size="10">onRecordingComplete → onCaptureComplete</text>
+    </g>
+    
+    <!-- Peer Navigator Feature Box -->
+    <g id="peer-feature">
+      <rect x="360" y="485" width="280" height="200" class="component-box feature-box" />
+      <text x="500" y="510" class="component-text" text-anchor="middle" font-size="13" font-weight="700">👥 Peer Navigator: RCSM Matching</text>
+      
+      <rect x="370" y="525" width="260" height="155" fill="rgba(255,255,255,0.1)" rx="4" />
+      
+      <text x="380" y="543" class="component-text" font-size="11" font-weight="600">• Candidate Generation</text>
+      <text x="385" y="558" class="component-desc" font-size="10">Recommender-based top-K edge scoring</text>
+      
+      <text x="380" y="575" class="component-text" font-size="11" font-weight="600">• Constrained Optimization</text>
+      <text x="385" y="590" class="component-desc" font-size="10">Fairness, safety, capacity constraints</text>
+      
+      <text x="380" y="607" class="component-text" font-size="11" font-weight="600">• Stability Refinement</text>
+      <text x="385" y="622" class="component-desc" font-size="10">Deferred acceptance to reduce churn</text>
+      
+      <text x="380" y="639" class="component-text" font-size="11" font-weight="600">• Async Matching Cycles</text>
+      <text x="385" y="654" class="component-desc" font-size="10">Every 1–5 min, policy gates enforced</text>
+    </g>
+    
+    <!-- Resilience Pathway Feature Box -->
+    <g id="resilience-feature">
+      <rect x="680" y="485" width="280" height="200" class="component-box feature-box" />
+      <text x="820" y="510" class="component-text" text-anchor="middle" font-size="13" font-weight="700">🌱 Resilience Pathway: RAG-Enhanced</text>
+      
+      <rect x="690" y="525" width="260" height="155" fill="rgba(255,255,255,0.1)" rx="4" />
+      
+      <text x="700" y="543" class="component-text" font-size="11" font-weight="600">• Knowledge Index</text>
+      <text x="705" y="558" class="component-desc" font-size="10">Retrieval-Augmented Generation for guidance</text>
+      
+      <text x="700" y="575" class="component-text" font-size="11" font-weight="600">• Guided Interventions</text>
+      <text x="705" y="590" class="component-desc" font-size="10">Personalized pathways from journaling</text>
+      
+      <text x="700" y="607" class="component-text" font-size="11" font-weight="600">• Context Awareness</text>
+      <text x="705" y="622" class="component-desc" font-size="10">Sentiment + journal history + peer network</text>
+      
+      <text x="700" y="639" class="component-text" font-size="11" font-weight="600">• Safety Gating</text>
+      <text x="705" y="654" class="component-desc" font-size="10">Content review, crisis escalation</text>
+    </g>
+    
+    <!-- Shared Utilities Box -->
+    <g id="utilities">
+      <rect x="1000" y="485" width="280" height="200" class="component-box utility-box" />
+      <text x="1140" y="510" class="component-text" text-anchor="middle" font-size="13" font-weight="700">🔧 Shared Utilities &amp; Hooks</text>
+      
+      <rect x="1010" y="525" width="260" height="155" fill="rgba(255,255,255,0.1)" rx="4" />
+      
+      <text x="1020" y="543" class="component-text" font-size="11" font-weight="600">• Page Flag System</text>
+      <text x="1025" y="558" class="component-desc" font-size="10">Feature flags for gradual rollout</text>
+      
+      <text x="1020" y="575" class="component-text" font-size="11" font-weight="600">• Analytics Provider</text>
+      <text x="1025" y="590" class="component-desc" font-size="10">Event tracking, error reporting</text>
+      
+      <text x="1020" y="607" class="component-text" font-size="11" font-weight="600">• Theme Management</text>
+      <text x="1025" y="622" class="component-desc" font-size="10">Blog theme switcher, Tailwind vars</text>
+      
+      <text x="1020" y="639" class="component-text" font-size="11" font-weight="600">• Type Definitions</text>
+      <text x="1025" y="654" class="component-desc" font-size="10">Shared TypeScript interfaces</text>
+    </g>
+  </g>
+  
+  <!-- LAYER 3: DATA & STATE MANAGEMENT -->
+  <g id="layer-data">
+    <rect x="20" y="750" width="1360" height="240" class="layer-data" />
+    <text x="40" y="775" class="layer-title" fill="#1a1a2e" font-size="16">💾 LAYER 3: DATA, STATE &amp; LOCAL STORAGE</text>
+    <text x="40" y="795" class="layer-desc">Data persistence, caching, and state management. Browser APIs + future backend integration.</text>
+    
+    <!-- Local Storage -->
+    <g id="localstorage">
+      <rect x="40" y="815" width="220" height="150" class="component-box data-box" />
+      <text x="150" y="840" class="component-text" text-anchor="middle" font-size="12" font-weight="700">📦 Browser Storage</text>
+      
+      <text x="50" y="860" class="component-text" font-size="10" font-weight="600">• LocalStorage</text>
+      <text x="55" y="875" class="component-desc" font-size="9">User prefs, draft entries</text>
+      
+      <text x="50" y="895" class="component-text" font-size="10" font-weight="600">• SessionStorage</text>
+      <text x="55" y="910" class="component-desc" font-size="9">Ephemeral UI state</text>
+      
+      <text x="50" y="930" class="component-text" font-size="10" font-weight="600">• IndexedDB</text>
+      <text x="55" y="945" class="component-desc" font-size="9">Large journal/match history</text>
+    </g>
+    
+    <!-- RAG Config -->
+    <g id="rag-config">
+      <rect x="290" y="815" width="220" height="150" class="component-box data-box" />
+      <text x="400" y="840" class="component-text" text-anchor="middle" font-size="12" font-weight="700">🗂️  RAG Configuration</text>
+      
+      <text x="300" y="860" class="component-text" font-size="10" font-weight="600">• Knowledge Index</text>
+      <text x="305" y="875" class="component-desc" font-size="9">Vector embeddings, content</text>
+      
+      <text x="300" y="895" class="component-text" font-size="10" font-weight="600">• Retrieval Rules</text>
+      <text x="305" y="910" class="component-desc" font-size="9">Scoring, ranking, safety</text>
+      
+      <text x="300" y="930" class="component-text" font-size="10" font-weight="600">• Cache Management</text>
+      <text x="305" y="945" class="component-desc" font-size="9">TTL, invalidation strategy</text>
+    </g>
+    
+    <!-- Analytics Events -->
+    <g id="analytics-data">
+      <rect x="540" y="815" width="220" height="150" class="component-box data-box" />
+      <text x="650" y="840" class="component-text" text-anchor="middle" font-size="12" font-weight="700">📊 Analytics Events</text>
+      
+      <text x="550" y="860" class="component-text" font-size="10" font-weight="600">• User Actions</text>
+      <text x="555" y="875" class="component-desc" font-size="9">Clicks, form submissions</text>
+      
+      <text x="550" y="895" class="component-text" font-size="10" font-weight="600">• Feature Usage</text>
+      <text x="555" y="910" class="component-desc" font-size="9">Echo records, matches, reads</text>
+      
+      <text x="550" y="930" class="component-text" font-size="10" font-weight="600">• Error Tracking</text>
+      <text x="555" y="945" class="component-desc" font-size="9">Exceptions, failures</text>
+    </g>
+    
+    <!-- User Profile -->
+    <g id="user-profile">
+      <rect x="790" y="815" width="220" height="150" class="component-box data-box" />
+      <text x="900" y="840" class="component-text" text-anchor="middle" font-size="12" font-weight="700">👤 User Profile</text>
+      
+      <text x="800" y="860" class="component-text" font-size="10" font-weight="600">• Preferences</text>
+      <text x="805" y="875" class="component-desc" font-size="9">Language, theme, notifications</text>
+      
+      <text x="800" y="895" class="component-text" font-size="10" font-weight="600">• Consent States</text>
+      <text x="805" y="910" class="component-desc" font-size="9">Matching, analytics, emails</text>
+      
+      <text x="800" y="930" class="component-text" font-size="10" font-weight="600">• Metadata</text>
+      <text x="805" y="945" class="component-desc" font-size="9">Onboarding state, flags</text>
+    </g>
+    
+    <!-- Content Store -->
+    <g id="content-store">
+      <rect x="1040" y="815" width="320" height="150" class="component-box data-box" />
+      <text x="1200" y="840" class="component-text" text-anchor="middle" font-size="12" font-weight="700">📄 Content &amp; Blog Data</text>
+      
+      <text x="1050" y="860" class="component-text" font-size="10" font-weight="600">• Markdown Files (local)</text>
+      <text x="1055" y="875" class="component-desc" font-size="9">articles, resources, FAQs</text>
+      
+      <text x="1050" y="895" class="component-text" font-size="10" font-weight="600">• Remote JSON Adapter</text>
+      <text x="1055" y="910" class="component-desc" font-size="9">CMS integration option</text>
+      
+      <text x="1050" y="930" class="component-text" font-size="10" font-weight="600">• Cache Invalidation</text>
+      <text x="1055" y="945" class="component-desc" font-size="9">build-rag-index.mjs automation</text>
+    </g>
+  </g>
+  
+  <!-- LAYER 4: BACKEND SERVICES & API -->
+  <g id="layer-backend">
+    <rect x="20" y="1030" width="1360" height="220" class="layer-backend" />
+    <text x="40" y="1055" class="layer-title" fill="#1a1a2e" font-size="16">🚀 LAYER 4: BACKEND SERVICES &amp; API</text>
+    <text x="40" y="1075" class="layer-desc">Node.js HTTP services, endpoints, and business logic. Ready for scaling to microservices.</text>
+    
+    <!-- Backend Service -->
+    <g id="api-health">
+      <rect x="40" y="1095" width="280" height="130" class="component-box api-box" />
+      <text x="180" y="1120" class="component-text" text-anchor="middle" font-size="12" font-weight="700">💓 Health Check Service</text>
+      
+      <text x="50" y="1140" class="component-text" font-size="10" font-weight="600">GET /health</text>
+      <text x="55" y="1155" class="component-desc" font-size="9">service status, timestamp</text>
+      
+      <text x="50" y="1175" class="component-text" font-size="10" font-weight="600">HEAD /health</text>
+      <text x="55" y="1190" class="component-desc" font-size="9">lightweight probe (no body)</text>
+      
+      <text x="50" y="1210" class="component-desc" font-size="9">Port: 8080 | Runtime: Node.js 20.x</text>
+    </g>
+    
+    <!-- Future API Gateway -->
+    <g id="api-gateway">
+      <rect x="360" y="1095" width="280" height="130" class="component-box api-box" />
+      <text x="500" y="1120" class="component-text" text-anchor="middle" font-size="12" font-weight="700">🌐 API Gateway (Future)</text>
+      
+      <text x="370" y="1140" class="component-text" font-size="10" font-weight="600">REST Endpoints</text>
+      <text x="375" y="1155" class="component-desc" font-size="9">/echo, /matches, /pathways</text>
+      
+      <text x="370" y="1175" class="component-text" font-size="10" font-weight="600">Authentication</text>
+      <text x="375" y="1190" class="component-desc" font-size="9">OAuth 2.0 / JWT tokens</text>
+      
+      <text x="370" y="1210" class="component-desc" font-size="9">Rate limiting, CORS, validation</text>
+    </g>
+    
+    <!-- Data Service -->
+    <g id="data-service">
+      <rect x="680" y="1095" width="280" height="130" class="component-box api-box" />
+      <text x="820" y="1120" class="component-text" text-anchor="middle" font-size="12" font-weight="700">💾 Data Service (Future)</text>
+      
+      <text x="690" y="1140" class="component-text" font-size="10" font-weight="600">Persistence Layer</text>
+      <text x="695" y="1155" class="component-desc" font-size="9">journals, matches, profiles</text>
+      
+      <text x="690" y="1175" class="component-text" font-size="10" font-weight="600">Audit Logging</text>
+      <text x="695" y="1190" class="component-desc" font-size="9">compliance, fairness tracking</text>
+      
+      <text x="690" y="1210" class="component-desc" font-size="9">ACID transactions, encryption</text>
+    </g>
+    
+    <!-- Async Jobs -->
+    <g id="async-jobs">
+      <rect x="1000" y="1095" width="340" height="130" class="component-box api-box" />
+      <text x="1170" y="1120" class="component-text" text-anchor="middle" font-size="12" font-weight="700">⚡ Async Jobs &amp; Workers (Future)</text>
+      
+      <text x="1010" y="1140" class="component-text" font-size="10" font-weight="600">Matching Cycles</text>
+      <text x="1015" y="1155" class="component-desc" font-size="9">1–5 min recurring jobs</text>
+      
+      <text x="1010" y="1175" class="component-text" font-size="10" font-weight="600">RAG Index Rebuild</text>
+      <text x="1015" y="1190" class="component-desc" font-size="9">scheduled content indexing</text>
+      
+      <text x="1010" y="1210" class="component-desc" font-size="9">Message queues, retries, DLQ</text>
+    </g>
+  </g>
+  
+  <!-- LAYER 5: INFRASTRUCTURE & EXTERNAL SERVICES -->
+  <g id="layer-infra">
+    <rect x="20" y="1290" width="1360" height="260" class="layer-infra" />
+    <text x="40" y="1315" class="layer-title" fill="#1a1a2e" font-size="16">🌍 LAYER 5: INFRASTRUCTURE &amp; EXTERNAL SERVICES</text>
+    <text x="40" y="1335" class="layer-desc">Deployment, CDN, external APIs, and third-party integrations. Production-ready infrastructure.</text>
+    
+    <!-- Deployment -->
+    <g id="deployment">
+      <rect x="40" y="1355" width="210" height="160" class="component-box service-box" />
+      <text x="145" y="1380" class="component-text" text-anchor="middle" font-size="12" font-weight="700">📦 Deployment</text>
+      
+      <text x="50" y="1400" class="component-text" font-size="10" font-weight="600">Vercel</text>
+      <text x="55" y="1415" class="component-desc" font-size="9">Frontend hosting, Edge</text>
+      
+      <text x="50" y="1435" class="component-text" font-size="10" font-weight="600">Netlify</text>
+      <text x="55" y="1450" class="component-desc" font-size="9">Alt/static deployment</text>
+      
+      <text x="50" y="1470" class="component-text" font-size="10" font-weight="600">Docker</text>
+      <text x="55" y="1485" class="component-desc" font-size="9">Backend containerization</text>
+      
+      <text x="50" y="1500" class="component-desc" font-size="9">CI/CD: GitHub Actions</text>
+    </g>
+    
+    <!-- CDN & Performance -->
+    <g id="cdn">
+      <rect x="280" y="1355" width="210" height="160" class="component-box service-box" />
+      <text x="385" y="1380" class="component-text" text-anchor="middle" font-size="12" font-weight="700">⚡ CDN &amp; Performance</text>
+      
+      <text x="290" y="1400" class="component-text" font-size="10" font-weight="600">Next.js Image Opt</text>
+      <text x="295" y="1415" class="component-desc" font-size="9">auto WebP, srcset</text>
+      
+      <text x="290" y="1435" class="component-text" font-size="10" font-weight="600">Global Edge Network</text>
+      <text x="295" y="1450" class="component-desc" font-size="9">low-latency responses</text>
+      
+      <text x="290" y="1470" class="component-text" font-size="10" font-weight="600">Cache Control</text>
+      <text x="295" y="1485" class="component-desc" font-size="9">ISR, revalidation</text>
+      
+      <text x="290" y="1500" class="component-desc" font-size="9">Perf budget tracking</text>
+    </g>
+    
+    <!-- AI & LLM Services -->
+    <g id="ai-services">
+      <rect x="520" y="1355" width="210" height="160" class="component-box service-box" />
+      <text x="625" y="1380" class="component-text" text-anchor="middle" font-size="12" font-weight="700">🤖 AI &amp; LLM Services</text>
+      
+      <text x="530" y="1400" class="component-text" font-size="10" font-weight="600">Optional LLM APIs</text>
+      <text x="535" y="1415" class="component-desc" font-size="9">OpenAI, Anthropic</text>
+      
+      <text x="530" y="1435" class="component-text" font-size="10" font-weight="600">Speech-to-Text</text>
+      <text x="535" y="1450" class="component-desc" font-size="9">Web Speech or API</text>
+      
+      <text x="530" y="1470" class="component-text" font-size="10" font-weight="600">Content Safety</text>
+      <text x="535" y="1485" class="component-desc" font-size="9">moderation, tagging</text>
+      
+      <text x="530" y="1500" class="component-desc" font-size="9">In-browser or cloud models</text>
+    </g>
+    
+    <!-- Data & Monitoring -->
+    <g id="monitoring">
+      <rect x="760" y="1355" width="210" height="160" class="component-box service-box" />
+      <text x="865" y="1380" class="component-text" text-anchor="middle" font-size="12" font-weight="700">📈 Monitoring</text>
+      
+      <text x="770" y="1400" class="component-text" font-size="10" font-weight="600">Analytics</text>
+      <text x="775" y="1415" class="component-desc" font-size="9">usage, trends, cohorts</text>
+      
+      <text x="770" y="1435" class="component-text" font-size="10" font-weight="600">Error Tracking</text>
+      <text x="775" y="1450" class="component-desc" font-size="9">Sentry, LogRocket</text>
+      
+      <text x="770" y="1470" class="component-text" font-size="10" font-weight="600">Performance</text>
+      <text x="775" y="1485" class="component-desc" font-size="9">Web Vitals, RUM</text>
+      
+      <text x="770" y="1500" class="component-desc" font-size="9">Real User Monitoring</text>
+    </g>
+    
+    <!-- Third-Party Integrations -->
+    <g id="third-party">
+      <rect x="1000" y="1355" width="340" height="160" class="component-box external-box" />
+      <text x="1170" y="1380" class="component-text" text-anchor="middle" font-size="12" font-weight="700">🔗 Third-Party Integrations</text>
+      
+      <text x="1010" y="1400" class="component-text" font-size="10" font-weight="600">Giscus Comments</text>
+      <text x="1015" y="1415" class="component-desc" font-size="9">GitHub-backed discussions</text>
+      
+      <text x="1010" y="1435" class="component-text" font-size="10" font-weight="600">Social Media Sharing</text>
+      <text x="1015" y="1450" class="component-desc" font-size="9">Twitter, LinkedIn, Facebook</text>
+      
+      <text x="1010" y="1470" class="component-text" font-size="10" font-weight="600">SEO &amp; Metadata</text>
+      <text x="1015" y="1485" class="component-desc" font-size="9">JSON-LD, Open Graph, robots</text>
+      
+      <text x="1010" y="1500" class="component-desc" font-size="9">Sitemap, RSS, accessibility</text>
+    </g>
+  </g>
+  
+  <!-- DATA FLOW ARROWS -->
+  <g id="data-flows">
+    <!-- UI to Core Features -->
+    <path class="arrow" d="M 200 415 L 200 485" />
+    <path class="arrow" d="M 430 415 L 430 485" />
+    <path class="arrow" d="M 750 415 L 750 485" />
+    
+    <!-- Core Features to Data Layer -->
+    <path class="arrow" d="M 180 685 L 180 815" />
+    <path class="arrow" d="M 500 685 L 500 815" />
+    <path class="arrow" d="M 820 685 L 820 815" />
+    
+    <!-- Data Layer to Backend -->
+    <path class="arrow" d="M 300 965 L 300 1095" />
+    <path class="arrow" d="M 650 965 L 650 1095" />
+    <path class="arrow" d="M 1000 965 L 1000 1095" />
+    
+    <!-- Backend to Infrastructure -->
+    <path class="arrow" d="M 200 1225 L 200 1355" />
+    <path class="arrow" d="M 650 1225 L 650 1355" />
+    <path class="arrow" d="M 1100 1225 L 1100 1355" />
+  </g>
+  
+  <!-- COMPONENT INTERACTIONS & LEGENDS -->
+  <g id="footer">
+    <rect x="20" y="1600" width="1360" height="160" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2" rx="6" />
+    
+    <text x="40" y="1625" class="layer-title" fill="#1a1a2e" font-size="14">📋 Key Architectural Principles</text>
+    
+    <text x="40" y="1650" class="layer-desc" fill="#1a1a2e" font-size="12">✓ <tspan font-weight="600">Privacy-First:</tspan> Client-side processing where possible, minimal data collection, GDPR-aware</text>
+    <text x="40" y="1670" class="layer-desc" fill="#1a1a2e" font-size="12">✓ <tspan font-weight="600">Scalable Monorepo:</tspan> Workspaces for apps &amp; packages, independent CI/CD, shared types</text>
+    <text x="40" y="1690" class="layer-desc" fill="#1a1a2e" font-size="12">✓ <tspan font-weight="600">Modular AI:</tspan> RAG for resilience guidance, RCSM for peer matching, optional LLM services</text>
+    <text x="40" y="1710" class="layer-desc" fill="#1a1a2e" font-size="12">✓ <tspan font-weight="600">Safety-Gated:</tspan> Consent flows, content review, fairness audits, crisis escalation paths</text>
+    <text x="40" y="1730" class="layer-desc" fill="#1a1a2e" font-size="12">✓ <tspan font-weight="600">Production-Ready:</tspan> Type-safe (TypeScript), tested (Jest), performant (Next.js 14), observable (analytics)</text>
+    <text x="40" y="1750" class="layer-desc" fill="#1a1a2e" font-size="12">✓ <tspan font-weight="600">Cloud-Native:</tspan> Docker-ready backend, Vercel edge functions, async jobs &amp; workers ready</text>
+
+    <!-- Visual legend for non-technical readers -->
+    <rect x="900" y="1630" width="20" height="14" class="component-box page-box" />
+    <text x="930" y="1642" class="legend-label">Primary user-flow route (core experience)</text>
+    <rect x="900" y="1660" width="20" height="14" class="component-box page-box system-box" />
+    <text x="930" y="1672" class="legend-label">System/platform route (SEO, API, error-handling, infrastructure)</text>
+    <line x1="900" y1="1692" x2="920" y2="1692" class="arrow" />
+    <text x="930" y="1696" class="legend-label">Cross-layer data flow direction</text>
+  </g>
+</svg>
