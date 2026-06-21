@@ -1,0 +1,178 @@
+{
+  "root": {
+    "props": {
+      "title": "Blog Index"
+    }
+  },
+  "content": [
+    {
+      "type": "HeroBlock",
+      "props": {
+        "kicker": "Aether Journal",
+        "title": "Practical Resilience Library",
+        "description": "Short, evidence-informed guides for students who need calm next steps, not a wall of advice.",
+        "id": "HeroBlock-1781919219743-27"
+      }
+    },
+    {
+      "type": "ActionBlock",
+      "props": {
+        "primaryAction": {
+          "href": "/feed.xml",
+          "label": "Subscribe via RSS"
+        },
+        "secondaryAction": {
+          "href": "/ask",
+          "label": "Ask Aether"
+        },
+        "id": "ActionBlock-1781919219743-28"
+      }
+    },
+    {
+      "type": "MetricsBlock",
+      "props": {
+        "title": "Journal overview",
+        "items": [
+          {
+            "value": "5+",
+            "label": "practical guides",
+            "description": "Evidence-informed student resilience articles in the current library."
+          },
+          {
+            "value": "Short",
+            "label": "reading format",
+            "description": "Designed for action in one sitting, then application in real life."
+          },
+          {
+            "value": "Actionable",
+            "label": "next steps",
+            "description": "Each post is designed to connect with tools and pathways across Aether."
+          }
+        ],
+        "id": "MetricsBlock-1781919219743-29"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "eyebrow": "Reading path",
+        "title": "Build a weekly rhythm",
+        "description": "Stabilize, map support, manage stress, recover from setbacks, and plan the next season.",
+        "columns": "three",
+        "items": [
+          {
+            "eyebrow": "Step 1",
+            "title": "Pick one guide",
+            "description": "Start with one practical path instead of consuming everything at once."
+          },
+          {
+            "eyebrow": "Step 2",
+            "title": "Try one action for seven days",
+            "description": "Keep the action small and repeatable so the habit can stick."
+          },
+          {
+            "eyebrow": "Step 3",
+            "title": "Return with a sharper question",
+            "description": "Use Ask Aether or another route once you have real signal from practice."
+          }
+        ],
+        "id": "CardGridBlock-1781919219743-30"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "eyebrow": "Recent guides",
+        "title": "Keep the thread going",
+        "description": "Continue with the latest practical paths and reinforce continuity week to week.",
+        "columns": "two",
+        "items": [
+          {
+            "eyebrow": "Recent guides",
+            "title": "Keep the thread going",
+            "description": "Use latest posts to maintain momentum after your first practical path."
+          },
+          {
+            "title": "Stabilize your baseline",
+            "description": "Rebuild daily steadiness before layering on new goals and commitments.",
+            "href": "/blog/practical-path-01-stabilize-your-baseline",
+            "hrefLabel": "Read guide"
+          },
+          {
+            "title": "Build your support map",
+            "description": "Identify people, places, and routines you can activate when pressure spikes.",
+            "href": "/blog/practical-path-02-build-your-support-map",
+            "hrefLabel": "Read guide"
+          },
+          {
+            "title": "Study stress operating system",
+            "description": "Turn heavy academic load into repeatable focus and recovery loops.",
+            "href": "/blog/practical-path-03-study-stress-operating-system",
+            "hrefLabel": "Read guide"
+          }
+        ],
+        "id": "CardGridBlock-1781919219743-31"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "eyebrow": "Connect reading to action",
+        "title": "Move from insight to support",
+        "description": "Pair each article with a practical tool, reflection space, or source-grounded question.",
+        "columns": "three",
+        "items": [
+          {
+            "title": "Resilience Pathway",
+            "description": "Open check-ins, safety planning, navigation, and support modules directly from journal insights.",
+            "href": "/resilience-pathway",
+            "hrefLabel": "Open Resilience Pathway"
+          },
+          {
+            "title": "Echo Chamber",
+            "description": "Process emotion privately before deciding on the next support action.",
+            "href": "/echo",
+            "hrefLabel": "Open Echo Chamber"
+          },
+          {
+            "title": "Peer-Navigator",
+            "description": "Translate reflection into belonging support through transparent peer matching.",
+            "href": "/peer-navigator",
+            "hrefLabel": "Open Peer-Navigator"
+          },
+          {
+            "title": "Fairness & Governance",
+            "description": "Inspect policy and audit context behind peer-matching behavior.",
+            "href": "/fairness-governance",
+            "hrefLabel": "View governance"
+          },
+          {
+            "title": "Ask Aether",
+            "description": "Ask source-grounded questions across journal content and product pathways.",
+            "href": "/ask",
+            "hrefLabel": "Ask a question"
+          }
+        ],
+        "id": "CardGridBlock-1781919219743-32"
+      }
+    },
+    {
+      "type": "NoticeBlock",
+      "props": {
+        "kicker": "Full library",
+        "title": "Every practical path",
+        "description": "Tags, dates, and reading times are generated from markdown post metadata and updated automatically.",
+        "id": "NoticeBlock-1781919219743-33"
+      }
+    },
+    {
+      "type": "NoticeBlock",
+      "props": {
+        "kicker": "Content source",
+        "title": "Blog posts are markdown-driven",
+        "description": "Featured cards, recent guides, tags, dates, and reading times come from files in content/blog. Use this CMS page to edit surrounding framing and connective narrative.",
+        "id": "NoticeBlock-1781919219743-34"
+      }
+    }
+  ]
+}

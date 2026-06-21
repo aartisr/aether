@@ -9,9 +9,23 @@ import type { NavigationLink } from '../../lib/navigation';
 type SiteHeaderClientProps = {
   primaryNavigation: NavigationLink[];
   secondaryNavigation: NavigationLink[];
-  trustSignals: readonly string[];
+  trustSignals: string[];
   shareTagline: string;
   siteName: string;
+  logoHref?: string;
+  logoAlt?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  ctaDescription?: string;
+  feedbackLabel?: string;
+  explorePrimaryTitle?: string;
+  explorePrimaryDescription?: string;
+  exploreSecondaryTitle?: string;
+  exploreSecondaryDescription?: string;
+  mobilePrimaryDescription?: string;
+  mobileSecondaryDescription?: string;
+  headerSurfaceVariant?: 'glass' | 'solid' | 'calm';
+  trustBarVariant?: 'mint' | 'slate' | 'sky';
 };
 
 const MAX_VISIBLE_NAVIGATION_ITEMS = 5;
@@ -234,6 +248,20 @@ export default function SiteHeaderClient({
   trustSignals,
   shareTagline,
   siteName,
+  logoHref,
+  logoAlt,
+  ctaLabel,
+  ctaHref,
+  ctaDescription,
+  feedbackLabel,
+  explorePrimaryTitle,
+  explorePrimaryDescription,
+  exploreSecondaryTitle,
+  exploreSecondaryDescription,
+  mobilePrimaryDescription,
+  mobileSecondaryDescription,
+  headerSurfaceVariant,
+  trustBarVariant,
 }: SiteHeaderClientProps) {
   const pathname = usePathname() || '/';
   const headerRef = useRef<HTMLElement | null>(null);
@@ -247,18 +275,40 @@ export default function SiteHeaderClient({
     () => selectDesktopNavigation(allNavigation, pathname),
     [allNavigation, pathname],
   );
-  const ctaLink = { href: '/ask', label: 'Ask Aether', description: 'Open the guided copilot workspace.' };
+  const ctaLink = {
+    href: ctaHref && ctaHref.trim().length > 0 ? ctaHref : '/ask',
+    label: ctaLabel && ctaLabel.trim().length > 0 ? ctaLabel : 'Ask Aether',
+    description:
+      ctaDescription && ctaDescription.trim().length > 0
+        ? ctaDescription
+        : 'Open the guided copilot workspace.',
+  };
   const feedbackLink = allNavigation.find((link) => link.href === '/feedback') ?? {
     href: '/feedback',
-    label: 'Feedback',
+    label: feedbackLabel && feedbackLabel.trim().length > 0 ? feedbackLabel : 'Feedback',
     description: 'Report an issue or suggest an improvement.',
   };
-  const ctaLabel = 'Ask Aether';
+  const resolvedCtaLabel = ctaLink.label;
   const hasNavigation = allNavigation.length > 0;
   const hasOverflowNavigation = overflowNavigation.length > 0;
   const currentNavigationItem = allNavigation.find((link) => isCurrentPath(pathname, link.href));
   const panelPrimaryNavigation = primaryNavigation.filter((link) => link.href !== feedbackLink.href);
   const panelSecondaryNavigation = secondaryNavigation;
+  const resolvedHeaderSurfaceVariant = headerSurfaceVariant ?? 'glass';
+  const resolvedTrustBarVariant = trustBarVariant ?? 'mint';
+  const headerSurfaceClasses: Record<typeof resolvedHeaderSurfaceVariant, string> = {
+    glass:
+      'sticky top-0 z-50 border-b border-[color:var(--theme-border)] bg-[rgb(255_255_255/0.88)] shadow-[var(--theme-shadow-sm)] backdrop-blur-xl',
+    solid:
+      'sticky top-0 z-50 border-b border-[color:var(--theme-border)] bg-white shadow-[var(--theme-shadow-sm)]',
+    calm:
+      'sticky top-0 z-50 border-b border-[color:var(--theme-border)] bg-[rgb(244_250_247/0.95)] shadow-[var(--theme-shadow-sm)] backdrop-blur-md',
+  };
+  const trustBarClasses: Record<typeof resolvedTrustBarVariant, string> = {
+    mint: 'border-t border-[color:var(--theme-border)] bg-[rgb(237_247_242/0.74)]',
+    slate: 'border-t border-slate-200 bg-slate-100',
+    sky: 'border-t border-sky-200 bg-sky-100/80',
+  };
 
   const closeMenus = useCallback(() => {
     setIsExploreOpen(false);
@@ -296,7 +346,7 @@ export default function SiteHeaderClient({
   return (
     <header
       ref={headerRef}
-      className="sticky top-0 z-50 border-b border-[color:var(--theme-border)] bg-[rgb(255_255_255/0.88)] shadow-[var(--theme-shadow-sm)] backdrop-blur-xl"
+      className={headerSurfaceClasses[resolvedHeaderSurfaceVariant]}
     >
       <div className="mx-auto flex min-w-0 max-w-7xl items-center gap-3 px-4 py-3 md:px-6">
         <Link
@@ -306,12 +356,19 @@ export default function SiteHeaderClient({
           aria-label={`${siteName} home`}
         >
           <span className="grid h-10 w-10 flex-none place-items-center rounded-[var(--theme-radius-sm)] bg-white p-1 shadow-sm ring-1 ring-[color:var(--theme-border)]">
-            <Image src="/aether-logo-icon.svg" alt="" width={40} height={40} priority className="h-full w-full" />
+            <Image
+              src={logoHref && logoHref.trim().length > 0 ? logoHref : '/aether-logo-icon.svg'}
+              alt={logoAlt && logoAlt.trim().length > 0 ? logoAlt : ''}
+              width={40}
+              height={40}
+              priority
+              className="h-full w-full"
+            />
           </span>
           <span className="min-w-0">
             <span className="block font-display text-2xl font-extrabold leading-none">{siteName}</span>
             <span className="mt-1 hidden max-w-[13rem] truncate text-xs font-bold text-[color:var(--theme-text-muted)] sm:block">
-              Student resilience
+              {shareTagline}
             </span>
           </span>
         </Link>
@@ -347,7 +404,7 @@ export default function SiteHeaderClient({
         ) : null}
 
         <div className="ml-auto flex flex-none items-center gap-2 lg:ml-0">
-          <HeaderActionLink link={ctaLink} label={ctaLabel} onNavigate={closeMenus} />
+          <HeaderActionLink link={ctaLink} label={resolvedCtaLabel} onNavigate={closeMenus} />
           {hasNavigation ? (
             <button
               type="button"
@@ -380,15 +437,27 @@ export default function SiteHeaderClient({
             className="mx-auto grid min-w-0 max-w-7xl gap-5 px-6 py-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_18rem]"
           >
             <NavigationSection
-              title="Build resilience"
-              description="Core product experiences for reflection, guidance, support, and learning."
+              title={explorePrimaryTitle && explorePrimaryTitle.trim().length > 0 ? explorePrimaryTitle : 'Build resilience'}
+              description={
+                explorePrimaryDescription && explorePrimaryDescription.trim().length > 0
+                  ? explorePrimaryDescription
+                  : 'Core product experiences for reflection, guidance, support, and learning.'
+              }
               links={panelPrimaryNavigation}
               pathname={pathname}
               onNavigate={closeMenus}
             />
             <NavigationSection
-              title="Trust and context"
-              description="Understand the principles, people, and safeguards behind Aether."
+              title={
+                exploreSecondaryTitle && exploreSecondaryTitle.trim().length > 0
+                  ? exploreSecondaryTitle
+                  : 'Trust and context'
+              }
+              description={
+                exploreSecondaryDescription && exploreSecondaryDescription.trim().length > 0
+                  ? exploreSecondaryDescription
+                  : 'Understand the principles, people, and safeguards behind Aether.'
+              }
               links={panelSecondaryNavigation}
               pathname={pathname}
               onNavigate={closeMenus}
@@ -402,8 +471,12 @@ export default function SiteHeaderClient({
                 {currentNavigationItem?.description ?? shareTagline}
               </p>
               <div className="mt-4 grid gap-2">
-                <HeaderActionLink link={feedbackLink} label="Share feedback" onNavigate={closeMenus} />
-                <HeaderActionLink link={ctaLink} label={ctaLabel} onNavigate={closeMenus} />
+                <HeaderActionLink
+                  link={feedbackLink}
+                  label={feedbackLabel && feedbackLabel.trim().length > 0 ? feedbackLabel : 'Share feedback'}
+                  onNavigate={closeMenus}
+                />
+                <HeaderActionLink link={ctaLink} label={resolvedCtaLabel} onNavigate={closeMenus} />
               </div>
             </section>
           </nav>
@@ -418,15 +491,27 @@ export default function SiteHeaderClient({
             </div>
             <div className="grid gap-5 md:grid-cols-2">
               <NavigationSection
-                title="Build resilience"
-                description="Start with the most useful product surfaces."
+                title={explorePrimaryTitle && explorePrimaryTitle.trim().length > 0 ? explorePrimaryTitle : 'Build resilience'}
+                description={
+                  mobilePrimaryDescription && mobilePrimaryDescription.trim().length > 0
+                    ? mobilePrimaryDescription
+                    : 'Start with the most useful product surfaces.'
+                }
                 links={panelPrimaryNavigation}
                 pathname={pathname}
                 onNavigate={closeMenus}
               />
               <NavigationSection
-                title="Trust and context"
-                description="Review privacy, accessibility, mentors, and governance."
+                title={
+                  exploreSecondaryTitle && exploreSecondaryTitle.trim().length > 0
+                    ? exploreSecondaryTitle
+                    : 'Trust and context'
+                }
+                description={
+                  mobileSecondaryDescription && mobileSecondaryDescription.trim().length > 0
+                    ? mobileSecondaryDescription
+                    : 'Review privacy, accessibility, mentors, and governance.'
+                }
                 links={panelSecondaryNavigation}
                 pathname={pathname}
                 onNavigate={closeMenus}
@@ -436,7 +521,7 @@ export default function SiteHeaderClient({
         </div>
       ) : null}
 
-      <div className="border-t border-[color:var(--theme-border)] bg-[rgb(237_247_242/0.74)]">
+      <div className={trustBarClasses[resolvedTrustBarVariant]}>
         <div className="mx-auto min-w-0 max-w-7xl px-4 py-2 md:flex md:items-center md:gap-3 md:px-6">
           <p className="hidden min-w-0 flex-1 truncate text-xs font-bold text-[color:var(--theme-text-muted)] md:block">{shareTagline}</p>
           <div className="grid min-w-0 grid-cols-2 gap-1.5 md:hidden">

@@ -1,0 +1,35 @@
+{
+  "root": {
+    "props": {
+      "title": "Echo Chamber"
+    }
+  },
+  "content": [
+    {
+      "type": "HeroBlock",
+      "props": {
+        "kicker": "Private Reflection",
+        "title": "Echo Chamber",
+        "description": "An anonymized, voice-enabled outlet for catharsis with on-device transcript, sentiment, and safety signal mapping.",
+        "id": "HeroBlock-1781919219843-35"
+      }
+    },
+    {
+      "type": "EchoStudioBlock",
+      "props": {
+        "kicker": "Interactive module",
+        "title": "Echo reflection studio",
+        "description": "Voice recording and local analysis are embedded below. Edit this text to guide students through the flow.",
+        "id": "EchoStudioBlock-1781919219843-36"
+      }
+    },
+    {
+      "type": "NoticeBlock",
+      "props": {
+        "kicker": "Privacy",
+        "description": "Audio, transcript, and classifications remain on-device in this implementation.",
+        "id": "NoticeBlock-1781919219843-37"
+      }
+    }
+  ]
+}

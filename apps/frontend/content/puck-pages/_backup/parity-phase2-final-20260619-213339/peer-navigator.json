@@ -1,0 +1,50 @@
+{
+  "root": {
+    "props": {
+      "title": "Peer-Navigator"
+    }
+  },
+  "content": [
+    {
+      "type": "HeroBlock",
+      "props": {
+        "kicker": "Belonging Support",
+        "title": "Peer-Navigator Network",
+        "description": "Connect with peers who share relevant lived context and build support pathways in a privacy-aware matching flow.",
+        "id": "HeroBlock-1781919066717-48"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "eyebrow": "Matching workspace",
+        "title": "Find a relevant peer pathway",
+        "description": "Choose a broad context, then review how the system arrives at a primary and backup match. This demo is transparent by design.",
+        "columns": "three",
+        "items": [
+          {
+            "title": "Signal",
+            "description": "Choose one broad context area. The demo avoids names, contact details, and sensitive free text."
+          },
+          {
+            "title": "Rank",
+            "description": "The matcher scores fit through staged compatibility, safety, and fairness-aware adjustments."
+          },
+          {
+            "title": "Review",
+            "description": "A primary and backup match are shown with score progression for auditability."
+          }
+        ],
+        "id": "CardGridBlock-1781919066717-49"
+      }
+    },
+    {
+      "type": "NoticeBlock",
+      "props": {
+        "kicker": "Transparency",
+        "description": "This is a demo with advanced metrics. In production, matching is privacy-preserving and peer-verified.",
+        "id": "NoticeBlock-1781919066717-50"
+      }
+    }
+  ]
+}

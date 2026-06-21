@@ -1,0 +1,251 @@
+{
+  "root": {
+    "props": {
+      "title": "Global Header & Footer"
+    }
+  },
+  "content": [
+    {
+      "type": "GlobalHeaderBlock",
+      "props": {
+        "bannerText": "",
+        "bannerVariant": "emerald",
+        "surfaceVariant": "glass",
+        "trustBarVariant": "mint",
+        "siteName": "Aether",
+        "tagline": "Privacy-first student resilience support with guided pathways, peer connection, and transparent AI.",
+        "logoHref": "/aether-logo-icon.svg",
+        "logoAlt": "Aether logo",
+        "ctaLabel": "Ask Aether",
+        "ctaHref": "/ask",
+        "ctaDescription": "Open the guided copilot workspace.",
+        "feedbackLabel": "Share feedback",
+        "explorePrimaryTitle": "Build resilience",
+        "explorePrimaryDescription": "Core product experiences for reflection, guidance, support, and learning.",
+        "exploreSecondaryTitle": "Trust and context",
+        "exploreSecondaryDescription": "Understand the principles, people, and safeguards behind Aether.",
+        "mobilePrimaryDescription": "Start with the most useful product surfaces.",
+        "mobileSecondaryDescription": "Review privacy, accessibility, mentors, and governance.",
+        "trustSignals": [
+          {
+            "value": "Privacy-first"
+          },
+          {
+            "value": "Peer support"
+          },
+          {
+            "value": "Safety-aware"
+          },
+          {
+            "value": "AI-readable"
+          }
+        ],
+        "primaryNavigation": [
+          {
+            "label": "Resilience Hub",
+            "href": "/resilience-pathway",
+            "description": "Guided check-ins, safety planning, resource routing, peer circles, and habits.",
+            "external": "false"
+          },
+          {
+            "label": "Echo",
+            "href": "/echo",
+            "description": "Private reflection with on-device transcript and sentiment mapping.",
+            "external": "false"
+          },
+          {
+            "label": "Peer Navigator",
+            "href": "/peer-navigator",
+            "description": "Privacy-aware peer matching with explainable fairness controls.",
+            "external": "false"
+          },
+          {
+            "label": "Journal",
+            "href": "/blog",
+            "description": "Practical, evidence-informed student resilience guides.",
+            "external": "false"
+          }
+        ],
+        "secondaryNavigation": [
+          {
+            "label": "Governance",
+            "href": "/fairness-governance",
+            "description": "Fairness metrics, policy posture, and auditability.",
+            "external": "false"
+          },
+          {
+            "label": "Privacy",
+            "href": "/privacy",
+            "description": "Local-first design, minimized data exposure, and identity safety.",
+            "external": "false"
+          },
+          {
+            "label": "Accessibility",
+            "href": "/accessibility",
+            "description": "Inclusive design commitments and SAFE-AI guidance.",
+            "external": "false"
+          },
+          {
+            "label": "About",
+            "href": "/about",
+            "description": "Mission, architecture, and product context.",
+            "external": "false"
+          },
+          {
+            "label": "Mentors",
+            "href": "/mentors",
+            "description": "Public gratitude for the guidance behind Aether.",
+            "external": "false"
+          },
+          {
+            "label": "Feedback",
+            "href": "/feedback",
+            "description": "Report an issue, request a fix, or suggest what Aether should add next.",
+            "external": "false"
+          }
+        ],
+        "id": "GlobalHeaderBlock-1782000000000-1"
+      }
+    },
+    {
+      "type": "GlobalFooterBlock",
+      "props": {
+        "surfaceVariant": "glass",
+        "accentVariant": "teal",
+        "summaryText": "Aether is a student resilience ecosystem designed to support reflection, navigation, and safer next steps.",
+        "safetyTitle": "Safety Note",
+        "safetyNote": "Aether is a support and resilience experience, not emergency care. If there is imminent danger, contact local emergency services. In the United States, call or text 988.",
+        "copyrightText": "Research-driven. Privacy-first.",
+        "socialSharePath": "/",
+        "socialShareTitle": "Aether: Student Resiliency Ecosystem",
+        "badgeHref": "https://saugus.pioneercss.org",
+        "badgeAriaLabel": "Visit PCSS II Saugus",
+        "dedicationLabel": "Dedicated to PCSS II Students and Staff.",
+        "dedicationHref": "https://saugus.pioneercss.org",
+        "attributionPrefix": "Aether logo artwork (c)",
+        "authorName": "Aarti S Ravikumar",
+        "authorUrl": "https://aartisr.foreverlotus.com",
+        "authorLinkLabel": "Aarti S Ravikumar",
+        "trustSignals": [
+          {
+            "value": "Privacy-first"
+          },
+          {
+            "value": "Peer support"
+          },
+          {
+            "value": "Safety-aware"
+          },
+          {
+            "value": "AI-readable"
+          }
+        ],
+        "navigationLinks": [
+          {
+            "groupTitle": "Product",
+            "label": "Resilience Hub",
+            "href": "/resilience-pathway",
+            "external": "false"
+          },
+          {
+            "groupTitle": "Product",
+            "label": "Echo Chamber",
+            "href": "/echo",
+            "external": "false"
+          },
+          {
+            "groupTitle": "Product",
+            "label": "Peer Navigator",
+            "href": "/peer-navigator",
+            "external": "false"
+          },
+          {
+            "groupTitle": "Product",
+            "label": "Aether Journal",
+            "href": "/blog",
+            "external": "false"
+          },
+          {
+            "groupTitle": "Trust",
+            "label": "Privacy",
+            "href": "/privacy",
+            "external": "false"
+          },
+          {
+            "groupTitle": "Trust",
+            "label": "Accessibility",
+            "href": "/accessibility",
+            "external": "false"
+          },
+          {
+            "groupTitle": "Trust",
+            "label": "Fairness Governance",
+            "href": "/fairness-governance",
+            "external": "false"
+          },
+          {
+            "groupTitle": "Trust",
+            "label": "988 Lifeline",
+            "href": "https://988lifeline.org/",
+            "external": "true"
+          },
+          {
+            "groupTitle": "About",
+            "label": "About Aether",
+            "href": "/about",
+            "external": "false"
+          },
+          {
+            "groupTitle": "About",
+            "label": "Mentors",
+            "href": "/mentors",
+            "external": "false"
+          },
+          {
+            "groupTitle": "About",
+            "label": "Feedback",
+            "href": "/feedback",
+            "external": "false"
+          },
+          {
+            "groupTitle": "About",
+            "label": "RSS Feed",
+            "href": "/feed.xml",
+            "external": "false"
+          },
+          {
+            "groupTitle": "About",
+            "label": "AI Guide",
+            "href": "/llms.txt",
+            "external": "false"
+          },
+          {
+            "groupTitle": "Machine-Readable",
+            "label": "Sitemap",
+            "href": "/sitemap.xml",
+            "external": "false"
+          },
+          {
+            "groupTitle": "Machine-Readable",
+            "label": "Image Sitemap",
+            "href": "/image-sitemap.xml",
+            "external": "false"
+          },
+          {
+            "groupTitle": "Machine-Readable",
+            "label": "Robots",
+            "href": "/robots.txt",
+            "external": "false"
+          },
+          {
+            "groupTitle": "Machine-Readable",
+            "label": "Web Manifest",
+            "href": "/manifest.webmanifest",
+            "external": "false"
+          }
+        ],
+        "id": "GlobalFooterBlock-1782000000000-2"
+      }
+    }
+  ]
+}

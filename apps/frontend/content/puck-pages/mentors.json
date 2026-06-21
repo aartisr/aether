@@ -1,0 +1,183 @@
+{
+  "root": {
+    "props": {
+      "title": "Mentors"
+    }
+  },
+  "content": [
+    {
+      "type": "HeroBlock",
+      "props": {
+        "kicker": "Mentor Appreciation",
+        "title": "The Mentors Behind Aether",
+        "description": "This project exists because mentors gave precision, challenge, and care at every critical turning point.",
+        "id": "HeroBlock-1781950713861-42"
+      }
+    },
+    {
+      "type": "MarkdownBlock",
+      "props": {
+        "eyebrow": "A Public Thank You",
+        "title": "Mentorship as core infrastructure",
+        "body": "Aether was shaped in rooms where mentors asked harder questions than we expected and offered steadier support than we deserved. They challenged assumptions, redirected weak decisions, and helped us build a system that protects students while remaining practical to implement.\n\nThis page is a standing acknowledgment that mentorship is core infrastructure, as important to project quality as code, design, and research.",
+        "id": "MarkdownBlock-1781950713861-43"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "eyebrow": "Featured gratitude",
+        "title": "Featured Mentor Gratitude",
+        "columns": "two",
+        "items": [
+          {
+            "eyebrow": "Computer Science Teacher, PCSS II",
+            "title": "Mr. Shalif Shaoul",
+            "description": "With gratitude for your guidance and encouragement throughout the Aether journey. Your mentorship strengthened both our technical direction and our confidence to keep building with purpose."
+          },
+          {
+            "eyebrow": "Parents and Lifelong Guides",
+            "title": "Subasri Dorairaj & Ramanjanappa Ravikumar",
+            "description": "With deep gratitude for your unwavering support, guidance, sacrifices, and belief throughout the Aether journey. Your love, values, and steady encouragement made this work possible and gave it meaning beyond the project itself."
+          }
+        ],
+        "id": "CardGridBlock-1781950713861-44"
+      }
+    },
+    {
+      "type": "MetricsBlock",
+      "props": {
+        "title": "Mentor Impact",
+        "items": [
+          {
+            "value": "12+",
+            "label": "Mentor-informed product pivots",
+            "description": "Key architecture and UX decisions improved after mentor reviews."
+          },
+          {
+            "value": "40+",
+            "label": "Feedback sessions incorporated",
+            "description": "Guidance translated into concrete accessibility, safety, and governance updates."
+          },
+          {
+            "value": "20+",
+            "label": "Research and ethics checkpoints",
+            "description": "Mentor input strengthened evidence alignment and responsible AI boundaries."
+          }
+        ],
+        "id": "MetricsBlock-1781950713861-45"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "title": "How Mentors Changed the Build",
+        "columns": "two",
+        "items": [
+          {
+            "title": "Clarity Under Pressure",
+            "description": "Mentors helped narrow broad ideas into practical, student-safe product pathways that teams can actually ship."
+          },
+          {
+            "title": "Ethics Before Velocity",
+            "description": "Mentorship kept privacy, fairness, and duty-of-care considerations as non-negotiable guardrails."
+          },
+          {
+            "title": "Research to Practice",
+            "description": "Mentors continuously translated theory into implementation details that survive real-world constraints."
+          },
+          {
+            "title": "Human-Centered Standards",
+            "description": "Critical reviews improved readability, accessibility, and the emotional tone of high-stress student journeys."
+          }
+        ],
+        "id": "CardGridBlock-1781950713861-46"
+      }
+    },
+    {
+      "type": "MarkdownBlock",
+      "props": {
+        "title": "Mentor Constellation",
+        "body": "Mentorship influence appears in clusters. Guidance, encouragement, rigor, and integrity connect across every release.",
+        "id": "MarkdownBlock-1781950713861-47"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "title": "Mentor Constellation Nodes",
+        "columns": "four",
+        "items": [
+          {
+            "eyebrow": "Node",
+            "title": "Guidance",
+            "description": "Consistent direction during key architectural and product choices."
+          },
+          {
+            "eyebrow": "Node",
+            "title": "Encouragement",
+            "description": "Support that sustained momentum through complex and ambiguous milestones."
+          },
+          {
+            "eyebrow": "Node",
+            "title": "Rigor",
+            "description": "Feedback that improved quality, clarity, and implementation discipline."
+          },
+          {
+            "eyebrow": "Node",
+            "title": "Integrity",
+            "description": "Values-based coaching that reinforced privacy, safety, and fairness choices."
+          }
+        ],
+        "id": "CardGridBlock-1781950713861-48"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "title": "Recognition Rituals We Commit To",
+        "columns": "two",
+        "items": [
+          {
+            "title": "Attribution by Design",
+            "description": "Major decisions are accompanied by mentorship context in internal changelogs, not just release notes."
+          },
+          {
+            "title": "Mentor Credit Ledger",
+            "description": "Each milestone records who shaped the decision, what changed, and how the impact was measured."
+          },
+          {
+            "title": "Teach-Forward Practice",
+            "description": "Every mentorship insight is converted into templates and guidance so future teams benefit too."
+          },
+          {
+            "title": "Annual Gratitude Review",
+            "description": "A yearly review revisits mentor impact and updates recognition artifacts across docs and website."
+          }
+        ],
+        "id": "CardGridBlock-1781950713861-49"
+      }
+    },
+    {
+      "type": "FaqBlock",
+      "props": {
+        "title": "Mentor Recognition FAQ",
+        "items": [
+          {
+            "question": "Why dedicate a full page to mentors?",
+            "answer": "Because meaningful mentorship is not a footnote. It shaped the product strategy, safety model, and implementation quality of Aether."
+          },
+          {
+            "question": "How should mentor names be displayed?",
+            "answer": "Use explicit consent, preferred titles, and context about what each person contributed. Recognition should be accurate and respectful."
+          },
+          {
+            "question": "Can this page support institutions and cohorts?",
+            "answer": "Yes. The structure is designed to recognize individuals, faculty groups, and program cohorts with equal clarity."
+          }
+        ],
+        "id": "FaqBlock-1781950713861-50"
+      }
+    }
+  ]
+}

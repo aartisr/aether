@@ -1,0 +1,61 @@
+{
+  "root": {
+    "props": {
+      "title": "Privacy"
+    }
+  },
+  "content": [
+    {
+      "type": "HeroBlock",
+      "props": {
+        "kicker": "Privacy by Design",
+        "title": "Privacy and Data Ethics",
+        "description": "Student wellbeing workflows are built to minimize data exposure while preserving practical support outcomes.",
+        "id": "HeroBlock-1781919220341-54"
+      }
+    },
+    {
+      "type": "ActionBlock",
+      "props": {
+        "id": "ActionBlock-1781919220341-55"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "title": "Key areas",
+        "columns": "two",
+        "items": [
+          {
+            "title": "Local-First Processing",
+            "description": "Sensitive voice and sentiment analysis stay on-device by default to reduce data transfer and central retention."
+          },
+          {
+            "title": "Identity Safety Patterns",
+            "description": "System interactions prioritize pseudonymity, constrained metadata, and explicit consent boundaries."
+          },
+          {
+            "title": "Ethical AI Controls",
+            "description": "Fairness checkpoints and escalation boundaries are reviewed to avoid overreach in high-sensitivity contexts.",
+            "href": "/fairness-governance",
+            "hrefLabel": "Inspect Governance Controls"
+          }
+        ],
+        "id": "CardGridBlock-1781919220341-56"
+      }
+    },
+    {
+      "type": "NoticeBlock",
+      "props": {
+        "kicker": "Continue with context",
+        "title": "Next step",
+        "description": "For mission context and architecture background, continue to the About page.",
+        "link": {
+          "href": "/about",
+          "label": "Go to About"
+        },
+        "id": "NoticeBlock-1781919220341-57"
+      }
+    }
+  ]
+}

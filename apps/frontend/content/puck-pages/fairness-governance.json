@@ -1,0 +1,27 @@
+{
+  "root": {
+    "props": {
+      "title": "Fairness & Governance"
+    }
+  },
+  "content": [
+    {
+      "type": "HeroBlock",
+      "props": {
+        "kicker": "Policy and transparency",
+        "title": "Fairness & Governance",
+        "description": "Review fairness metrics, audit trails, and governance policy framing for the peer matching system.",
+        "id": "HeroBlock-1781950713670-38"
+      }
+    },
+    {
+      "type": "FairnessDashboardBlock",
+      "props": {
+        "kicker": "Interactive dashboard",
+        "title": "Fairness audit dashboard",
+        "description": "Inspect cohort metrics, policy parameters, and audit trail behavior in this embedded module.",
+        "id": "FairnessDashboardBlock-1781950713670-39"
+      }
+    }
+  ]
+}

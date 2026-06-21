@@ -1,0 +1,63 @@
+{
+  "root": {
+    "props": {
+      "title": "Accessibility"
+    }
+  },
+  "content": [
+    {
+      "type": "HeroBlock",
+      "props": {
+        "kicker": "Inclusive Design",
+        "title": "Accessibility and SAFE-AI Compliance",
+        "description": "Aether is built for readability, keyboard access, and fairness-aware AI behavior across different user contexts.",
+        "id": "HeroBlock-1781919219468-17"
+      }
+    },
+    {
+      "type": "ActionBlock",
+      "props": {
+        "id": "ActionBlock-1781919219468-18"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "title": "Key areas",
+        "columns": "two",
+        "items": [
+          {
+            "title": "Accessibility Baseline",
+            "description": "Interfaces target WCAG 2.1 AA with keyboard navigation, clear focus states, and robust semantic markup.",
+            "href": "https://www.w3.org/WAI/standards-guidelines/wcag/",
+            "hrefLabel": "Review WCAG Guidelines"
+          },
+          {
+            "title": "Safe Interaction Patterns",
+            "description": "Visual hierarchy, language clarity, and low-cognitive-load flows are prioritized for student wellbeing scenarios."
+          },
+          {
+            "title": "SAFE-AI Governance",
+            "description": "Model behavior, triage messaging, and fairness checks are reviewed under documented governance controls.",
+            "href": "/fairness-governance",
+            "hrefLabel": "View Fairness Dashboard"
+          }
+        ],
+        "id": "CardGridBlock-1781919219468-19"
+      }
+    },
+    {
+      "type": "NoticeBlock",
+      "props": {
+        "kicker": "Continue with context",
+        "title": "Next step",
+        "description": "Need assistance or want to report an issue?",
+        "link": {
+          "href": "mailto:accessibility@aether.org",
+          "label": "Contact accessibility support"
+        },
+        "id": "NoticeBlock-1781919219468-20"
+      }
+    }
+  ]
+}

@@ -1,0 +1,361 @@
+{
+  "root": {
+    "props": {
+      "title": "Resilience Pathway"
+    }
+  },
+  "content": [
+    {
+      "type": "HeroBlock",
+      "props": {
+        "kicker": "Student resilience command hub",
+        "title": "Aether Resilience Hub",
+        "description": "A warm, privacy-first operating system for student support: fast enough for the moment of need, careful enough for safety, and structured enough for campus teams to improve services.",
+        "id": "HeroBlock-1781919220451-58"
+      }
+    },
+    {
+      "type": "ActionBlock",
+      "props": {
+        "primaryAction": {
+          "href": "#check-in",
+          "label": "Start check-in"
+        },
+        "secondaryAction": {
+          "href": "#safety-plan",
+          "label": "Build safety plan"
+        },
+        "id": "ActionBlock-1781919220451-59"
+      }
+    },
+    {
+      "type": "ActionBlock",
+      "props": {
+        "primaryAction": {
+          "href": "https://988lifeline.org/",
+          "label": "Get 24/7 crisis support"
+        },
+        "id": "ActionBlock-1781919220452-60"
+      }
+    },
+    {
+      "type": "MetricsBlock",
+      "props": {
+        "title": "Operating metrics",
+        "items": [
+          {
+            "value": "5",
+            "label": "support modes",
+            "description": "check-in, safety, resources, peers, habits"
+          },
+          {
+            "value": "24/7",
+            "label": "urgent lane",
+            "description": "crisis support is never hidden behind product UI"
+          },
+          {
+            "value": "0",
+            "label": "required account",
+            "description": "the core hub can orient a student immediately"
+          },
+          {
+            "value": "25",
+            "label": "research inputs",
+            "description": "public-health, campus, peer, and product benchmarks"
+          }
+        ],
+        "id": "MetricsBlock-1781919220452-61"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "eyebrow": "Live care map",
+        "title": "Live care map",
+        "columns": "four",
+        "items": [
+          {
+            "title": "Stabilize",
+            "description": "When a student needs immediate grounding, safety planning, or crisis support."
+          },
+          {
+            "title": "Navigate",
+            "description": "When the hard part is finding the right next door: peer, campus, self-guided, or professional."
+          },
+          {
+            "title": "Belong",
+            "description": "When isolation is the risk signal and a moderated peer pathway can restore connection."
+          },
+          {
+            "title": "Practice",
+            "description": "When resilience needs repetition through tiny actions that fit a real student week."
+          }
+        ],
+        "id": "CardGridBlock-1781919220452-62"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "eyebrow": "Intervention architecture",
+        "title": "Pathway stages",
+        "columns": "three",
+        "items": [
+          {
+            "eyebrow": "Step 1",
+            "title": "Early Signal Detection",
+            "description": "Weekly check-in identifies stress, connection, sleep, and safety trends early."
+          },
+          {
+            "eyebrow": "Step 2",
+            "title": "Immediate Stabilization",
+            "description": "Students can create a practical safety plan and activate crisis support in one click."
+          },
+          {
+            "eyebrow": "Step 3",
+            "title": "Right-Sized Support",
+            "description": "Resource navigator routes students to peer, self-guided, campus, or urgent options."
+          },
+          {
+            "eyebrow": "Step 4",
+            "title": "Social Reinforcement",
+            "description": "Peer circles reduce isolation and create identity-safe belonging pathways."
+          },
+          {
+            "eyebrow": "Step 5",
+            "title": "Sustainable Growth",
+            "description": "Habit planning builds long-term resilience through short, repeatable daily actions."
+          }
+        ],
+        "id": "CardGridBlock-1781919220452-63"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "eyebrow": "Benchmark synthesis",
+        "title": "What world-class wellbeing products get right",
+        "columns": "four",
+        "items": [
+          {
+            "eyebrow": "MindLink / campus access hubs",
+            "title": "One-tap access",
+            "description": "The first useful action should be available before login, intake, or explanation."
+          },
+          {
+            "eyebrow": "TalkCampus / Togetherall",
+            "title": "Safeguarded peer belonging",
+            "description": "Peer support is strongest when belonging, moderation, and escalation pathways are designed together."
+          },
+          {
+            "eyebrow": "SilverCloud / Headspace / Calm",
+            "title": "Structured self-guided care",
+            "description": "Students need short pathways that turn stress, sleep, and focus signals into doable routines."
+          },
+          {
+            "eyebrow": "University wellbeing toolkits",
+            "title": "Privacy-forward signal use",
+            "description": "Aggregate trends can help teams improve services without exposing private student reflections."
+          }
+        ],
+        "id": "CardGridBlock-1781919220452-64"
+      }
+    },
+    {
+      "type": "ResilienceToolkitBlock",
+      "props": {
+        "kicker": "Interactive tools",
+        "title": "Resilience toolkit modules",
+        "description": "Check-in, safety planning, navigation, peer matching, and habit planning are editable and runnable here.",
+        "id": "ResilienceToolkitBlock-1781919220452-65"
+      }
+    },
+    {
+      "type": "CardGridBlock",
+      "props": {
+        "eyebrow": "Research and evidence",
+        "title": "Research and Benchmark Inputs (25)",
+        "description": "References that informed feature selection, safety pathways, and resilience intervention patterns.",
+        "columns": "three",
+        "items": [
+          {
+            "eyebrow": "institute",
+            "title": "The Jed Foundation",
+            "description": "School systems strengthening + youth suicide prevention pathway.",
+            "href": "https://jedfoundation.org/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "institute",
+            "title": "Active Minds",
+            "description": "Peer-led campus chapters and ASK model for early support.",
+            "href": "https://activeminds.org/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "institute",
+            "title": "NAMI",
+            "description": "Helpline, local affiliate routing, education and support groups.",
+            "href": "https://www.nami.org/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "institute",
+            "title": "Mental Health America",
+            "description": "Early screening and prevention resources at population scale.",
+            "href": "https://mhanational.org/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "crisis-service",
+            "title": "SAMHSA 988",
+            "description": "24/7 free, confidential crisis response and implementation guidance.",
+            "href": "https://www.samhsa.gov/find-help/988",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "crisis-service",
+            "title": "988 Lifeline",
+            "description": "Multi-channel urgent support (call/text/chat) and accessibility options.",
+            "href": "https://988lifeline.org/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "framework",
+            "title": "WHO Mental Health",
+            "description": "Resilience framing with social determinants and systems-level response.",
+            "href": "https://www.who.int/health-topics/mental-health",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "framework",
+            "title": "APA Resilience",
+            "description": "Trainable coping skills and social support as key resilience drivers.",
+            "href": "https://www.apa.org/topics/resilience",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "framework",
+            "title": "NIMH Child and Adolescent Mental Health",
+            "description": "Early warning signs and prompt intervention reduce long-term harm.",
+            "href": "https://www.nimh.nih.gov/health/topics/child-and-adolescent-mental-health",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "framework",
+            "title": "CDC Mental Health",
+            "description": "Population-level mental health education, stigma reduction, and data channels.",
+            "href": "https://www.cdc.gov/mental-health/index.html",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "institute",
+            "title": "Healthy Minds Network",
+            "description": "Campus mental health survey benchmarks and action toolkit.",
+            "href": "https://healthymindsnetwork.org/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "institute",
+            "title": "ACHA-NCHA",
+            "description": "Institutional student health measurement and implementation toolkits.",
+            "href": "https://www.acha.org/NCHA",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "institute",
+            "title": "SOS Signs of Suicide",
+            "description": "Evidence-based student and staff training with risk reduction outcomes.",
+            "href": "https://sossignsofsuicide.org/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "platform",
+            "title": "Togetherall",
+            "description": "Anonymous community-based support with moderated safety model.",
+            "href": "https://togetherall.com/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "platform",
+            "title": "TalkCampus",
+            "description": "Higher-education peer support with 24/7 safeguarding and multilingual access patterns.",
+            "href": "https://www.talkcampus.com/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "platform",
+            "title": "MindLink",
+            "description": "One-tap university wellbeing access hub with no app, no login, and low-friction support routing.",
+            "href": "https://mindl.ink/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "platform",
+            "title": "Kooth",
+            "description": "Anonymous journaling, mini-activities, moderated peer forum, and chat support.",
+            "href": "https://www.kooth.com/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "platform",
+            "title": "Sonar Mental Health",
+            "description": "Human-in-the-loop coaching with school escalation and care navigation.",
+            "href": "https://www.sonarmentalhealth.com/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "platform",
+            "title": "SilverCloud by Amwell",
+            "description": "Evidence-based digital CBT-style pathways and higher-ed support models.",
+            "href": "https://silvercloud.amwell.com/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "platform",
+            "title": "YOU at College",
+            "description": "Campus-specific wellbeing pathways built with student involvement and behavior-change research.",
+            "href": "https://youatcollege.com/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "platform",
+            "title": "Inner Peak",
+            "description": "Student-facing digital support reporting wellbeing gains and long-term value markers.",
+            "href": "https://www.innerpeak.ai/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "platform",
+            "title": "VIWELL Student Wellbeing",
+            "description": "Short student activities, school-wide planning support, and privacy-aware wellbeing programs.",
+            "href": "https://www.viwell.com/product-student-wellbeing",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "platform",
+            "title": "Headspace",
+            "description": "Large content library for stress, sleep, and guided practice adherence.",
+            "href": "https://www.headspace.com/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "platform",
+            "title": "Calm",
+            "description": "Behavioral routines for stress and sleep with high daily engagement design.",
+            "href": "https://www.calm.com/",
+            "hrefLabel": "Visit source"
+          },
+          {
+            "eyebrow": "crisis-service",
+            "title": "Befrienders Worldwide",
+            "description": "Anonymous emotional support and multilingual global access model.",
+            "href": "https://www.befrienders.org/",
+            "hrefLabel": "Visit source"
+          }
+        ],
+        "id": "CardGridBlock-1781919220452-66"
+      }
+    }
+  ]
+}

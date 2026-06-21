@@ -3,14 +3,16 @@ import '../styles/theme.css';
 import '../styles/home.css';
 import '../styles/assistant.css';
 import React from 'react';
-import { Manrope, Playfair_Display } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 import AnalyticsProvider from '../components/AnalyticsProvider';
 import FloatingAssistantLoader from '../components/assistant/FloatingAssistantLoader';
 import SiteFooter from '../components/layout/SiteFooter';
 import SiteHeader from '../components/layout/SiteHeader';
 import SiteReturnLoop from '../components/layout/SiteReturnLoop';
+import CmsRouteOverride from '../components/cms/CmsRouteOverride';
 import { JsonLd } from '../components/page/PagePrimitives';
+import { getGlobalShellSettings } from '../lib/cms/global-shell';
+import { readCmsPageData } from '../lib/cms/storage';
 import { getAllPages, isPageEnabled, isPageEnabledForRequest } from '../lib/page-flags';
 import {
   authorName,
@@ -33,18 +35,6 @@ import {
 } from '../lib/site';
 
 export const dynamic = 'force-dynamic';
-
-const manrope = Manrope({
-  subsets: ['latin'],
-  variable: '--font-body',
-  display: 'swap',
-});
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-});
 
 const metadataAlternatesTypes = {
   ...(isPageEnabled('blog') ? { 'application/rss+xml': '/feed.xml' } : {}),
@@ -152,11 +142,13 @@ export const viewport: Viewport = {
   themeColor: '#2B5D8C',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const visibleSections = getPrimarySiteSectionsForRequest();
   const enabledPaths = visibleSections.map((section) => section.path);
   const controlledPaths = getAllPages().map((page) => page.path);
   const blogEnabled = isPageEnabledForRequest('blog');
+  const globalShellData = await readCmsPageData('global-shell');
+  const globalShellSettings = getGlobalShellSettings(globalShellData ?? undefined);
 
   const websiteJsonLd = {
     '@context': 'https://schema.org',
@@ -213,20 +205,69 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="en" className={`${manrope.variable} ${playfair.variable}`}>
+    <html
+      lang="en"
+      style={
+        {
+          '--font-body': '"Manrope", "Avenir Next", "Segoe UI", sans-serif',
+          '--font-display': '"Playfair Display", "Iowan Old Style", serif',
+        } as React.CSSProperties
+      }
+    >
       <body className="min-h-screen font-sans antialiased">
         <JsonLd data={[websiteJsonLd, organizationJsonLd, navigationJsonLd]} idPrefix="root-layout-jsonld" />
         <a href="#main-content" className="sr-only focus:not-sr-only absolute top-2 left-2 bg-emerald-800 text-white px-4 py-2 rounded z-50">Skip to main content</a>
-        <SiteHeader />
+        <SiteHeader
+          bannerText={globalShellSettings.headerBannerText}
+          bannerVariant={globalShellSettings.headerBannerVariant}
+          headerSurfaceVariant={globalShellSettings.headerSurfaceVariant}
+          trustBarVariant={globalShellSettings.headerTrustBarVariant}
+          customSiteName={globalShellSettings.headerSiteName}
+          customTagline={globalShellSettings.headerTagline}
+          logoHref={globalShellSettings.headerLogoHref}
+          logoAlt={globalShellSettings.headerLogoAlt}
+          primaryNavigation={globalShellSettings.headerPrimaryNavigation}
+          secondaryNavigation={globalShellSettings.headerSecondaryNavigation}
+          ctaLabel={globalShellSettings.headerCtaLabel}
+          ctaHref={globalShellSettings.headerCtaHref}
+          ctaDescription={globalShellSettings.headerCtaDescription}
+          feedbackLabel={globalShellSettings.headerFeedbackLabel}
+          explorePrimaryTitle={globalShellSettings.headerExplorePrimaryTitle}
+          explorePrimaryDescription={globalShellSettings.headerExplorePrimaryDescription}
+          exploreSecondaryTitle={globalShellSettings.headerExploreSecondaryTitle}
+          exploreSecondaryDescription={globalShellSettings.headerExploreSecondaryDescription}
+          mobilePrimaryDescription={globalShellSettings.headerMobilePrimaryDescription}
+          mobileSecondaryDescription={globalShellSettings.headerMobileSecondaryDescription}
+          trustSignalOverrides={globalShellSettings.headerTrustSignals}
+        />
         <main
           id="main-content"
           className="theme-app-main mx-auto min-w-0 max-w-7xl px-3 pb-6 pt-3 sm:px-4 md:px-8 md:pb-10 md:pt-6"
           tabIndex={-1}
         >
-          {children}
+          <CmsRouteOverride>{children}</CmsRouteOverride>
         </main>
         <SiteReturnLoop sections={visibleSections} />
-        <SiteFooter />
+        <SiteFooter
+          surfaceVariant={globalShellSettings.footerSurfaceVariant}
+          accentVariant={globalShellSettings.footerAccentVariant}
+          summaryText={globalShellSettings.footerSummaryText}
+          safetyTitle={globalShellSettings.footerSafetyTitle}
+          safetyNote={globalShellSettings.footerSafetyNote}
+          copyrightText={globalShellSettings.footerCopyrightText}
+          footerNavigation={globalShellSettings.footerNavigation}
+          trustSignalOverrides={globalShellSettings.footerTrustSignals}
+          socialSharePath={globalShellSettings.footerSocialSharePath}
+          socialShareTitle={globalShellSettings.footerSocialShareTitle}
+          badgeHref={globalShellSettings.footerBadgeHref}
+          badgeAriaLabel={globalShellSettings.footerBadgeAriaLabel}
+          dedicationLabel={globalShellSettings.footerDedicationLabel}
+          dedicationHref={globalShellSettings.footerDedicationHref}
+          attributionPrefix={globalShellSettings.footerAttributionPrefix}
+          authorNameOverride={globalShellSettings.footerAuthorName}
+          authorUrlOverride={globalShellSettings.footerAuthorUrl}
+          authorLinkLabel={globalShellSettings.footerAuthorLinkLabel}
+        />
         <FloatingAssistantLoader enabledPaths={enabledPaths} controlledPaths={controlledPaths} />
         <AnalyticsProvider />
       </body>

@@ -18,6 +18,7 @@
 | **Add state/storage** | Layer 3 | `apps/frontend/src/lib/` (hooks, storage) |
 | **Add backend endpoint** | Layer 4 | `apps/backend/index.js` |
 | **Configure deployment** | Layer 5 | `vercel.json`, `netlify.toml`, `Dockerfile` |
+| **Run Admin CMS interactive QA** | QA checklist | `docs/admin-cms-interactive-qa-checklist.md` |
 
 ---
 

@@ -1,0 +1,28 @@
+{
+  "root": {
+    "props": {
+      "title": "Feedback"
+    }
+  },
+  "content": [
+    {
+      "type": "HeroBlock",
+      "props": {
+        "kicker": "Feedback Observatory",
+        "title": "Help improve Aether",
+        "description": "Report issues, request fixes, and suggest useful additions through a structured, privacy-aware intake flow.",
+        "id": "HeroBlock-1781919220060-40"
+      }
+    },
+    {
+      "type": "FeedbackFormBlock",
+      "props": {
+        "kicker": "Interactive form",
+        "title": "Feedback Observatory",
+        "description": "Help improve a page, report an issue, or suggest what Aether should support next. The form turns rough thoughts into clear product signals.",
+        "productName": "Aether",
+        "id": "FeedbackFormBlock-1781919220060-41"
+      }
+    }
+  ]
+}

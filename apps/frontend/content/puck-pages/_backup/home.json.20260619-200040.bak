@@ -1,0 +1,43 @@
+{
+  "root": { "props": { "title": "Aether" } },
+  "content": [
+    {
+      "type": "AetherPageBlock",
+      "props": {
+        "kicker": "Privacy-first student resilience",
+        "title": "Aether",
+        "description": "A calm resilience ecosystem for students who need a private place to reflect, find direction, and return to support that feels steady.",
+        "body": "Aether combines reflection, peer support, guided pathways, and transparent governance so students can take a steady first step without losing dignity.",
+        "primaryAction": { "href": "/resilience-pathway", "label": "Open Resilience Hub" },
+        "secondaryAction": { "href": "/ask", "label": "Ask Aether" },
+        "metrics": [
+          { "label": "Private by default", "value": "Yes", "description": "Core experiences minimize unnecessary data exposure." },
+          { "label": "Support pathways", "value": "5", "description": "Reflection, peer matching, navigation, governance, and feedback." },
+          { "label": "Visible boundaries", "value": "Always", "description": "The product never hides crisis support or trust posture." }
+        ],
+        "panels": [
+          { "eyebrow": "Start here", "title": "A calm first step", "description": "Open the resilience pathway when you want orientation before action." },
+          { "eyebrow": "Private reflection", "title": "Use Echo Chamber", "description": "Reflect locally, then decide whether to move toward support." },
+          { "eyebrow": "Source-grounded help", "title": "Ask Aether", "description": "Ask practical questions against the site content and product guidance." }
+        ],
+        "sections": [
+          {
+            "eyebrow": "What Aether does",
+            "title": "Support that feels practical",
+            "description": "The product is built to move a student from uncertainty to a next step that feels doable.",
+            "columns": "three",
+            "items": [
+              { "eyebrow": "Reflect", "title": "Private check-ins", "description": "Notice what is happening before it becomes too big to name." },
+              { "eyebrow": "Navigate", "title": "Guided pathways", "description": "Move toward a next action instead of getting stuck in the overview." },
+              { "eyebrow": "Connect", "title": "Peer-aware support", "description": "Surface human support when the situation calls for more than solo reflection." }
+            ]
+          }
+        ],
+        "faqs": [
+          { "question": "Who is Aether for?", "answer": "Students, campus wellbeing teams, mentors, and researchers who need practical, privacy-aware support experiences." },
+          { "question": "What makes it different?", "answer": "Aether emphasizes privacy-first design, accessibility, and transparent AI boundaries instead of opaque automation." }
+        ]
+      }
+    }
+  ]
+}

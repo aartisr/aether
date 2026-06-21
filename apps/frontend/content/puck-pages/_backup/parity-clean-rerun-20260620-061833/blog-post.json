@@ -1,0 +1,26 @@
+{
+  "root": {
+    "props": {
+      "title": "Blog Post Template"
+    }
+  },
+  "content": [
+    {
+      "type": "HeroBlock",
+      "props": {
+        "kicker": "Blog post template",
+        "title": "Blog article experience",
+        "description": "This template controls shared framing around each markdown article, including discussion guidance and FAQ positioning.",
+        "id": "HeroBlock-1781919219650-25"
+      }
+    },
+    {
+      "type": "NoticeBlock",
+      "props": {
+        "kicker": "Markdown-first",
+        "description": "Article body text still comes from markdown files. Use this CMS template to edit reusable layout copy and helper messaging around posts.",
+        "id": "NoticeBlock-1781919219650-26"
+      }
+    }
+  ]
+}
