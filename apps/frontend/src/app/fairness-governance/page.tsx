@@ -1,9 +1,8 @@
-'use client';
-
 import React from 'react';
 import FairnessAuditDashboard, {
   generateMockFairnessData,
 } from '../../components/FairnessAuditDashboard';
+import { getRecruitmentFairnessSnapshot } from '../../lib/peer-recruitment/fairness';
 
 /**
  * Fairness Governance Page
@@ -13,11 +12,11 @@ import FairnessAuditDashboard, {
  * and system transparency.
  */
 
-export default function FairnessGovernancePage() {
-  const { metrics, auditLog, policy, generatedAt } = generateMockFairnessData();
-
-  const totalMatches = metrics.reduce((sum, m) => sum + m.matchCount, 0);
-  const totalCycles = Math.ceil(totalMatches / 5); // Assume ~5 matches per cycle
+export default async function FairnessGovernancePage() {
+  const data = await getRecruitmentFairnessSnapshot().catch(() => generateMockFairnessData());
+  const { metrics, auditLog, policy, generatedAt } = data;
+  const totalMatches = 'totalMatches' in data ? data.totalMatches : metrics.reduce((sum, m) => sum + m.matchCount, 0);
+  const totalCycles = 'totalCycles' in data ? data.totalCycles : Math.ceil(totalMatches / 5);
 
   return (
     <FairnessAuditDashboard

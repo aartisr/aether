@@ -215,6 +215,41 @@ LOG_LEVEL=debug
 
 ## Common Tasks
 
+### RBAC Quick Verify (2 Minutes)
+
+Use this checklist after deploy or key rotation.
+
+1. Confirm env variables are present:
+  - `AETHER_ENABLE_ADMIN_PAGE=true`
+  - `AETHER_ADMIN_SESSION_SECRET`
+  - `AETHER_ADMIN_OWNER_KEYS`
+  - `AETHER_ADMIN_OPERATOR_KEYS`
+  - `AETHER_ADMIN_REVIEWER_KEYS`
+2. Sign in with a reviewer key:
+  - Allowed: `/admin/peers/audit`, `/admin/feedback`
+  - Denied: `/admin/peers`, `/admin/cms`, `/admin/page-controls`
+3. Sign in with an operator key:
+  - Allowed: `/admin/peers`, `/admin/peers/audit`, `/admin/feedback`
+  - Denied: `/admin/cms`, `/admin/page-controls`
+4. Sign in with an owner key:
+  - Allowed: all admin routes including `/admin/cms` and `/admin/page-controls`
+5. Verify sign-out clears admin session and blocks admin pages until next login.
+6. Validate deployment keys and role config:
+  - `npm --workspace=apps/frontend run admin:rbac:validate`
+
+Reference runbook: `docs/admin-rbac-rollout-runbook.md`.
+
+### Worker Scheduler Quick Verify (2 Minutes)
+
+1. Confirm cron wiring exists in `vercel.json` for `/api/peer-recruitment/workers/run`.
+2. Confirm env variables are set:
+  - `PEER_RECRUITMENT_WORKER_API_KEY`
+  - `CRON_SECRET` (same value as worker API key)
+3. Manually run one cycle:
+  - `npm --workspace=apps/frontend run workers:run:once`
+4. Confirm queue updates:
+  - `GET /api/peer-recruitment/workers/jobs?status=completed`
+
 ### Add a New Page
 
 ```bash

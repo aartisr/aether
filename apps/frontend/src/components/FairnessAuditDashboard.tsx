@@ -100,6 +100,16 @@ export default function FairnessAuditDashboard({
           <p className="text-[color:var(--theme-text-muted)]">Peer Matching System Governance & Transparency</p>
         </div>
 
+        <div className="rounded-xl border border-emerald-100 bg-emerald-50/45 p-4">
+          <p className="text-xs font-black uppercase tracking-[0.12em] text-emerald-800">Quick navigation</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <a href="#compliance" className="theme-pill no-underline hover:no-underline">Compliance</a>
+            <a href="#cohort-metrics" className="theme-pill no-underline hover:no-underline">Cohort metrics</a>
+            <a href="#audit-log" className="theme-pill no-underline hover:no-underline">Audit log</a>
+            <a href="#policy-parameters" className="theme-pill no-underline hover:no-underline">Policy</a>
+          </div>
+        </div>
+
         {/* Policy Status */}
         <div className="bg-white rounded-lg shadow p-6 border-l-4 border-amber-500">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
@@ -129,7 +139,7 @@ export default function FairnessAuditDashboard({
         </div>
 
         {/* Compliance Scorecard */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div id="compliance" className="grid grid-cols-1 md:grid-cols-3 gap-4 scroll-mt-24">
           <div className="bg-white rounded-lg shadow p-6 border-t-4 border-blue-500">
             <h3 className="text-sm font-semibold text-slate-600 mb-2">Exposure Parity Compliance</h3>
             <p className="text-3xl font-bold text-blue-700 mb-1">{parityComplianceRate.toFixed(1)}%</p>
@@ -153,7 +163,7 @@ export default function FairnessAuditDashboard({
         </div>
 
         {/* Cohort Metrics Table */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div id="cohort-metrics" className="bg-white rounded-lg shadow overflow-hidden scroll-mt-24">
           <div className="p-6 border-b border-slate-200">
             <h2 className="text-lg font-semibold text-slate-900">Cohort Fairness Metrics</h2>
             <p className="text-sm text-slate-600">Exposure and quality parity by demographic cohort</p>
@@ -251,7 +261,7 @@ export default function FairnessAuditDashboard({
         </div>
 
         {/* Audit Trail */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div id="audit-log" className="bg-white rounded-lg shadow overflow-hidden scroll-mt-24">
           <div className="p-6 border-b border-slate-200 flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold text-slate-900">Audit Log</h2>
@@ -328,9 +338,10 @@ export default function FairnessAuditDashboard({
         </div>
 
         {/* Policy Parameters */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Active Policy Parameters</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <details id="policy-parameters" className="bg-white rounded-lg shadow p-6 scroll-mt-24" open>
+          <summary className="cursor-pointer text-lg font-semibold text-slate-900">Active Policy Parameters</summary>
+          <p className="mt-2 text-sm text-slate-600">Expand to inspect threshold and adjustment settings.</p>
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-3">
               <div className="flex items-center justify-between p-3 bg-slate-50 rounded">
                 <span className="text-slate-700 font-medium">Exposure Parity Band</span>
@@ -352,7 +363,7 @@ export default function FairnessAuditDashboard({
               </div>
             </div>
           </div>
-        </div>
+        </details>
 
         {/* Footer */}
         <div className="text-center text-sm text-slate-600 pb-4">
