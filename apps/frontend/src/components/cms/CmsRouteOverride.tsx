@@ -19,7 +19,7 @@ type CmsApiResponse = {
 };
 
 const NON_PUBLIC_PREFIXES = ['/admin', '/api', '/_next'];
-const NATIVE_ONLY_PATHS = ['/peer-navigator'];
+const NATIVE_ONLY_PATHS = ['/peer-navigator', '/resilience-pathway'];
 
 function normalizePath(path: string): string {
   const trimmed = path.replace(/\/+$/, '');
