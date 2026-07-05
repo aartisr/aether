@@ -17,6 +17,12 @@ Recommended system name:
 
 RCSM is a layered system, not a single algorithm.
 
+### See Also
+
+- [Peer Matching Benchmark Patterns (Top 25)](./peer-matching-benchmark-patterns-top25.md): Reference patterns and reusable contracts from 25 public products
+- [Peer Matching Service Contracts](./peer-matching-service-contracts.md): API and module boundaries
+- [Peer Navigator Network Implementation Plan](./peer-navigator-network-implementation-plan.md): Architectural integration
+
 ---
 
 ## 2. Why A Layered System

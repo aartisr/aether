@@ -40,6 +40,8 @@ export default function AdminCmsEditor({ pages, selectedPage, initialData, hasPu
     });
   };
 
+  const workflowSteps = ['Choose page', 'Edit blocks', 'Publish'];
+
   return (
     <section className="space-y-5">
       <header className="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft">
@@ -68,7 +70,20 @@ export default function AdminCmsEditor({ pages, selectedPage, initialData, hasPu
           })}
         </div>
 
-        <div className="mt-4 grid gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 md:grid-cols-[1fr_auto_auto] md:items-center">
+        <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50/60 p-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-emerald-800">Quick workflow</p>
+          <ol className="mt-2 grid gap-2 text-sm font-semibold text-slate-800 sm:grid-cols-3">
+            {workflowSteps.map((step, index) => (
+              <li key={step} className="rounded-lg border border-emerald-200 bg-white px-3 py-2">
+                {index + 1}. {step}
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <details className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <summary className="cursor-pointer text-sm font-semibold text-slate-900">Advanced actions</summary>
+          <div className="mt-3 grid gap-3 md:grid-cols-[1fr_auto_auto] md:items-center">
           <div>
             <p className="text-sm font-semibold text-slate-900">Editing: {selectedPage.name}</p>
             <p className="text-xs text-slate-600">
@@ -100,10 +115,11 @@ export default function AdminCmsEditor({ pages, selectedPage, initialData, hasPu
           >
             Clear Published Override
           </button>
-        </div>
+          </div>
+        </details>
 
         {status ? (
-          <div className="mt-3 rounded-xl border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-semibold text-sky-800">{status}</div>
+          <div role="status" className="mt-3 rounded-xl border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-semibold text-sky-800">{status}</div>
         ) : null}
       </header>
 
@@ -117,7 +133,7 @@ export default function AdminCmsEditor({ pages, selectedPage, initialData, hasPu
             <li>Click <strong>Publish</strong> (top-right) to save and deploy.</li>
           </ul>
         </div>
-        <div style={{ height: '100vh', width: '100%', display: 'flex', flexDirection: 'column' }}>
+        <div className="flex h-screen w-full flex-col">
           <Puck
             config={cmsPuckConfig}
             data={data}

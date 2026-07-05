@@ -16,7 +16,7 @@ describe('cms storage', () => {
     const data = await readCmsPageData('mentors');
 
     expect(data?.root?.props?.title).toBe('Mentors');
-    expect(data?.content?.[0]?.type).toBe('AetherPageBlock');
+    expect(data?.content?.[0]?.type).toBe('HeroBlock');
     expect(data?.content?.[0]?.props?.title).toBe('The Mentors Behind Aether');
   });
 });

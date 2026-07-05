@@ -1,0 +1,22 @@
+{
+  "jobs": [
+    {
+      "id": "job-o5xrka82-mr83sjs2",
+      "type": "refresh_forecast",
+      "status": "completed",
+      "createdAt": "2026-07-05T18:07:13.442Z",
+      "updatedAt": "2026-07-05T18:07:13.453Z",
+      "attempts": 1,
+      "resultSummary": "forecast gap shortfall=52, surplus=0"
+    },
+    {
+      "id": "job-o9z0imh7-mr83t8yw",
+      "type": "refresh_forecast",
+      "status": "completed",
+      "createdAt": "2026-07-05T18:07:46.088Z",
+      "updatedAt": "2026-07-05T18:07:46.098Z",
+      "attempts": 1,
+      "resultSummary": "forecast gap shortfall=52, surplus=0"
+    }
+  ]
+}

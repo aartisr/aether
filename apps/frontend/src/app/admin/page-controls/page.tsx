@@ -1,5 +1,11 @@
 import { notFound, redirect } from 'next/navigation';
-import { getAdminSessionMaxAgeSeconds, isAdminAuthenticatedForRequest, shouldExposeAdminConsole } from '../../../lib/admin-auth';
+import {
+  canAccessAdminSection,
+  getAdminRoleForRequest,
+  getAdminSessionMaxAgeSeconds,
+  getDefaultAdminPathForRole,
+  shouldExposeAdminConsole,
+} from '../../../lib/admin-auth';
 import { createPageMetadata } from '../../../lib/site';
 import {
   DEFAULT_ENABLED_PAGE_IDS,
@@ -26,9 +32,13 @@ export default async function AdminPageControlsPage({
     notFound();
   }
 
-  const authenticated = await isAdminAuthenticatedForRequest();
-  if (!authenticated) {
+  const role = await getAdminRoleForRequest();
+  if (!role) {
     redirect('/admin/login?next=/admin/page-controls');
+  }
+
+  if (!canAccessAdminSection(role, 'page-controls')) {
+    redirect(`${getDefaultAdminPathForRole(role)}?error=forbidden`);
   }
 
   const pages = getAllPages();
@@ -60,6 +70,12 @@ export default async function AdminPageControlsPage({
         <p className="text-xs text-slate-500">
           Admin session TTL: {Math.floor(getAdminSessionMaxAgeSeconds() / 60)} minutes.
         </p>
+        <div className="flex flex-wrap gap-2 pt-1">
+          <a href="#quick-presets" className="theme-pill no-underline hover:no-underline">Quick presets</a>
+          <a href="#enable-pages" className="theme-pill no-underline hover:no-underline">Enable pages</a>
+          <a href="#session-controls" className="theme-pill no-underline hover:no-underline">Session controls</a>
+          <a href="/admin/peers" className="theme-pill no-underline hover:no-underline">Peer directory</a>
+        </div>
       </header>
 
       {searchParams?.saved ? (
@@ -92,7 +108,7 @@ export default async function AdminPageControlsPage({
         </p>
       </section>
 
-      <section className="space-y-3 rounded-2xl border border-slate-200 bg-white p-5">
+      <section id="quick-presets" className="space-y-3 rounded-2xl border border-slate-200 bg-white p-5 scroll-mt-24">
         <h2 className="text-lg font-bold text-slate-900">Quick Presets</h2>
         <p className="text-sm text-slate-600">One-click profiles inspired by modern dashboard workflows.</p>
         <div className="flex flex-wrap gap-3">
@@ -141,7 +157,7 @@ export default async function AdminPageControlsPage({
         </div>
       </section>
 
-      <form action={savePageFlagsAction} className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5">
+      <form id="enable-pages" action={savePageFlagsAction} className="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 scroll-mt-24">
         <div>
           <h2 className="text-lg font-bold text-slate-900">Enable Pages</h2>
           <p className="mt-1 text-sm text-slate-600">
@@ -149,25 +165,28 @@ export default async function AdminPageControlsPage({
           </p>
         </div>
 
-        <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {configurablePages.map((page) => (
-            <li key={page.id} className="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
-              <label className="flex items-start gap-3">
-                <input
-                  type="checkbox"
-                  name="enabledPages"
-                  value={page.id}
-                  defaultChecked={isPageEnabledForRequest(page.id)}
-                  className="mt-1 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
-                />
-                <span>
-                  <span className="block text-sm font-semibold text-slate-900">{page.name}</span>
-                  <span className="block text-xs text-slate-600">{page.path}</span>
-                </span>
-              </label>
-            </li>
-          ))}
-        </ul>
+        <details open>
+          <summary className="cursor-pointer text-sm font-semibold text-slate-900">Show page toggles</summary>
+          <ul className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
+            {configurablePages.map((page) => (
+              <li key={page.id} className="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
+                <label className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    name="enabledPages"
+                    value={page.id}
+                    defaultChecked={isPageEnabledForRequest(page.id)}
+                    className="mt-1 h-4 w-4 rounded border-slate-300 text-sky-600 focus:ring-sky-500"
+                  />
+                  <span>
+                    <span className="block text-sm font-semibold text-slate-900">{page.name}</span>
+                    <span className="block text-xs text-slate-600">{page.path}</span>
+                  </span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </details>
 
         <div className="flex flex-wrap gap-3">
           <button
@@ -179,7 +198,7 @@ export default async function AdminPageControlsPage({
         </div>
       </form>
 
-      <form action={resetPageFlagsAction} className="rounded-2xl border border-slate-200 bg-white p-5">
+      <form id="session-controls" action={resetPageFlagsAction} className="rounded-2xl border border-slate-200 bg-white p-5 scroll-mt-24">
         <h2 className="text-lg font-bold text-slate-900">Reset</h2>
         <p className="mt-1 text-sm text-slate-600">Clear browser overrides and revert to environment-based defaults.</p>
         <button

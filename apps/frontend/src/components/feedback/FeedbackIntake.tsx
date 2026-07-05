@@ -154,7 +154,18 @@ export default function FeedbackIntake({
   );
 
   const clarityLabel = clarityScore >= 0.82 ? 'Ready for triage' : clarityScore >= 0.48 ? 'Actionable draft' : 'Needs context';
-  const progressWidth = `${Math.max(12, Math.round(clarityScore * 100))}%`;
+  const progressWidthClass =
+    clarityScore >= 0.9
+      ? 'w-full'
+      : clarityScore >= 0.75
+        ? 'w-4/5'
+        : clarityScore >= 0.6
+          ? 'w-3/5'
+          : clarityScore >= 0.45
+            ? 'w-2/5'
+            : clarityScore >= 0.3
+              ? 'w-1/3'
+              : 'w-1/4';
 
   const preview = useMemo(
     () => ({
@@ -260,6 +271,15 @@ export default function FeedbackIntake({
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(20rem,0.75fr)]">
         <form onSubmit={handleSubmit} className="theme-card space-y-6 p-4 md:p-6">
+          <section className="rounded-[var(--theme-radius-lg)] border border-[color:var(--theme-border)] bg-[color:var(--theme-bg-soft)] p-4">
+            <p className="theme-kicker">Fast path</p>
+            <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm leading-6 text-[color:var(--theme-text-muted)]">
+              <li>Name the page or feature.</li>
+              <li>Describe what happened.</li>
+              <li>Describe the expected fix.</li>
+            </ol>
+          </section>
+
           <div>
             <label htmlFor="feedback-surface" className="text-sm font-extrabold text-[color:var(--theme-text)]">
               What page, feature, or URL is this about?
@@ -290,7 +310,6 @@ export default function FeedbackIntake({
                       ? 'border-[color:var(--theme-primary)] bg-[color:var(--theme-bg-soft)] shadow-[var(--theme-focus)]'
                       : 'border-[color:var(--theme-border)] bg-white hover:border-[color:var(--theme-border-strong)]'
                   }`}
-                  aria-pressed={option.id === type}
                 >
                   <span className="block text-sm font-extrabold text-[color:var(--theme-text)]">{option.label}</span>
                   <span className="mt-1 block text-xs leading-5 text-[color:var(--theme-text-muted)]">{option.description}</span>
@@ -330,7 +349,10 @@ export default function FeedbackIntake({
             </div>
           </div>
 
-          <section className="rounded-[var(--theme-radius-lg)] border border-[color:var(--theme-border)] bg-[color:var(--theme-bg-soft)] p-4">
+          <details className="rounded-[var(--theme-radius-lg)] border border-[color:var(--theme-border)] bg-[color:var(--theme-bg-soft)] p-4">
+            <summary className="cursor-pointer text-sm font-extrabold text-[color:var(--theme-text)]">
+              Additional request context
+            </summary>
             <label className="flex cursor-pointer items-start gap-3">
               <input
                 type="checkbox"
@@ -391,7 +413,7 @@ export default function FeedbackIntake({
                 </div>
               </div>
             ) : null}
-          </section>
+          </details>
 
           <fieldset>
             <legend className="text-sm font-extrabold text-[color:var(--theme-text)]">How serious is it?</legend>
@@ -406,7 +428,6 @@ export default function FeedbackIntake({
                       ? 'border-[color:var(--theme-primary)] bg-[color:var(--theme-bg-soft)] text-[color:var(--theme-primary-strong)] shadow-[var(--theme-focus)]'
                       : 'border-[color:var(--theme-border)] bg-white text-[color:var(--theme-text)] hover:border-[color:var(--theme-border-strong)]'
                   }`}
-                  aria-pressed={option.id === impact}
                 >
                   {option.label}
                 </button>
@@ -479,7 +500,7 @@ export default function FeedbackIntake({
               </span>
             </div>
             <div className="mt-4 h-2 overflow-hidden rounded-full bg-[color:var(--theme-bg-soft)]">
-              <div className="h-full rounded-full bg-[color:var(--theme-primary)] transition-all" style={{ width: progressWidth }} />
+              <div className={`h-full rounded-full bg-[color:var(--theme-primary)] transition-all ${progressWidthClass}`} />
             </div>
             <p className="mt-3 text-sm leading-6 text-[color:var(--theme-text-muted)]">
               Strong reports name the surface, describe the problem, explain the expected fix, and include context.

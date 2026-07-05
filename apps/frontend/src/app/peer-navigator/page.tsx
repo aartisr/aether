@@ -7,7 +7,9 @@ import { HubAction, HubPanel, hubInputClass } from '../../components/resilience/
 import {
   createPeerNavigatorMatcher,
   peerNavigatorBackgrounds,
-  runPeerNavigatorMatch,
+  peerNavigatorGoals,
+  peerNavigatorModalities,
+  runPeerNavigatorMatchRequest,
   type PeerNavigatorMatchResult,
   type PeerNavigatorMetrics,
 } from '../../lib/peer-navigator-demo';
@@ -29,18 +31,37 @@ const matchingSteps = [
   },
 ];
 
+const firstRunTips = [
+  'Pick the broadest context that feels true right now.',
+  'Treat the first result as a starting point, not a label.',
+  'Use backup match if the primary fit feels off.',
+];
+
 export default function PeerNavigator() {
   const [selected, setSelected] = useState<string | null>(null);
+  const [goal, setGoal] = useState<string>(peerNavigatorGoals[0]);
+  const [modality, setModality] = useState<(typeof peerNavigatorModalities)[number]>(peerNavigatorModalities[0]);
+  const [urgencyBand, setUrgencyBand] = useState<'not_urgent' | 'soon' | 'high_concern' | 'immediate_danger'>('not_urgent');
   const [matches, setMatches] = useState<PeerNavigatorMatchResult[]>([]);
   const [metrics, setMetrics] = useState<PeerNavigatorMetrics | null>(null);
   const [showMetricsDetail, setShowMetricsDetail] = useState(false);
+  const [triage, setTriage] = useState<{ message: string; actionLabel: string; actionHref: string } | null>(null);
 
   const handleMatch = () => {
     if (!selected) return;
 
-    const result = runPeerNavigatorMatch(selected, matcher);
+    const result = runPeerNavigatorMatchRequest(
+      {
+        background: selected,
+        goal,
+        modality,
+        urgencyBand,
+      },
+      matcher,
+    );
     setMetrics(result.metrics);
     setMatches(result.matches);
+    setTriage(result.triage ?? null);
   };
 
   return (
@@ -80,6 +101,56 @@ export default function PeerNavigator() {
                   ))}
                 </select>
               </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label htmlFor="goal" className="block text-sm font-bold text-slate-900">Support goal</label>
+                  <select
+                    id="goal"
+                    className={`${hubInputClass('belong')} max-w-md`}
+                    value={goal}
+                    onChange={(event) => setGoal(event.target.value)}
+                  >
+                    {peerNavigatorGoals.map((goalOption) => (
+                      <option key={goalOption} value={goalOption}>{goalOption}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="modality" className="block text-sm font-bold text-slate-900">Preferred modality</label>
+                  <select
+                    id="modality"
+                    className={`${hubInputClass('belong')} max-w-md`}
+                    value={modality}
+                    onChange={(event) => setModality(event.target.value as (typeof peerNavigatorModalities)[number])}
+                  >
+                    {peerNavigatorModalities.map((modalityOption) => (
+                      <option key={modalityOption} value={modalityOption}>{modalityOption}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <details className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                <summary className="cursor-pointer text-xs font-black uppercase tracking-[0.08em] text-emerald-800">
+                  Safety context
+                </summary>
+                <div className="mt-3">
+                  <label htmlFor="urgency" className="block text-sm font-bold text-slate-900">Urgency band</label>
+                  <select
+                    id="urgency"
+                    className={`${hubInputClass('belong')} max-w-md`}
+                    value={urgencyBand}
+                    onChange={(event) => setUrgencyBand(event.target.value as 'not_urgent' | 'soon' | 'high_concern' | 'immediate_danger')}
+                  >
+                    <option value="not_urgent">Not urgent</option>
+                    <option value="soon">Soon</option>
+                    <option value="high_concern">High concern</option>
+                    <option value="immediate_danger">Immediate danger</option>
+                  </select>
+                </div>
+              </details>
+
               <HubAction
                 type="submit"
                 tone="belong"
@@ -99,6 +170,17 @@ export default function PeerNavigator() {
                 </article>
               ))}
             </div>
+
+            <details className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <summary className="cursor-pointer text-xs font-black uppercase tracking-[0.08em] text-emerald-800">
+                First-run tips
+              </summary>
+              <ul className="mt-3 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-700">
+                {firstRunTips.map((tip) => (
+                  <li key={tip}>{tip}</li>
+                ))}
+              </ul>
+            </details>
           </SurfaceCard>
 
           <div className="space-y-5">
@@ -138,8 +220,24 @@ export default function PeerNavigator() {
               </HubPanel>
             )}
 
+            {triage ? (
+              <HubPanel tone="stabilize" className="text-sm leading-6">
+                <p className="font-black text-rose-900">Urgent support routing</p>
+                <p className="mt-1 text-slate-700">{triage.message}</p>
+                <a href={triage.actionHref} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm font-black text-rose-800 underline">
+                  {triage.actionLabel}
+                </a>
+              </HubPanel>
+            ) : null}
+
             {matches.length > 0 ? (
               <section className="space-y-4" aria-label="Peer match results">
+                <SurfaceCard className="border-emerald-200 bg-emerald-50/45 p-4">
+                  <p className="text-xs font-black uppercase tracking-[0.08em] text-emerald-800">Run summary</p>
+                  <p className="mt-1 text-sm font-semibold text-slate-900">
+                    {matches.length} suggestion{matches.length > 1 ? 's' : ''} generated for {selected}.
+                  </p>
+                </SurfaceCard>
                 {matches.map((match, index) => (
                   <article key={match.name} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-soft">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -176,6 +274,15 @@ export default function PeerNavigator() {
                       Matches are anonymized in this demo. Production matching should remain consent-based,
                       privacy-preserving, and peer-verified.
                     </p>
+
+                    <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-3">
+                      <p className="text-xs font-black uppercase tracking-[0.08em] text-slate-600">Why this suggestion</p>
+                      <ul className="mt-2 list-disc space-y-1 pl-5 text-xs text-slate-700">
+                        {match.explanationFactors.map((factor) => (
+                          <li key={`${match.name}-${factor}`}>{factor}</li>
+                        ))}
+                      </ul>
+                    </div>
                   </article>
                 ))}
               </section>

@@ -291,6 +291,10 @@ export default function SiteHeaderClient({
   const resolvedCtaLabel = ctaLink.label;
   const hasNavigation = allNavigation.length > 0;
   const hasOverflowNavigation = overflowNavigation.length > 0;
+  const visibleTrustSignalsDesktop = trustSignals.slice(0, 4);
+  const visibleTrustSignalsMobile = trustSignals.slice(0, 2);
+  const hiddenTrustSignalCountDesktop = Math.max(0, trustSignals.length - visibleTrustSignalsDesktop.length);
+  const hiddenTrustSignalCountMobile = Math.max(0, trustSignals.length - visibleTrustSignalsMobile.length);
   const currentNavigationItem = allNavigation.find((link) => isCurrentPath(pathname, link.href));
   const panelPrimaryNavigation = primaryNavigation.filter((link) => link.href !== feedbackLink.href);
   const panelSecondaryNavigation = secondaryNavigation;
@@ -387,7 +391,6 @@ export default function SiteHeaderClient({
                     ? 'border-[color:var(--theme-bg-strong)] bg-[color:var(--theme-bg-strong)] text-white shadow-sm'
                     : 'border-[color:var(--theme-border)] bg-white text-[color:var(--theme-text-muted)] hover:border-[color:var(--theme-border-strong)] hover:text-[color:var(--theme-text)]',
                 )}
-                aria-expanded={isExploreOpen}
                 aria-controls={explorePanelId}
                 onClick={() => {
                   setIsExploreOpen((current) => !current);
@@ -414,7 +417,6 @@ export default function SiteHeaderClient({
                   ? 'border-[color:var(--theme-bg-strong)] bg-[color:var(--theme-bg-strong)] text-white shadow-sm'
                   : 'border-[color:var(--theme-border)] bg-white text-[color:var(--theme-text)] hover:border-[color:var(--theme-border-strong)]',
               )}
-              aria-expanded={isMobileOpen}
               aria-controls={mobilePanelId}
               onClick={() => {
                 setIsMobileOpen((current) => !current);
@@ -525,7 +527,7 @@ export default function SiteHeaderClient({
         <div className="mx-auto min-w-0 max-w-7xl px-4 py-2 md:flex md:items-center md:gap-3 md:px-6">
           <p className="hidden min-w-0 flex-1 truncate text-xs font-bold text-[color:var(--theme-text-muted)] md:block">{shareTagline}</p>
           <div className="grid min-w-0 grid-cols-2 gap-1.5 md:hidden">
-            {trustSignals.map((signal) => (
+            {visibleTrustSignalsMobile.map((signal) => (
               <span
                 key={`header-mobile-${signal}`}
                 className="theme-pill min-h-0 w-full justify-center rounded-[var(--theme-radius-sm)] px-2 py-1 text-center text-[0.68rem]"
@@ -533,9 +535,14 @@ export default function SiteHeaderClient({
                 {signal}
               </span>
             ))}
+            {hiddenTrustSignalCountMobile > 0 ? (
+              <span className="theme-pill min-h-0 w-full justify-center rounded-[var(--theme-radius-sm)] px-2 py-1 text-center text-[0.68rem]">
+                +{hiddenTrustSignalCountMobile} more
+              </span>
+            ) : null}
           </div>
           <div className="hidden min-w-0 flex-wrap justify-end gap-1.5 md:ml-auto md:flex">
-            {trustSignals.map((signal) => (
+            {visibleTrustSignalsDesktop.map((signal) => (
               <span
                 key={`header-${signal}`}
                 className="theme-pill min-h-0 rounded-[var(--theme-radius-sm)] px-2 py-1 text-[0.68rem]"
@@ -543,6 +550,11 @@ export default function SiteHeaderClient({
                 {signal}
               </span>
             ))}
+            {hiddenTrustSignalCountDesktop > 0 ? (
+              <span className="theme-pill min-h-0 rounded-[var(--theme-radius-sm)] px-2 py-1 text-[0.68rem]">
+                +{hiddenTrustSignalCountDesktop} more
+              </span>
+            ) : null}
           </div>
         </div>
       </div>

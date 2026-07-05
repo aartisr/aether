@@ -19,6 +19,7 @@ type CmsApiResponse = {
 };
 
 const NON_PUBLIC_PREFIXES = ['/admin', '/api', '/_next'];
+const NATIVE_ONLY_PATHS = ['/peer-navigator'];
 
 function normalizePath(path: string): string {
   const trimmed = path.replace(/\/+$/, '');
@@ -26,7 +27,10 @@ function normalizePath(path: string): string {
 }
 
 function shouldSkipCms(pathname: string): boolean {
-  return NON_PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+  return (
+    NON_PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix))
+    || NATIVE_ONLY_PATHS.includes(pathname)
+  );
 }
 
 export default function CmsRouteOverride({ children }: CmsRouteOverrideProps) {

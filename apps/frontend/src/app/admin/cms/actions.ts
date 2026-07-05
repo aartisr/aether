@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import type { Data } from '@puckeditor/core';
-import { isAdminAuthenticatedForRequest } from '../../../lib/admin-auth';
+import { canAccessAdminSection, getAdminRoleForRequest } from '../../../lib/admin-auth';
 import { createDefaultCmsPageData } from '../../../lib/cms/puck-config';
 import { getCmsEditablePageById } from '../../../lib/cms/page-registry';
 import { deleteCmsPageData, writeCmsPageData } from '../../../lib/cms/storage';
@@ -14,10 +14,14 @@ type SaveCmsPageResult = {
 };
 
 async function assertAdminSessionOrRedirect(): Promise<void> {
-  const authenticated = await isAdminAuthenticatedForRequest();
+  const role = await getAdminRoleForRequest();
 
-  if (!authenticated) {
+  if (!role) {
     redirect('/admin/login?next=/admin/cms');
+  }
+
+  if (!canAccessAdminSection(role, 'cms')) {
+    redirect('/admin/cms?error=forbidden');
   }
 }
 

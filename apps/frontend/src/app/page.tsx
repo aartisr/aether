@@ -98,6 +98,26 @@ export default function Home() {
     { value: 'Guided', label: 'The first action is always clearer than the surrounding stress.' },
     { value: 'Safe', label: 'Boundaries, crisis notes, and trust cues stay visible.' },
   ];
+  const firstVisitActions = [
+    {
+      title: 'Need calm now',
+      description: 'Use Echo Chamber for private voice reflection and immediate grounding cues.',
+      href: '/echo',
+      label: 'Open Echo Chamber',
+    },
+    {
+      title: 'Need a plan',
+      description: 'Use the Resilience Hub to check in, create a safety plan, and pick one habit.',
+      href: '/resilience-pathway',
+      label: 'Open Resilience Hub',
+    },
+    {
+      title: 'Need orientation',
+      description: 'Use Ask Aether for source-grounded answers before you decide where to go next.',
+      href: '/ask',
+      label: 'Open Ask Aether',
+    },
+  ];
 
   const organizationJsonLd = {
     '@context': 'https://schema.org',
@@ -250,6 +270,26 @@ export default function Home() {
             </article>
           ))}
         </div>
+      </section>
+
+      <section className="theme-shell space-y-6">
+        <div className="home-section-heading">
+          <p className="theme-kicker">First visit guide</p>
+          <h2>Start with one clear intention.</h2>
+          <p>
+            Skip exploration overload. Pick the lane that matches your current state and take one focused step.
+          </p>
+        </div>
+        <CardGrid
+          items={firstVisitActions.map((action) => ({
+            title: action.title,
+            description: action.description,
+            href: action.href,
+            hrefLabel: action.label,
+          }))}
+          columns="three"
+          className="text-left"
+        />
       </section>
 
       <section className="theme-shell space-y-6">

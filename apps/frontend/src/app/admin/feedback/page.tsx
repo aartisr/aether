@@ -1,5 +1,10 @@
 import { notFound, redirect } from 'next/navigation';
-import { isAdminAuthenticatedForRequest, shouldExposeAdminConsole } from '../../../lib/admin-auth';
+import {
+  canAccessAdminSection,
+  getAdminRoleForRequest,
+  getDefaultAdminPathForRole,
+  shouldExposeAdminConsole,
+} from '../../../lib/admin-auth';
 import { getFeedbackStoreLocation, listFeedbackSubmissions } from '../../../lib/feedback/store';
 import { createPageMetadata } from '../../../lib/site';
 
@@ -23,9 +28,13 @@ export default async function AdminFeedbackPage() {
     notFound();
   }
 
-  const authenticated = await isAdminAuthenticatedForRequest();
-  if (!authenticated) {
+  const role = await getAdminRoleForRequest();
+  if (!role) {
     redirect('/admin/login?next=/admin/feedback');
+  }
+
+  if (!canAccessAdminSection(role, 'feedback')) {
+    redirect(`${getDefaultAdminPathForRole(role)}?error=forbidden`);
   }
 
   const submissions = await listFeedbackSubmissions(200);
@@ -44,9 +53,13 @@ export default async function AdminFeedbackPage() {
           they can be exported, imported into an issue tracker, or migrated to a database later.
         </p>
         <p className="break-all text-xs text-slate-500">Store: {getFeedbackStoreLocation()}</p>
+        <div className="flex flex-wrap gap-2 pt-1">
+          <a href="#feedback-summary" className="theme-pill no-underline hover:no-underline">Summary</a>
+          <a href="#feedback-list" className="theme-pill no-underline hover:no-underline">Submissions</a>
+        </div>
       </header>
 
-      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5" aria-label="Feedback summary">
+      <section id="feedback-summary" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5 scroll-mt-24" aria-label="Feedback summary">
         {[
           ['Total', submissions.length],
           ['Trust/safety', impactCounts.trust ?? 0],
@@ -69,7 +82,7 @@ export default async function AdminFeedbackPage() {
           </p>
         </section>
       ) : (
-        <div className="grid gap-4">
+        <div id="feedback-list" className="grid gap-4 scroll-mt-24">
           {submissions.map((submission) => (
             <article key={submission.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
               <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
@@ -87,30 +100,35 @@ export default async function AdminFeedbackPage() {
                 </span>
               </div>
 
-              <div className="mt-4 grid gap-3 md:grid-cols-2">
-                <section className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                  <h3 className="text-xs font-black uppercase tracking-[0.1em] text-slate-500">Issue</h3>
-                  <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-800">{submission.issue}</p>
-                </section>
-                <section className="rounded-xl border border-slate-200 bg-slate-50 p-3">
-                  <h3 className="text-xs font-black uppercase tracking-[0.1em] text-slate-500">Requested fix</h3>
-                  <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-800">{submission.requestedFix}</p>
-                </section>
-              </div>
+              <details className="mt-4">
+                <summary className="cursor-pointer text-xs font-black uppercase tracking-[0.1em] text-slate-700">
+                  Show triage details
+                </summary>
+                <div className="mt-3 grid gap-3 md:grid-cols-2">
+                  <section className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                    <h3 className="text-xs font-black uppercase tracking-[0.1em] text-slate-500">Issue</h3>
+                    <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-800">{submission.issue}</p>
+                  </section>
+                  <section className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+                    <h3 className="text-xs font-black uppercase tracking-[0.1em] text-slate-500">Requested fix</h3>
+                    <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-800">{submission.requestedFix}</p>
+                  </section>
+                </div>
 
-              {submission.wantsAddition ? (
-                <section className="mt-3 rounded-xl border border-violet-200 bg-violet-50 p-3">
-                  <h3 className="text-xs font-black uppercase tracking-[0.1em] text-violet-800">Feature addition</h3>
-                  <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-800">{submission.addition}</p>
-                  {submission.audience || submission.importance ? (
-                    <p className="mt-2 text-sm leading-6 text-slate-700">
-                      {submission.audience ? `Audience: ${submission.audience}` : ''}
-                      {submission.audience && submission.importance ? ' · ' : ''}
-                      {submission.importance ? `Why: ${submission.importance}` : ''}
-                    </p>
-                  ) : null}
-                </section>
-              ) : null}
+                {submission.wantsAddition ? (
+                  <section className="mt-3 rounded-xl border border-violet-200 bg-violet-50 p-3">
+                    <h3 className="text-xs font-black uppercase tracking-[0.1em] text-violet-800">Feature addition</h3>
+                    <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-800">{submission.addition}</p>
+                    {submission.audience || submission.importance ? (
+                      <p className="mt-2 text-sm leading-6 text-slate-700">
+                        {submission.audience ? `Audience: ${submission.audience}` : ''}
+                        {submission.audience && submission.importance ? ' · ' : ''}
+                        {submission.importance ? `Why: ${submission.importance}` : ''}
+                      </p>
+                    ) : null}
+                  </section>
+                ) : null}
+              </details>
 
               <footer className="mt-4 grid gap-2 text-xs text-slate-500 md:grid-cols-3">
                 <span>Follow-up: {submission.allowFollowUp ? 'allowed' : 'not allowed'}</span>

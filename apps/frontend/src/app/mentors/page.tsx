@@ -105,7 +105,16 @@ export default function MentorsPage() {
           </p>
         </SurfaceCard>
 
-        <section aria-label="Featured Mentor Gratitude" className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <SurfaceCard className="border-emerald-100 bg-emerald-50/45">
+          <p className="theme-kicker">On this page</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <a href="#featured-mentors" className="theme-pill no-underline hover:no-underline">Featured mentors</a>
+            <a href="#mentor-impact" className="theme-pill no-underline hover:no-underline">Impact</a>
+            <a href="#mentor-faq" className="theme-pill no-underline hover:no-underline">FAQ</a>
+          </div>
+        </SurfaceCard>
+
+        <section id="featured-mentors" aria-label="Featured Mentor Gratitude" className="grid grid-cols-1 gap-4 md:grid-cols-2 scroll-mt-24">
           {featuredMentors.map((mentor, index) => (
             <SurfaceCard
               key={mentor.name}
@@ -121,7 +130,7 @@ export default function MentorsPage() {
           ))}
         </section>
 
-        <section aria-label="Mentor Impact" className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <section id="mentor-impact" aria-label="Mentor Impact" className="grid grid-cols-1 gap-4 md:grid-cols-3 scroll-mt-24">
           {mentorImpactStats.map((item) => (
             <SurfaceCard key={item.label} className="h-full">
               <p className="text-sm uppercase tracking-[0.12em] text-[color:var(--theme-text-soft)]">{item.label}</p>
@@ -141,16 +150,21 @@ export default function MentorsPage() {
           <p className="mt-2 text-sm leading-6 text-slate-700">
             Mentorship influence appears in clusters. Guidance, encouragement, rigor, and integrity connect across every release.
           </p>
-          <CardGrid
-            items={mentorConstellationNodes.map((node) => ({
-              title: node.label,
-              description: node.note,
-              eyebrow: 'Node',
-            }))}
-            columns="four"
-            className="mt-4"
-            itemClassName="relative overflow-hidden"
-          />
+          <details className="mt-4">
+            <summary className="cursor-pointer text-sm font-black uppercase tracking-[0.08em] text-emerald-800">
+              Show constellation nodes
+            </summary>
+            <CardGrid
+              items={mentorConstellationNodes.map((node) => ({
+                title: node.label,
+                description: node.note,
+                eyebrow: 'Node',
+              }))}
+              columns="four"
+              className="mt-4"
+              itemClassName="relative overflow-hidden"
+            />
+          </details>
         </SurfaceCard>
 
         <SurfaceCard>
@@ -166,17 +180,19 @@ export default function MentorsPage() {
           </ol>
         </SurfaceCard>
 
-        <SurfaceCard>
-          <h2 className="text-2xl font-bold text-slate-900">Mentor Recognition FAQ</h2>
-          <div className="mt-4 space-y-3">
-            {mentorFAQs.map((item) => (
-              <details key={item.question} className="rounded-xl border border-slate-200 bg-white p-4">
-                <summary className="cursor-pointer text-sm font-semibold text-slate-900">{item.question}</summary>
-                <p className="mt-2 text-sm leading-6 text-slate-700">{item.answer}</p>
-              </details>
-            ))}
-          </div>
-        </SurfaceCard>
+        <section id="mentor-faq" className="scroll-mt-24">
+          <SurfaceCard>
+            <h2 className="text-2xl font-bold text-slate-900">Mentor Recognition FAQ</h2>
+            <div className="mt-4 space-y-3">
+              {mentorFAQs.map((item) => (
+                <details key={item.question} className="rounded-xl border border-slate-200 bg-white p-4">
+                  <summary className="cursor-pointer text-sm font-semibold text-slate-900">{item.question}</summary>
+                  <p className="mt-2 text-sm leading-6 text-slate-700">{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </SurfaceCard>
+        </section>
       </PageContainer>
     </PageBackdrop>
   );

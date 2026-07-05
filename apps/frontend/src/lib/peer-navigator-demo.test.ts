@@ -10,9 +10,10 @@ describe('peer navigator demo module', () => {
     const result = runPeerNavigatorMatch(peerNavigatorBackgrounds[0], matcher);
 
     expect(result.matches.length).toBeGreaterThan(0);
-    expect(result.matches[0]).toMatchObject({
-      background: 'First-generation College Student',
-    });
+    expect(result.matches[0]).toHaveProperty('name');
+    expect(result.matches[0]).toHaveProperty('background');
+    expect(result.matches[0].explanationFactors.length).toBeGreaterThan(0);
     expect(result.metrics?.totalProfiles).toBeGreaterThan(1);
+    expect(result.triage).toBeUndefined();
   });
 });

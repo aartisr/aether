@@ -51,6 +51,7 @@ describe('page flags', () => {
 
     expect(pageFlags.getEnabledPages().map((page) => page.id)).toEqual([
       'home',
+      'peer-navigator',
       'privacy',
       'accessibility',
       'about',
@@ -65,7 +66,7 @@ describe('page flags', () => {
     expect(pageFlags.isPageEnabled('blog')).toBe(true);
     expect(pageFlags.isPageEnabled('privacy')).toBe(true);
     expect(pageFlags.isPageEnabled('accessibility')).toBe(true);
-    expect(pageFlags.isPageEnabled('peer-navigator')).toBe(false);
+    expect(pageFlags.isPageEnabled('peer-navigator')).toBe(true);
     expect(pageFlags.getPageIdForPath('/blog/practical-path-01-stabilize-your-baseline')).toBe('blog');
     expect(pageFlags.getPageIdForPath('/feedback?from=/ask')).toBe('feedback');
   });
@@ -113,6 +114,6 @@ describe('page flags', () => {
     expect(pageFlags.isPageEnabled('mentors')).toBe(false);
     expect(pageFlags.isPageEnabled('blog')).toBe(true);
     expect(pageFlags.isPageEnabled('privacy')).toBe(true);
-    expect(pageFlags.isPageEnabled('peer-navigator')).toBe(false);
+    expect(pageFlags.isPageEnabled('peer-navigator')).toBe(true);
   });
 });

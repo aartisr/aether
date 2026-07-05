@@ -6,6 +6,12 @@ This document defines implementation-ready API contracts and TypeScript interfac
 
 Use this as the canonical interface spec between frontend (`Peer Navigator`) and matching backend services.
 
+### See Also
+
+- [Peer Matching Benchmark Patterns (Top 25)](./peer-matching-benchmark-patterns-top25.md): Reference patterns and reusable contracts from public products
+- [Peer Matching Algorithm](./peer-matching-algorithm.md): Core algorithm specification
+- [Peer Navigator Network Implementation Plan](./peer-navigator-network-implementation-plan.md): Architectural integration
+
 ---
 
 ## 2. Service Boundaries

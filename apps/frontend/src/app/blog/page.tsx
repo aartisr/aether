@@ -35,6 +35,11 @@ export default async function BlogIndexPage() {
     label: 'Ask Aether',
     description: 'Ask source-grounded questions across Aether content and product pathways.',
   });
+  const quickStart = [
+    { label: 'Calm now', description: 'Start with the latest short guide.', href: featuredPost ? `/blog/${featuredPost.slug}` : '/blog' },
+    { label: 'Need a tool', description: 'Jump from reading into a support surface.', href: '/resilience-pathway' },
+    { label: 'Need clarity', description: 'Ask source-grounded questions across Aether.', href: '/ask' },
+  ];
   const collectionPageJsonLd = {
     ...createCollectionPageJsonLd({
       name: `${siteName} Blog`,
@@ -103,6 +108,15 @@ export default async function BlogIndexPage() {
           </article>
         </div>
       </header>
+
+      <section className="blog-quickstart" aria-label="Quick start choices">
+        {quickStart.map((item) => (
+          <Link key={item.label} href={item.href} className="blog-quickstart-chip">
+            <span>{item.label}</span>
+            <strong>{item.description}</strong>
+          </Link>
+        ))}
+      </section>
 
       {featuredPost ? (
         <section className="blog-featured-grid">
@@ -198,24 +212,27 @@ export default async function BlogIndexPage() {
               </ul>
             ) : null}
           </div>
-          <div className="blog-cards">
-          {posts.map((post) => (
-            <article key={post.slug} className="blog-card">
-              <p className="blog-date">{post.date} · {post.readingTimeMinutes} min read</p>
-              <h2>
-                <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-              </h2>
-              <p className="blog-card-excerpt">{post.excerpt}</p>
-              {post.tags.length > 0 ? (
-                <ul className="blog-tags">
-                  {post.tags.map((tag) => (
-                    <li key={`${post.slug}-${tag}`}>{tag}</li>
-                  ))}
-                </ul>
-              ) : null}
-            </article>
-          ))}
-          </div>
+          <details>
+            <summary className="blog-library-summary">Browse full library</summary>
+            <div className="blog-cards">
+              {posts.map((post) => (
+                <article key={post.slug} className="blog-card">
+                  <p className="blog-date">{post.date} · {post.readingTimeMinutes} min read</p>
+                  <h2>
+                    <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                  </h2>
+                  <p className="blog-card-excerpt">{post.excerpt}</p>
+                  {post.tags.length > 0 ? (
+                    <ul className="blog-tags">
+                      {post.tags.map((tag) => (
+                        <li key={`${post.slug}-${tag}`}>{tag}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          </details>
         </section>
       )}
     </section>

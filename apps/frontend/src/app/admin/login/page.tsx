@@ -1,9 +1,11 @@
 import { notFound, redirect } from 'next/navigation';
 import { createPageMetadata } from '../../../lib/site';
 import {
+  canAdminRoleAccessPath,
+  getAdminRoleForRequest,
+  getDefaultAdminPathForRole,
   getAdminSessionMaxAgeSeconds,
   isAdminAccessConfigured,
-  isAdminAuthenticatedForRequest,
   shouldExposeAdminConsole,
 } from '../../../lib/admin-auth';
 import { loginAdminAction } from './actions';
@@ -41,11 +43,12 @@ export default async function AdminLoginPage({
     notFound();
   }
 
-  const isAuthenticated = await isAdminAuthenticatedForRequest();
+  const role = await getAdminRoleForRequest();
   const nextPath = sanitizeNextPath(searchParams?.next);
 
-  if (isAuthenticated) {
-    redirect(nextPath);
+  if (role) {
+    const safeNextPath = canAdminRoleAccessPath(role, nextPath) ? nextPath : getDefaultAdminPathForRole(role);
+    redirect(safeNextPath);
   }
 
   return (
@@ -56,6 +59,11 @@ export default async function AdminLoginPage({
         <p className="text-sm leading-6 text-slate-700">
           Enter your admin access key to manage page toggles. Sessions are scoped to admin routes and expire automatically.
         </p>
+        <ol className="list-decimal space-y-1 pl-5 text-sm leading-6 text-slate-600">
+          <li>Sign in with your admin key.</li>
+          <li>Apply a preset or toggle pages manually.</li>
+          <li>Sign out when changes are complete.</li>
+        </ol>
       </header>
 
       {searchParams?.logout ? (
@@ -92,6 +100,7 @@ export default async function AdminLoginPage({
         >
           Continue to Admin Controls
         </button>
+        <p className="text-xs text-slate-500">If access fails, verify the key in your environment configuration.</p>
       </form>
 
       <p className="mt-4 text-xs text-slate-500">

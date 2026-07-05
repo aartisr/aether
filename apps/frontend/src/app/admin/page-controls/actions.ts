@@ -4,7 +4,8 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import {
   ADMIN_SESSION_COOKIE_NAME,
-  isAdminAuthenticatedForRequest,
+  canAccessAdminSection,
+  getAdminRoleForRequest,
 } from '../../../lib/admin-auth';
 import {
   DEFAULT_ENABLED_PAGE_IDS,
@@ -30,9 +31,13 @@ const togglePresets: Record<TogglePreset, AppPageId[]> = {
 };
 
 async function assertAdminSessionOrRedirect(): Promise<void> {
-  const authenticated = await isAdminAuthenticatedForRequest();
-  if (!authenticated) {
+  const role = await getAdminRoleForRequest();
+  if (!role) {
     redirect('/admin/login?next=/admin/page-controls');
+  }
+
+  if (!canAccessAdminSection(role, 'page-controls')) {
+    redirect('/admin/page-controls?error=forbidden');
   }
 }
 

@@ -1,4 +1,5 @@
 import AetherAssistant from '../../components/assistant/AetherAssistant';
+import StarterPromptList from '../../components/assistant/StarterPromptList';
 import { JsonLd } from '../../components/page/PagePrimitives';
 import { getAllPages } from '../../lib/page-flags';
 import { getRagIndexMetadata } from '../../lib/rag/search';
@@ -26,6 +27,11 @@ export default function AskAetherPage() {
     { label: 'Grounded', description: 'Answers come from indexed Aether content and source cards.' },
     { label: 'Flexible', description: 'The assistant works across enabled pages and knowledge-base documents.' },
     { label: 'Bounded', description: 'Safety, crisis, and privacy boundaries override normal guidance.' },
+  ];
+  const usageSteps = [
+    'Start with one short question.',
+    'Use source cards to verify what matters.',
+    'Turn the answer into one next step on a product page.',
   ];
   const webPageJsonLd = createWebPageJsonLd({
     name: 'Ask Aether',
@@ -67,14 +73,19 @@ export default function AskAetherPage() {
 
         <aside className="ask-sidebar min-w-0 space-y-4">
           <section className="theme-card p-5">
-            <p className="theme-kicker">Try asking</p>
-            <div className="mt-4 grid gap-2">
-              {askStarters.map((starter) => (
-                <div key={starter} className="ask-starter">
-                  {starter}
-                </div>
+            <p className="theme-kicker">Fast start</p>
+            <h2 className="mt-2 text-lg font-extrabold text-[color:var(--theme-text)]">Use the assistant in 3 steps</h2>
+            <ol className="mt-3 list-decimal space-y-1 pl-5 text-sm leading-6 text-[color:var(--theme-text-muted)]">
+              {usageSteps.map((step) => (
+                <li key={step}>{step}</li>
               ))}
-            </div>
+            </ol>
+          </section>
+
+          <section className="theme-card p-5">
+            <p className="theme-kicker">Starter prompts</p>
+            <h2 className="mt-2 text-lg font-extrabold text-[color:var(--theme-text)]">Copy and ask</h2>
+            <StarterPromptList prompts={askStarters} />
           </section>
 
           <section className="theme-card p-5">

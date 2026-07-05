@@ -58,6 +58,13 @@ export type InfoPageConfig = {
 
 export default function GenericInfoPage({ config }: { config: InfoPageConfig }) {
   const visibleItems = config.items.filter((item) => (item.href ? isPathEnabledForRequest(item.href) : true));
+  const visibleSections =
+    config.sections
+      ?.map((section) => ({
+        ...section,
+        items: section.items.filter((item) => (item.href ? isPathEnabledForRequest(item.href) : true)),
+      }))
+      .filter((section) => section.items.length > 0) ?? [];
   const shouldShowFooterLink = config.footerLink ? isPathEnabledForRequest(config.footerLink.href) : false;
   const shouldShowPrimaryAction = config.primaryAction ? isPathEnabledForRequest(config.primaryAction.href) : false;
   const shouldShowSecondaryAction = config.secondaryAction ? isPathEnabledForRequest(config.secondaryAction.href) : false;
@@ -87,6 +94,26 @@ export default function GenericInfoPage({ config }: { config: InfoPageConfig }) 
               />
             ) : null}
           </div>
+        ) : null}
+
+        {visibleSections.length > 0 ? (
+          <SurfaceCard className="border-emerald-100 bg-emerald-50/45">
+            <p className="theme-kicker">On this page</p>
+            <p className="mt-2 text-sm leading-6 text-slate-700">
+              Start with one section. Each area is intentionally scoped so you can scan quickly and only expand what you need.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {visibleSections.map((section) => (
+                <a
+                  key={section.title}
+                  href={`#${slugify(section.title)}`}
+                  className="theme-pill no-underline hover:no-underline"
+                >
+                  {section.title}
+                </a>
+              ))}
+            </div>
+          </SurfaceCard>
         ) : null}
 
         {config.metrics?.length ? (
@@ -119,43 +146,53 @@ export default function GenericInfoPage({ config }: { config: InfoPageConfig }) 
           />
         </SurfaceCard>
 
-        {config.sections?.map((section) => {
-          const sectionItems = section.items.filter((item) => (item.href ? isPathEnabledForRequest(item.href) : true));
-
+        {visibleSections.map((section, sectionIndex) => {
           return (
-            <SurfaceCard key={section.title} className="border-slate-200 bg-white">
-              {section.eyebrow ? (
-                <p className="text-xs font-black uppercase tracking-[0.14em] text-emerald-800">{section.eyebrow}</p>
-              ) : null}
-              <h2 className="mt-2 text-2xl font-black text-slate-950">{section.title}</h2>
-              {section.description ? (
-                <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-700">{section.description}</p>
-              ) : null}
-              <div
-                className={`mt-5 grid grid-cols-1 gap-4 ${
-                  section.columns === 'four'
-                    ? 'sm:grid-cols-2 lg:grid-cols-4'
-                    : section.columns === 'three'
-                      ? 'md:grid-cols-2 lg:grid-cols-3'
-                      : 'md:grid-cols-2'
-                }`}
-              >
-                {sectionItems.map((item) => (
-                  <article key={item.title} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                    {item.eyebrow ? (
-                      <p className="text-xs font-black uppercase tracking-[0.1em] text-emerald-800">{item.eyebrow}</p>
+            <section key={section.title} id={slugify(section.title)} className="scroll-mt-24">
+              <details open={sectionIndex === 0} className="group">
+                <summary className="list-none">
+                  <SurfaceCard className="cursor-pointer border-slate-200 bg-white transition group-open:border-emerald-200">
+                    {section.eyebrow ? (
+                      <p className="text-xs font-black uppercase tracking-[0.14em] text-emerald-800">{section.eyebrow}</p>
                     ) : null}
-                    <h3 className="mt-1 text-base font-black text-slate-950">{item.title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-slate-700">{item.description}</p>
-                    {item.href && item.hrefLabel ? (
-                      <div className="mt-3">
-                        <ActionLink href={item.href} label={item.hrefLabel} className="text-emerald-800" />
-                      </div>
+                    <div className="mt-2 flex items-center justify-between gap-3">
+                      <h2 className="text-2xl font-black text-slate-950">{section.title}</h2>
+                      <span className="rounded-full border border-slate-300 px-3 py-1 text-xs font-black uppercase tracking-[0.08em] text-slate-700">
+                        Expand
+                      </span>
+                    </div>
+                    {section.description ? (
+                      <p className="mt-2 max-w-3xl text-sm leading-7 text-slate-700">{section.description}</p>
                     ) : null}
-                  </article>
-                ))}
-              </div>
-            </SurfaceCard>
+                  </SurfaceCard>
+                </summary>
+
+                <div
+                  className={`mt-4 grid grid-cols-1 gap-4 ${
+                    section.columns === 'four'
+                      ? 'sm:grid-cols-2 lg:grid-cols-4'
+                      : section.columns === 'three'
+                        ? 'md:grid-cols-2 lg:grid-cols-3'
+                        : 'md:grid-cols-2'
+                  }`}
+                >
+                  {section.items.map((item) => (
+                    <article key={item.title} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                      {item.eyebrow ? (
+                        <p className="text-xs font-black uppercase tracking-[0.1em] text-emerald-800">{item.eyebrow}</p>
+                      ) : null}
+                      <h3 className="mt-1 text-base font-black text-slate-950">{item.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-slate-700">{item.description}</p>
+                      {item.href && item.hrefLabel ? (
+                        <div className="mt-3">
+                          <ActionLink href={item.href} label={item.hrefLabel} className="text-emerald-800" />
+                        </div>
+                      ) : null}
+                    </article>
+                  ))}
+                </div>
+              </details>
+            </section>
           );
         })}
 
@@ -178,4 +215,12 @@ export default function GenericInfoPage({ config }: { config: InfoPageConfig }) 
       </PageContainer>
     </PageBackdrop>
   );
+}
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
 }

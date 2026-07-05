@@ -83,6 +83,10 @@ body {
   box-shadow: var(--theme-shadow-sm);
 }
 
+.theme-card p {
+  max-width: 68ch;
+}
+
 .theme-card-interactive {
   min-width: 0;
   border: 1px solid rgb(216 230 223 / 0.88);
@@ -110,6 +114,19 @@ body {
   font-weight: 900;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+details > summary {
+  cursor: pointer;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+details[open] > summary span {
+  border-color: rgb(var(--theme-primary-rgb) / 0.35);
+  color: var(--theme-primary-strong);
 }
 
 .theme-muted {

@@ -30,6 +30,13 @@ const operatingMetrics = [
   { value: String(researchReferences.length), label: 'research inputs', detail: 'public-health, campus, peer, and product benchmarks' },
 ];
 
+const quickJumpLinks = [
+  { href: '#check-in', label: 'Check-in' },
+  { href: '#safety-plan', label: 'Safety Plan' },
+  { href: '#habit-planner', label: 'Habit Planner' },
+  { href: '#research-inputs', label: 'Research Sources' },
+];
+
 export default function ResiliencePathway() {
   assertPageEnabledForRequest('resilience-pathway');
 
@@ -119,6 +126,22 @@ export default function ResiliencePathway() {
           />
         </SurfaceCard>
 
+        <SurfaceCard className="border-emerald-100 bg-emerald-50/45">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-emerald-700">Quick navigation</p>
+              <h2 className="mt-1 text-xl font-black text-slate-950">Jump to one module at a time</h2>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {quickJumpLinks.map((link) => (
+                <a key={link.href} href={link.href} className="theme-pill no-underline hover:no-underline">
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </SurfaceCard>
+
         <SurfaceCard className="border-emerald-200 bg-white">
           <p className="text-xs font-black uppercase tracking-[0.16em] text-emerald-800">Benchmark synthesis</p>
           <h2 className="mt-2 text-2xl font-black text-slate-950 sm:text-3xl">What world-class wellbeing products get right</h2>
@@ -144,31 +167,38 @@ export default function ResiliencePathway() {
         <PeerCircleMatcher />
         <HabitPlanner />
 
-        <SurfaceCard className="border-emerald-100 bg-white">
-          <h2 className="text-xl font-black text-slate-950 sm:text-2xl">
-            Research and Benchmark Inputs ({researchReferences.length})
-          </h2>
-          <p className="mt-2 text-sm leading-6 text-slate-600">
-            These references informed feature selection, safety pathways, and resilience intervention patterns.
-          </p>
-          <div className="mt-4 md:mt-5 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-            {researchReferences.map((reference) => (
-              <article key={reference.name} className="rounded-xl border border-slate-200 p-4 bg-slate-50">
-                <p className="text-xs uppercase tracking-wide text-emerald-700 font-black">{reference.category}</p>
-                <h3 className="text-base font-black text-slate-950 mt-1">{reference.name}</h3>
-                <p className="text-sm text-slate-700 mt-2">{reference.evidenceSignal}</p>
-                <a
-                  href={reference.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block mt-2 text-sm text-emerald-700 font-bold"
-                >
-                  Visit Source
-                </a>
-              </article>
-            ))}
-          </div>
-        </SurfaceCard>
+        <section id="research-inputs" className="scroll-mt-24">
+          <SurfaceCard className="border-emerald-100 bg-white">
+            <h2 className="text-xl font-black text-slate-950 sm:text-2xl">
+              Research and Benchmark Inputs ({researchReferences.length})
+            </h2>
+            <p className="mt-2 text-sm leading-6 text-slate-600">
+              These references informed feature selection, safety pathways, and resilience intervention patterns.
+            </p>
+            <details className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <summary className="cursor-pointer text-sm font-black uppercase tracking-[0.08em] text-emerald-800">
+                Show references
+              </summary>
+              <div className="mt-4 grid grid-cols-1 gap-3 md:gap-4 lg:grid-cols-2">
+                {researchReferences.map((reference) => (
+                  <article key={reference.name} className="rounded-xl border border-slate-200 p-4 bg-white">
+                    <p className="text-xs uppercase tracking-wide text-emerald-700 font-black">{reference.category}</p>
+                    <h3 className="text-base font-black text-slate-950 mt-1">{reference.name}</h3>
+                    <p className="text-sm text-slate-700 mt-2">{reference.evidenceSignal}</p>
+                    <a
+                      href={reference.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block mt-2 text-sm text-emerald-700 font-bold"
+                    >
+                      Visit Source
+                    </a>
+                  </article>
+                ))}
+              </div>
+            </details>
+          </SurfaceCard>
+        </section>
       </PageContainer>
     </PageBackdrop>
   );

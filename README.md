@@ -98,6 +98,50 @@ Blog source adapters:
 - `BLOG_CONTENT_DIR`: optional override for markdown directory
 - `BLOG_REMOTE_JSON_URL`: required when `BLOG_SOURCE=remote-json`
 
+Admin RBAC and session security:
+
+- `AETHER_ENABLE_ADMIN_PAGE`: set to `true` in production to expose admin routes
+- `AETHER_ADMIN_SESSION_SECRET`: strong random secret used to sign admin sessions
+- `AETHER_ADMIN_SESSION_TTL_MINUTES`: session lifetime in minutes (default `480`)
+- `AETHER_ADMIN_OWNER_KEYS`: comma-separated owner keys (full admin access)
+- `AETHER_ADMIN_OPERATOR_KEYS`: comma-separated operator keys (peer ops + audit + feedback)
+- `AETHER_ADMIN_REVIEWER_KEYS`: comma-separated reviewer keys (audit + feedback read access)
+
+Legacy compatibility:
+
+- `AETHER_ADMIN_ACCESS_KEY` and `AETHER_ADMIN_ACCESS_KEYS` are still accepted as owner keys.
+
+Suggested production template:
+
+```bash
+# Admin exposure and signing
+AETHER_ENABLE_ADMIN_PAGE=true
+AETHER_ADMIN_SESSION_SECRET=replace-with-64+char-random-secret
+AETHER_ADMIN_SESSION_TTL_MINUTES=240
+
+# Role-scoped keys (rotate quarterly or on staffing changes)
+AETHER_ADMIN_OWNER_KEYS=owner-key-1,owner-key-2
+AETHER_ADMIN_OPERATOR_KEYS=operator-key-1,operator-key-2
+AETHER_ADMIN_REVIEWER_KEYS=reviewer-key-1,reviewer-key-2
+```
+
+Operational guidance:
+
+- RBAC rollout runbook: [docs/admin-rbac-rollout-runbook.md](docs/admin-rbac-rollout-runbook.md)
+- Recruitment execution plan: [docs/peer-recruitment-execution-plan.md](docs/peer-recruitment-execution-plan.md)
+
+Recruitment worker queue:
+
+- `PEER_RECRUITMENT_WORKER_QUEUE_PATH`: queue storage JSON path (default `.data/peer-recruitment-worker-queue.json`)
+- `PEER_RECRUITMENT_WORKER_API_KEY`: optional key required by worker run endpoint (`x-worker-key` header)
+- `PEER_RECRUITMENT_INCIDENT_SLA_HOURS`: SLA threshold used by incident SLA worker job (default `24`)
+
+Worker endpoints:
+
+- `POST /api/peer-recruitment/workers/jobs` enqueue job (`refresh_forecast`, `refresh_fairness`, `incident_sla_check`)
+- `GET /api/peer-recruitment/workers/jobs` list jobs with optional `status`, `type`, `limit`
+- `POST /api/peer-recruitment/workers/run` process queued jobs (optional JSON body: `{ "limit": 20 }`)
+
 Giscus comments (required to enable comments):
 
 - `NEXT_PUBLIC_GISCUS_REPO`

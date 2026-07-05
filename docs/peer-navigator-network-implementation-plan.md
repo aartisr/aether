@@ -5,6 +5,12 @@ Last updated: 2026-05-02
 Audience: product, design, engineering, trust and safety, campus/program operators  
 Scope: a consent-first peer support and peer mentoring network that collects the minimum useful data, matches people safely, and keeps the relationship supported after the match.
 
+### See Also
+
+- [Peer Matching Benchmark Patterns (Top 25)](./peer-matching-benchmark-patterns-top25.md): Reference patterns and reusable contracts from public products
+- [Peer Matching Algorithm](./peer-matching-algorithm.md): Core matching algorithm specification
+- [Peer Matching Service Contracts](./peer-matching-service-contracts.md): API and module boundaries
+
 ## Executive Recommendation
 
 Build Peer-Navigator Network as a safety-gated, explainable, human-governed support network, not as an open directory of people. The product should guide a participant through:

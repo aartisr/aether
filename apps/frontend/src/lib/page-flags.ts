@@ -36,6 +36,7 @@ export const PAGE_FLAGS_COOKIE_NAME = 'aether_page_flags';
 
 export const DEFAULT_ENABLED_PAGE_IDS = [
   'home',
+  'peer-navigator',
   'about',
   'mentors',
   'blog',
