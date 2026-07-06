@@ -51,14 +51,28 @@ class MockSpeechRecognition {
 
 function EchoFlowHarness() {
   const [capture, setCapture] = useState<VoiceCapture | null>(null);
+  const [liveTranscript, setLiveTranscript] = useState('');
+  const [liveTranscriptSource, setLiveTranscriptSource] = useState<'speech-recognition' | 'manual' | 'unavailable'>('unavailable');
+
+  const handleCaptureComplete = (nextCapture: VoiceCapture) => {
+    setCapture(nextCapture);
+    setLiveTranscript(nextCapture.transcript);
+    setLiveTranscriptSource(nextCapture.transcriptSource);
+  };
 
   return (
     <div>
-      <VoiceRecorder onCaptureComplete={setCapture} />
+      <VoiceRecorder
+        onCaptureComplete={handleCaptureComplete}
+        onTranscriptChange={(nextTranscript, nextSource) => {
+          setLiveTranscript(nextTranscript);
+          setLiveTranscriptSource(nextSource);
+        }}
+      />
       <SentimentMapping
         audio={capture?.audio ?? null}
-        transcript={capture?.transcript ?? ''}
-        transcriptSource={capture?.transcriptSource ?? 'unavailable'}
+        transcript={liveTranscript}
+        transcriptSource={liveTranscriptSource}
       />
     </div>
   );
@@ -102,7 +116,7 @@ describe('Echo flow integration', () => {
     jest.useRealTimers();
   });
 
-  it('propagates transcript on stop and enables Analyze with ready status', async () => {
+  it('propagates live transcript into the analysis pad before stop and enables Analyze once enough words exist', async () => {
     const track: MockTrack = { stop: jest.fn() };
     const stream = { getTracks: () => [track] } as unknown as MediaStream;
     getUserMedia.mockResolvedValue(stream);
@@ -128,13 +142,17 @@ describe('Echo flow integration', () => {
       });
     });
 
+    await waitFor(() => {
+      expect(screen.getByLabelText(/transcript for local analysis/i)).toHaveValue('I feel steady today');
+      expect(screen.getByText(/transcript ready. you can analyze this check-in./i)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /analyze check-in/i })).toBeEnabled();
+    });
+
     fireEvent.click(screen.getByRole('button', { name: /stop recording/i }));
 
     await waitFor(() => {
       expect(track.stop).toHaveBeenCalledTimes(1);
       expect(createObjectURL).toHaveBeenCalledTimes(1);
-      expect(screen.getByText(/transcript ready. you can analyze this check-in./i)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /analyze check-in/i })).toBeEnabled();
     });
   });
 });

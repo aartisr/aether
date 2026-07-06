@@ -77,12 +77,14 @@ type LiveStatus = 'idle' | 'active' | 'unavailable';
 export default function VoiceRecorder({
   onRecordingComplete,
   onCaptureComplete,
+  onTranscriptChange,
   recordButtonLabel = 'Start Recording',
   stopButtonLabel = 'Stop Recording',
   className = '',
 }: {
   onRecordingComplete?: (audio: Blob) => void;
   onCaptureComplete?: (capture: VoiceCapture) => void;
+  onTranscriptChange?: (transcript: string, transcriptSource: TranscriptSource) => void;
   recordButtonLabel?: string;
   stopButtonLabel?: string;
   className?: string;
@@ -172,6 +174,7 @@ export default function VoiceRecorder({
           transcriptRef.current = next;
           transcriptSourceRef.current = 'speech-recognition';
           setTranscript(next);
+          onTranscriptChange?.(next, 'speech-recognition');
           recognitionFinalRef.current = allFinal;
         }
       }
@@ -222,6 +225,7 @@ export default function VoiceRecorder({
     transcriptRef.current = '';
     transcriptSourceRef.current = 'unavailable';
     recognitionFinalRef.current = '';
+    onTranscriptChange?.('', 'unavailable');
 
     // Guard: getUserMedia requires HTTPS (or localhost) and a supported browser
     if (!navigator.mediaDevices?.getUserMedia) {
@@ -301,6 +305,7 @@ export default function VoiceRecorder({
     transcriptRef.current = value;
     transcriptSourceRef.current = value ? 'manual' : 'unavailable';
     setTranscript(value);
+    onTranscriptChange?.(value, value ? 'manual' : 'unavailable');
   };
 
   return (

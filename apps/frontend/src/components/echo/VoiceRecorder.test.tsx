@@ -172,6 +172,26 @@ describe('VoiceRecorder', () => {
     });
   });
 
+  it('emits live transcript updates to the parent callback as speech is finalized', async () => {
+    const { stream } = makeStream();
+    const onTranscriptChange = jest.fn();
+    getUserMedia.mockResolvedValue(stream);
+
+    render(<VoiceRecorder onTranscriptChange={onTranscriptChange} />);
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+    await waitFor(() => screen.getByRole('button', { name: /stop recording/i }));
+
+    act(() => {
+      MockSpeechRecognition.instance?.onresult?.(
+        makeSpeechEvent([{ transcript: 'I feel steady today', isFinal: true }]),
+      );
+    });
+
+    await waitFor(() => {
+      expect(onTranscriptChange).toHaveBeenCalledWith('I feel steady today', 'speech-recognition');
+    });
+  });
+
   it('does NOT update textarea with interim-only results', async () => {
     const { stream } = makeStream();
     getUserMedia.mockResolvedValue(stream);
@@ -296,6 +316,22 @@ describe('VoiceRecorder', () => {
         expect.objectContaining({ transcript: 'typed by user', transcriptSource: 'manual' }),
       );
     });
+  });
+
+  it('emits manual transcript edits to the parent callback', async () => {
+    const { stream } = makeStream();
+    const onTranscriptChange = jest.fn();
+    getUserMedia.mockResolvedValue(stream);
+
+    render(<VoiceRecorder onTranscriptChange={onTranscriptChange} />);
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+    await waitFor(() => screen.getByRole('button', { name: /stop recording/i }));
+
+    fireEvent.change(screen.getByRole('textbox', { name: /voice transcript/i }), {
+      target: { value: 'typed by user' },
+    });
+
+    expect(onTranscriptChange).toHaveBeenLastCalledWith('typed by user', 'manual');
   });
 
   // ── Live indicator ────────────────────────────────────────────────────────────

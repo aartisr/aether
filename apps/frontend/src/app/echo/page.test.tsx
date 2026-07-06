@@ -254,4 +254,31 @@ describe('Echo Sentiment Visualization Integration Tests', () => {
     // Verify it contains SVG elements for rendering
     expect(rail.querySelector('svg')).toBeInTheDocument();
   });
+
+  test('shows explicit analyze-now affordance once transcript is ready', () => {
+    render(
+      <SentimentMapping
+        audio={mockAudio}
+        transcript="I feel steady today"
+        transcriptSource="speech-recognition"
+      />
+    );
+
+    expect(screen.getByText(/transcript ready\. you can analyze this check-in\./i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /analyze now/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /analyze check-in/i })).toBeEnabled();
+  });
+
+  test('keeps analyze disabled when transcript is too short', () => {
+    render(
+      <SentimentMapping
+        audio={mockAudio}
+        transcript="Too short"
+        transcriptSource="speech-recognition"
+      />
+    );
+
+    expect(screen.getByRole('button', { name: /analyze check-in/i })).toBeDisabled();
+    expect(screen.queryByRole('button', { name: /analyze now/i })).not.toBeInTheDocument();
+  });
 });

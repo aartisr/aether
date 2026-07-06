@@ -107,6 +107,9 @@ export default function SentimentMapping({
   const [hasAnalyzedOnce, setHasAnalyzedOnce] = useState(false);
   const [showWarmupHint, setShowWarmupHint] = useState(false);
   const warmupTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const analyzeButtonRef = React.useRef<HTMLButtonElement | null>(null);
+  const transcriptPanelRef = React.useRef<HTMLDivElement | null>(null);
+  const previousCanAnalyzeRef = React.useRef(false);
 
   const wordCount = countWords(editableTranscript);
   const wordsNeeded = Math.max(0, MIN_TRANSCRIPT_WORDS - wordCount);
@@ -123,6 +126,20 @@ export default function SentimentMapping({
   React.useEffect(() => {
     setEditableTranscript(transcript);
   }, [transcript]);
+
+  React.useEffect(() => {
+    const becameReady = canAnalyze && !previousCanAnalyzeRef.current;
+    previousCanAnalyzeRef.current = canAnalyze;
+
+    if (!becameReady || loading) {
+      return;
+    }
+
+    if (typeof transcriptPanelRef.current?.scrollIntoView === 'function') {
+      transcriptPanelRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    analyzeButtonRef.current?.focus();
+  }, [canAnalyze, loading]);
 
   React.useEffect(() => () => {
     if (warmupTimerRef.current) {
@@ -188,7 +205,7 @@ export default function SentimentMapping({
     : '';
 
   return (
-    <div className={`mt-6 flex flex-col items-center gap-2 ${className}`}>
+    <div ref={transcriptPanelRef} className={`mt-6 flex flex-col items-center gap-2 ${className}`}>
       <label className="w-full max-w-xl text-left text-sm font-medium text-slate-700" htmlFor="echo-transcript">
         Transcript for local analysis
       </label>
@@ -200,6 +217,7 @@ export default function SentimentMapping({
         placeholder="Your local transcript will appear here. You can also type or edit it manually."
       />
       <button
+        ref={analyzeButtonRef}
         className="px-4 py-2 bg-emerald-800 text-white rounded shadow hover:bg-emerald-900 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-emerald-300 transition"
         onClick={handleAnalyze}
         disabled={!canAnalyze || loading}
@@ -214,6 +232,23 @@ export default function SentimentMapping({
       <p className="w-full max-w-xl text-left text-xs text-slate-500" aria-live="polite">
         {loading ? (showWarmupHint ? 'Model warming up locally...' : 'Analyzing check-in locally...') : transcriptStatus}
       </p>
+      {canAnalyze && !loading && !result && (
+        <div className="w-full max-w-xl rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-left">
+          <p className="text-sm font-semibold text-emerald-900">Your transcript is ready.</p>
+          <p className="mt-1 text-xs leading-6 text-emerald-800">
+            Review or edit the transcript if you want, then run local analysis when you are ready.
+          </p>
+          <div className="mt-3">
+            <button
+              type="button"
+              className="rounded-md border border-emerald-300 bg-white px-3 py-2 text-sm font-medium text-emerald-900 hover:bg-emerald-100"
+              onClick={handleAnalyze}
+            >
+              Analyze now
+            </button>
+          </div>
+        </div>
+      )}
       {analysisError && (
         <p className="w-full max-w-xl text-left text-xs text-amber-700" aria-live="polite">
           {analysisError}

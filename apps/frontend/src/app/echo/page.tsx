@@ -5,7 +5,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
 
-import type { VoiceCapture } from '../../lib/local-ai';
+import type { TranscriptSource, VoiceCapture } from '../../lib/local-ai';
 import { PageBackdrop, PageContainer, PageHero, SurfaceCard } from '../../components/page/PagePrimitives';
 
 const VoiceRecorder = dynamic(() => import('../../components/echo/VoiceRecorder'), {
@@ -19,6 +19,20 @@ const SentimentMapping = dynamic(() => import('../../components/echo/SentimentMa
 
 export default function EchoChamber() {
   const [capture, setCapture] = useState<VoiceCapture | null>(null);
+  const [liveTranscript, setLiveTranscript] = useState('');
+  const [liveTranscriptSource, setLiveTranscriptSource] = useState<TranscriptSource>('unavailable');
+
+  const handleCaptureComplete = (nextCapture: VoiceCapture) => {
+    setCapture(nextCapture);
+    setLiveTranscript(nextCapture.transcript);
+    setLiveTranscriptSource(nextCapture.transcriptSource);
+  };
+
+  const handleTranscriptChange = (nextTranscript: string, nextSource: TranscriptSource) => {
+    setLiveTranscript(nextTranscript);
+    setLiveTranscriptSource(nextSource);
+  };
+
   const quickFlow = [
     {
       title: 'Record',
@@ -55,11 +69,14 @@ export default function EchoChamber() {
           </div>
         </SurfaceCard>
         <SurfaceCard>
-          <VoiceRecorder onCaptureComplete={setCapture} />
+          <VoiceRecorder
+            onCaptureComplete={handleCaptureComplete}
+            onTranscriptChange={handleTranscriptChange}
+          />
           <SentimentMapping
             audio={capture?.audio ?? null}
-            transcript={capture?.transcript ?? ''}
-            transcriptSource={capture?.transcriptSource ?? 'unavailable'}
+            transcript={liveTranscript}
+            transcriptSource={liveTranscriptSource}
           />
           <p className="mt-4 text-xs leading-6 text-slate-600">
             Audio, transcript, and classifications remain on-device in this implementation.
