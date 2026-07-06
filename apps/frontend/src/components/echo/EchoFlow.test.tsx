@@ -34,6 +34,7 @@ class MockSpeechRecognition {
   lang = 'en-US';
   onresult: ((event: { results: ArrayLike<{ 0: { transcript: string } }> }) => void) | null = null;
   onerror: (() => void) | null = null;
+  onend: (() => void) | null = null;
 
   constructor() {
     MockSpeechRecognition.instance = this;
@@ -120,7 +121,10 @@ describe('Echo flow integration', () => {
 
     act(() => {
       MockSpeechRecognition.instance?.onresult?.({
-        results: [{ 0: { transcript: 'I feel steady today' } }],
+        results: Object.assign(
+          [{ isFinal: true, length: 1, 0: { transcript: 'I feel steady today', confidence: 0.9 } }],
+          { length: 1 },
+        ),
       });
     });
 
