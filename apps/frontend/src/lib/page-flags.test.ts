@@ -46,12 +46,15 @@ afterAll(() => {
 });
 
 describe('page flags', () => {
-  it('defaults to the public discovery and trust pages', async () => {
+  it('defaults to all pages enabled', async () => {
     const pageFlags = await loadPageFlags();
 
     expect(pageFlags.getEnabledPages().map((page) => page.id)).toEqual([
       'home',
+      'resilience-pathway',
+      'echo',
       'peer-navigator',
+      'fairness-governance',
       'privacy',
       'accessibility',
       'about',
@@ -67,6 +70,9 @@ describe('page flags', () => {
     expect(pageFlags.isPageEnabled('privacy')).toBe(true);
     expect(pageFlags.isPageEnabled('accessibility')).toBe(true);
     expect(pageFlags.isPageEnabled('peer-navigator')).toBe(true);
+    expect(pageFlags.isPageEnabled('resilience-pathway')).toBe(true);
+    expect(pageFlags.isPageEnabled('echo')).toBe(true);
+    expect(pageFlags.isPageEnabled('fairness-governance')).toBe(true);
     expect(pageFlags.getPageIdForPath('/blog/practical-path-01-stabilize-your-baseline')).toBe('blog');
     expect(pageFlags.getPageIdForPath('/feedback?from=/ask')).toBe('feedback');
   });

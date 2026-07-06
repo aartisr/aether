@@ -36,7 +36,10 @@ export const PAGE_FLAGS_COOKIE_NAME = 'aether_page_flags';
 
 export const DEFAULT_ENABLED_PAGE_IDS = [
   'home',
+  'resilience-pathway',
+  'echo',
   'peer-navigator',
+  'fairness-governance',
   'about',
   'mentors',
   'blog',
