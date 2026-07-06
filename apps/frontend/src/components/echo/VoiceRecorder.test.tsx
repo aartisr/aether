@@ -425,6 +425,65 @@ describe('VoiceRecorder', () => {
     });
   });
 
+  it('treats an early not-allowed error as microphone setup in progress and retries transcription', async () => {
+    const { stream } = makeStream();
+    getUserMedia.mockResolvedValue(stream);
+
+    render(<VoiceRecorder />);
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+    await waitFor(() => screen.getByRole('button', { name: /stop recording/i }));
+
+    const recognition = MockSpeechRecognition.instance!;
+    expect(recognition.startCallCount).toBe(1);
+
+    act(() => { recognition.onerror?.({ error: 'not-allowed' }); });
+
+    expect(screen.getByRole('status')).toHaveTextContent(/finishing microphone permission setup/i);
+    expect(screen.queryByText(/revoked mid-session/i)).toBeNull();
+
+    act(() => {
+      jest.advanceTimersByTime(900);
+    });
+
+    expect(recognition.startCallCount).toBe(2);
+
+    act(() => {
+      recognition.onresult?.(
+        makeSpeechEvent([{ transcript: 'I feel steady now', isFinal: true }]),
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole('textbox', { name: /voice transcript/i })).toHaveValue('I feel steady now');
+      expect(screen.queryByRole('status')).toBeNull();
+    });
+  });
+
+  it('keeps the stronger revoked warning for permission loss after transcription has started', async () => {
+    const { stream } = makeStream();
+    getUserMedia.mockResolvedValue(stream);
+
+    render(<VoiceRecorder />);
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+    await waitFor(() => screen.getByRole('button', { name: /stop recording/i }));
+
+    act(() => {
+      MockSpeechRecognition.instance?.onresult?.(
+        makeSpeechEvent([{ transcript: 'I feel steady now', isFinal: true }]),
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole('textbox', { name: /voice transcript/i })).toHaveValue('I feel steady now');
+    });
+
+    act(() => { MockSpeechRecognition.instance?.onerror?.({ error: 'not-allowed' }); });
+
+    await waitFor(() => {
+      expect(screen.getByRole('status')).toHaveTextContent(/revoked mid-session/i);
+    });
+  });
+
   it('silently ignores no-speech SpeechRecognition errors', async () => {
     const { stream } = makeStream();
     getUserMedia.mockResolvedValue(stream);

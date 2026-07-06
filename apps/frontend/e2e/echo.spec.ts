@@ -17,6 +17,16 @@ test.describe('Echo voice reflection flow', () => {
         getTracks: () => [{ stop: () => undefined }],
       };
 
+      type MockRecorderChunkHandler = ((event: { data: Blob }) => void) | null;
+      type MockRecognitionResultHandler = ((event: {
+        results: ArrayLike<{
+          isFinal: boolean;
+          length: number;
+          0: { transcript: string; confidence: number };
+        }>;
+      }) => void) | null;
+      type MockRecognitionErrorHandler = ((event: { error: string }) => void) | null;
+
       Object.defineProperty(navigator, 'mediaDevices', {
         configurable: true,
         value: {
@@ -30,10 +40,10 @@ test.describe('Echo voice reflection flow', () => {
         }
 
         mimeType = 'audio/webm';
-        ondataavailable = null;
-        onstop = null;
+        ondataavailable: MockRecorderChunkHandler = null;
+        onstop: (() => void) | null = null;
 
-        constructor(_stream, _options) {
+        constructor(_stream: MediaStream, _options?: { mimeType?: string }) {
           void _stream;
           void _options;
         }
@@ -53,9 +63,10 @@ test.describe('Echo voice reflection flow', () => {
         continuous = false;
         interimResults = false;
         lang = 'en-US';
-        onresult = null;
-        onerror = null;
-        onend = null;
+        onresult: MockRecognitionResultHandler = null;
+        onerror: MockRecognitionErrorHandler = null;
+        onend: (() => void) | null = null;
+        onstart: (() => void) | null = null;
 
         start() {
           window.setTimeout(() => {
@@ -77,9 +88,9 @@ test.describe('Echo voice reflection flow', () => {
         }
       }
 
-      window.MediaRecorder = MockMediaRecorder;
-      window.SpeechRecognition = MockSpeechRecognition;
-      window.webkitSpeechRecognition = undefined;
+      window.MediaRecorder = MockMediaRecorder as unknown as typeof MediaRecorder;
+      window.SpeechRecognition = MockSpeechRecognition as unknown as { new (): SpeechRecognition };
+      window.webkitSpeechRecognition = undefined as unknown as { new (): SpeechRecognition };
       URL.createObjectURL = () => 'blob:mock-audio';
     });
   });

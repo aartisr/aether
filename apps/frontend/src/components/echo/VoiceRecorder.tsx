@@ -70,6 +70,19 @@ function formatTime(seconds: number): string {
   return `${m}:${s}`;
 }
 
+const RECOGNITION_PERMISSION_GRACE_MS = 2500;
+const RECOGNITION_RETRY_DELAY_MS = 900;
+const RECOGNITION_MAX_STARTUP_RETRIES = 2;
+
+function isStartupPermissionHandshake(errorCode: string, startedAt: number, hasTranscript: boolean): boolean {
+  return (
+    (errorCode === 'not-allowed' || errorCode === 'service-not-allowed') &&
+    !hasTranscript &&
+    startedAt > 0 &&
+    Date.now() - startedAt <= RECOGNITION_PERMISSION_GRACE_MS
+  );
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 type LiveStatus = 'idle' | 'active' | 'unavailable';
@@ -108,6 +121,9 @@ export default function VoiceRecorder({
   const transcriptSourceRef = useRef<TranscriptSource>('unavailable');
   // Tracks cumulative isFinal text from SpeechRecognition so we can compute deltas
   const recognitionFinalRef = useRef('');
+  const recognitionStartedAtRef = useRef(0);
+  const recognitionStartupRetryCountRef = useRef(0);
+  const recognitionRetryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -118,6 +134,7 @@ export default function VoiceRecorder({
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
+      if (recognitionRetryTimeoutRef.current) clearTimeout(recognitionRetryTimeoutRef.current);
       try { recognitionRef.current?.stop(); } catch { /* ignore */ }
     };
   }, []);
@@ -126,6 +143,12 @@ export default function VoiceRecorder({
     const current = recognitionRef.current;
     // Null out BEFORE calling stop() so that the onend handler won't restart it
     recognitionRef.current = null;
+    recognitionStartedAtRef.current = 0;
+    recognitionStartupRetryCountRef.current = 0;
+    if (recognitionRetryTimeoutRef.current) {
+      clearTimeout(recognitionRetryTimeoutRef.current);
+      recognitionRetryTimeoutRef.current = null;
+    }
     if (current) {
       try { current.stop(); } catch { /* ignore stop races */ }
     }
@@ -180,10 +203,35 @@ export default function VoiceRecorder({
       }
 
       setInterimText(currentInterim.trim());
+      setTranscriptionNotice(null);
       setLiveStatus('active');
     };
 
     recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+      const hasTranscript = Boolean(transcriptRef.current.trim() || recognitionFinalRef.current.trim());
+      if (
+        isStartupPermissionHandshake(event.error, recognitionStartedAtRef.current, hasTranscript) &&
+        recognitionStartupRetryCountRef.current < RECOGNITION_MAX_STARTUP_RETRIES
+      ) {
+        setTranscriptionNotice(
+          'Finishing microphone permission setup. If you just tapped Allow, live transcription should begin in a moment. Recording continues and you can type below anytime.',
+        );
+        setLiveStatus('idle');
+        if (recognitionRetryTimeoutRef.current) clearTimeout(recognitionRetryTimeoutRef.current);
+        recognitionRetryTimeoutRef.current = setTimeout(() => {
+          recognitionRetryTimeoutRef.current = null;
+          if (!isRecordingRef.current || recognitionRef.current !== recognition) return;
+          recognitionStartupRetryCountRef.current += 1;
+          recognitionStartedAtRef.current = Date.now();
+          try {
+            recognition.start();
+          } catch {
+            // Ignore transient invalid-state races; onend will attempt recovery too.
+          }
+        }, RECOGNITION_RETRY_DELAY_MS);
+        return;
+      }
+
       const notice = getSpeechRecognitionNotice(event.error);
       if (notice !== null) {
         setTranscriptionNotice(notice);
@@ -197,13 +245,19 @@ export default function VoiceRecorder({
       // Auto-restart to survive Chrome's ~3 s silence timeout.
       // recognitionRef.current is set to null by stopSpeechRecognition BEFORE
       // stop() is called, so this guard reliably prevents restarts post-recording.
-      if (isRecordingRef.current && recognitionRef.current === recognition) {
+      if (
+        isRecordingRef.current &&
+        recognitionRef.current === recognition &&
+        !recognitionRetryTimeoutRef.current
+      ) {
+        recognitionStartedAtRef.current = Date.now();
         try { recognition.start(); } catch { /* ignore */ }
       }
     };
 
     recognitionRef.current = recognition;
     try {
+      recognitionStartedAtRef.current = Date.now();
       recognition.start();
       setLiveStatus('active');
     } catch {
@@ -225,6 +279,12 @@ export default function VoiceRecorder({
     transcriptRef.current = '';
     transcriptSourceRef.current = 'unavailable';
     recognitionFinalRef.current = '';
+    recognitionStartedAtRef.current = 0;
+    recognitionStartupRetryCountRef.current = 0;
+    if (recognitionRetryTimeoutRef.current) {
+      clearTimeout(recognitionRetryTimeoutRef.current);
+      recognitionRetryTimeoutRef.current = null;
+    }
     onTranscriptChange?.('', 'unavailable');
 
     // Guard: getUserMedia requires HTTPS (or localhost) and a supported browser
