@@ -413,7 +413,8 @@ export default function VoiceRecorder({
         if (e.data.size > 0) {
           chunksRef.current.push(e.data);
           if (rollingCaptionsEnabled && isRecordingRef.current && transcriptSourceRef.current !== 'speech-recognition') {
-            rollingSessionRef.current?.addAudioChunk(e.data);
+            const effectiveMime = mediaRecorder.mimeType || 'audio/webm';
+            rollingSessionRef.current?.updateAudioSnapshot(new Blob(chunksRef.current, { type: effectiveMime }));
           }
         }
       };
@@ -421,6 +422,10 @@ export default function VoiceRecorder({
       mediaRecorder.onstop = () => {
         const effectiveMime = mediaRecorder.mimeType || 'audio/webm';
         const blob = new Blob(chunksRef.current, { type: effectiveMime });
+        if (rollingCaptionsEnabled && transcriptSourceRef.current !== 'speech-recognition') {
+          // Ensure short recordings also receive a final local-caption pass.
+          rollingSessionRef.current?.updateAudioSnapshot(blob);
+        }
         setAudioURL(URL.createObjectURL(blob));
         setRecordedAudio(blob);
         onRecordingComplete?.(blob);

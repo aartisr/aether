@@ -10,18 +10,18 @@ describe('createRollingCaptionSession', () => {
 
   beforeEach(() => jest.resetAllMocks());
 
-  it('serializes chunks and emits one cumulative transcript', async () => {
-    transcribe.mockResolvedValueOnce('First thought').mockResolvedValueOnce('second thought');
+  it('uses the latest valid recording snapshot for captions', async () => {
+    transcribe.mockResolvedValueOnce('First thought').mockResolvedValueOnce('First thought, clarified');
     const onTranscript = jest.fn();
     const session = createRollingCaptionSession({ onTranscript });
 
-    session.addAudioChunk(new Blob(['first']));
-    session.addAudioChunk(new Blob(['second']));
+    session.updateAudioSnapshot(new Blob(['first']));
+    session.updateAudioSnapshot(new Blob(['first', 'second']));
     await new Promise((resolve) => setTimeout(resolve, 0));
     await new Promise((resolve) => setTimeout(resolve, 0));
 
     expect(transcribe).toHaveBeenCalledTimes(2);
-    expect(onTranscript).toHaveBeenLastCalledWith('First thought second thought');
+    expect(onTranscript).toHaveBeenLastCalledWith('First thought, clarified');
   });
 
   it('discards queued output after reset', async () => {
@@ -30,7 +30,7 @@ describe('createRollingCaptionSession', () => {
     const onTranscript = jest.fn();
     const session = createRollingCaptionSession({ onTranscript });
 
-    session.addAudioChunk(new Blob(['first']));
+    session.updateAudioSnapshot(new Blob(['first']));
     await Promise.resolve();
     session.reset();
     resolveTranscription?.('Discard this');
