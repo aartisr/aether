@@ -133,7 +133,14 @@
 }
 
 .home-hero-actions > * {
-  flex: 1 1 12rem;
+  flex: 0 1 auto;
+}
+
+.home-hero-actions > .home-hero-action-secondary {
+  align-self: center;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  max-width: max-content;
 }
 
 .home-hero-signals {
@@ -359,6 +366,13 @@
 
   .home-hero-actions > * {
     min-height: 3.1rem;
+  }
+
+  .home-hero-action-secondary {
+    width: auto !important;
+    min-height: 2.75rem !important;
+    padding-inline: 1rem !important;
+    font-size: 0.9rem;
   }
 
   .home-hero-signals {

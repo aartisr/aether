@@ -136,6 +136,22 @@ describe('VoiceRecorder', () => {
     });
   });
 
+  it('uses rolling captions without showing an unrelated native-caption warning', async () => {
+    const { stream } = makeStream();
+    getUserMedia.mockResolvedValue(stream);
+    Object.defineProperty(window, 'SpeechRecognition', { value: undefined, configurable: true });
+
+    render(<VoiceRecorder />);
+    fireEvent.click(screen.getByRole('button', { name: /enable private rolling captions/i }));
+    await waitFor(() => expect(screen.getByText(/private rolling captions are ready/i)).toBeInTheDocument());
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/private rolling captions are listening/i)).toBeInTheDocument();
+    });
+    expect(screen.queryByText(/this browser can record privately/i)).not.toBeInTheDocument();
+  });
+
   // ── Recording lifecycle ─────────────────────────────────────────────────────
 
   it('records audio, shows timer, fires callbacks, and shows playback on stop', async () => {

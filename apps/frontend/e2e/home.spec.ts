@@ -22,6 +22,20 @@ test.describe('Homepage calm-entry flow', () => {
       await expect(page.locator('.home-journey-dock')).toBeVisible();
       await expect(page.locator('.home-page')).toBeVisible();
       await expectNoHorizontalOverflow(page);
+
+      if (viewport.width === phoneViewport.width) {
+        const primaryAction = page.getByRole('link', { name: /find one next step/i });
+        const secondaryAction = page.getByRole('link', { name: /i have a question/i });
+        const [primaryBox, secondaryBox] = await Promise.all([
+          primaryAction.boundingBox(),
+          secondaryAction.boundingBox(),
+        ]);
+
+        expect(primaryBox?.height).toBeGreaterThanOrEqual(44);
+        expect(primaryBox?.height).toBeLessThanOrEqual(60);
+        expect(secondaryBox?.height).toBeGreaterThanOrEqual(44);
+        expect(secondaryBox?.height).toBeLessThanOrEqual(60);
+      }
     });
   }
 });

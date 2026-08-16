@@ -154,10 +154,10 @@ export default function Home() {
             </p>
             <p className="home-hero-reassurance">There is no perfect way to begin. Take this one moment at a time.</p>
             <div className="home-hero-actions">
-              <Link href="#first-step" className="theme-button theme-button-primary w-full px-6 py-3 sm:w-auto">
+              <Link href="#first-step" className="home-hero-action-primary theme-button theme-button-primary px-6 py-3">
                 Find one next step
               </Link>
-              <Link href="/ask" className="theme-button theme-button-secondary w-full px-6 py-3 sm:w-auto">
+              <Link href="/ask" className="home-hero-action-secondary theme-button theme-button-secondary px-6 py-3">
                 I have a question
               </Link>
             </div>

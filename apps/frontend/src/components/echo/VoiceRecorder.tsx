@@ -437,7 +437,13 @@ export default function VoiceRecorder({
       mediaRecorder.start(rollingCaptionsEnabled ? ROLLING_CAPTION_SLICE_MS : undefined);
       setRecording(true);
       timerRef.current = setInterval(() => setElapsed((t) => t + 1), 1000);
-      startSpeechRecognition();
+      if (rollingCaptionsEnabled) {
+        // Rolling Whisper captions are the selected path. Do not start native
+        // recognition too: its unsupported-browser notice would be misleading.
+        setRollingCaptionNotice('Private rolling captions are listening. Words may appear a few seconds after you speak.');
+      } else {
+        startSpeechRecognition();
+      }
     } catch (err) {
       setError(getMicrophoneErrorMessage(err));
     }
@@ -567,6 +573,13 @@ export default function VoiceRecorder({
           {transcriptionNotice}
         </p>
       )}
+
+      {recording && transcriptionNotice === LIVE_CAPTIONS_UNAVAILABLE_NOTICE ? (
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+          <p className="text-sm font-bold text-emerald-950">Private transcription will be ready when you finish.</p>
+          <p className="mt-1 text-xs leading-5 text-emerald-900">Keep recording if you like. After you stop, use the clearly labeled <span className="font-bold">Transcribe privately on this device</span> button below your recording.</p>
+        </div>
+      ) : null}
 
       {/* ── Text pad — visible once recording starts or a transcript exists ── */}
       {(recording || transcript) && (
