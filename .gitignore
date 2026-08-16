@@ -57,6 +57,10 @@ public/*.log
 # Mac system files
 Icon?
 
+# Branded install icons for the Progressive Web App.
+!apps/frontend/public/icons/
+!apps/frontend/public/icons/*.png
+
 # Optional: lockfiles in subfolders (keep only root lockfile)
 apps/*/package-lock.json
 apps/*/yarn.lock

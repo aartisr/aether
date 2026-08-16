@@ -9,7 +9,7 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/',
     scope: '/',
     display: 'standalone',
-    orientation: 'portrait',
+    orientation: 'any',
     background_color: '#F0F4FF',
     theme_color: '#2B5D8C',
     lang: 'en',
@@ -47,6 +47,18 @@ export default function manifest(): MetadataRoute.Manifest {
       },
     ],
     icons: [
+      {
+        src: '/icons/aether-192.png',
+        sizes: '192x192',
+        type: 'image/png',
+        purpose: 'any',
+      },
+      {
+        src: '/icons/aether-512.png',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'maskable',
+      },
       {
         src: '/aether-logo-icon.svg',
         sizes: 'any',

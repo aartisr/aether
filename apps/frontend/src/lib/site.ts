@@ -1,14 +1,11 @@
 import type { Metadata } from 'next';
 import { getEnabledPages, getEnabledPagesForRequest } from './page-flags';
 
-const fallbackSiteUrl = 'https://aether-resilience.vercel.app';
+// Never derive canonical URLs from a Vercel deployment URL: previews are not public identities.
+const fallbackSiteUrl = 'https://aether.ai-aarti.com';
 
 function getConfiguredSiteUrl(): string | undefined {
-  return (
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    process.env.VERCEL_PROJECT_PRODUCTION_URL ||
-    process.env.VERCEL_URL
-  );
+  return process.env.NEXT_PUBLIC_SITE_URL;
 }
 
 function normalizeSiteUrl(input?: string): string {

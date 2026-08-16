@@ -6,6 +6,7 @@ import React from 'react';
 import type { Metadata, Viewport } from 'next';
 import AnalyticsProvider from '../components/AnalyticsProvider';
 import FloatingAssistantLoader from '../components/assistant/FloatingAssistantLoader';
+import PwaProvider from '../components/pwa/PwaProvider';
 import SiteFooter from '../components/layout/SiteFooter';
 import SiteHeader from '../components/layout/SiteHeader';
 import SiteReturnLoop from '../components/layout/SiteReturnLoop';
@@ -103,9 +104,12 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/aether-logo-icon.svg',
-    shortcut: '/aether-logo-icon.svg',
-    apple: '/aether-logo-icon.svg',
+    icon: [
+      { url: '/icons/aether-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/aether-logo-icon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/icons/aether-192.png',
+    apple: [{ url: '/icons/aether-180.png', sizes: '180x180', type: 'image/png' }],
   },
   formatDetection: {
     email: false,
@@ -119,6 +123,7 @@ export const metadata: Metadata = {
   },
   other: {
     'application-name': siteName,
+    'mobile-web-app-capable': 'yes',
     'apple-mobile-web-app-title': siteName,
     'ai-summary': shareTagline,
     'content-language': 'en-US',
@@ -269,6 +274,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           authorLinkLabel={globalShellSettings.footerAuthorLinkLabel}
         />
         <FloatingAssistantLoader enabledPaths={enabledPaths} controlledPaths={controlledPaths} />
+        <PwaProvider />
         <AnalyticsProvider />
       </body>
     </html>

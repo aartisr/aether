@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import SocialShareLinks from '../SocialShareLinks';
+import InstallAether from '../pwa/InstallAether';
 import type { NavigationGroup } from '../../lib/navigation';
 import { getFooterNavigationForRequest, trustSignals } from '../../lib/navigation';
 import { authorName, authorUrl, shareTagline, siteName } from '../../lib/site';
@@ -147,6 +148,7 @@ export default function SiteFooter({
             </p>
           </div>
           <SocialShareLinks path={resolvedSocialSharePath} title={resolvedSocialShareTitle} compact />
+          <InstallAether />
         </section>
 
         <nav aria-label="Footer navigation" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

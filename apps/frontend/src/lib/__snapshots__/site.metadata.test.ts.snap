@@ -14,19 +14,19 @@ exports[`site metadata snapshots matches JSON-LD helper snapshots 1`] = `
           "description": "Foundational recovery guide.",
           "name": "Stabilize Your Baseline",
           "position": 1,
-          "url": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline",
+          "url": "https://aether.ai-aarti.com/blog/practical-path-01-stabilize-your-baseline",
         },
         {
           "@type": "ListItem",
           "description": "Mapping people and channels for support.",
           "name": "Build Your Support Map",
           "position": 2,
-          "url": "https://aether-resilience.vercel.app/blog/practical-path-02-build-your-support-map",
+          "url": "https://aether.ai-aarti.com/blog/practical-path-02-build-your-support-map",
         },
       ],
     },
     "name": "Aether Blog",
-    "url": "https://aether-resilience.vercel.app/blog",
+    "url": "https://aether.ai-aarti.com/blog",
   },
   "webPage": {
     "@context": "https://schema.org",
@@ -39,12 +39,12 @@ exports[`site metadata snapshots matches JSON-LD helper snapshots 1`] = `
     "isPartOf": {
       "@type": "WebSite",
       "name": "Aether",
-      "url": "https://aether-resilience.vercel.app/",
+      "url": "https://aether.ai-aarti.com/",
     },
     "keywords": "student resilience, student mental wellbeing, privacy-first AI, peer support, campus wellbeing programs, accessible technology, responsible AI governance, safety planning, habit formation, student support navigation, privacy, ethics",
     "name": "Privacy and Data Ethics",
-    "primaryImageOfPage": "https://aether-resilience.vercel.app/opengraph-image",
-    "url": "https://aether-resilience.vercel.app/privacy",
+    "primaryImageOfPage": "https://aether.ai-aarti.com/opengraph-image",
+    "url": "https://aether.ai-aarti.com/privacy",
   },
 }
 `;
@@ -53,9 +53,9 @@ exports[`site metadata snapshots matches article metadata snapshot 1`] = `
 {
   "abstract": "Practical checklist for stabilizing during stress spikes.",
   "alternates": {
-    "canonical": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline",
+    "canonical": "https://aether.ai-aarti.com/blog/practical-path-01-stabilize-your-baseline",
     "languages": {
-      "en-US": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline",
+      "en-US": "https://aether.ai-aarti.com/blog/practical-path-01-stabilize-your-baseline",
     },
   },
   "authors": [
@@ -90,7 +90,7 @@ exports[`site metadata snapshots matches article metadata snapshot 1`] = `
       {
         "alt": "How to Stabilize Your Baseline",
         "height": 630,
-        "url": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline/opengraph-image",
+        "url": "https://aether.ai-aarti.com/blog/practical-path-01-stabilize-your-baseline/opengraph-image",
         "width": 1200,
       },
     ],
@@ -104,10 +104,10 @@ exports[`site metadata snapshots matches article metadata snapshot 1`] = `
     ],
     "title": "How to Stabilize Your Baseline",
     "type": "article",
-    "url": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline",
+    "url": "https://aether.ai-aarti.com/blog/practical-path-01-stabilize-your-baseline",
   },
   "other": {
-    "ai-canonical-url": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline",
+    "ai-canonical-url": "https://aether.ai-aarti.com/blog/practical-path-01-stabilize-your-baseline",
     "ai-content-type": "article",
     "audience": "students, campus wellbeing teams, mentors, researchers",
   },
@@ -129,7 +129,7 @@ exports[`site metadata snapshots matches article metadata snapshot 1`] = `
     "images": [
       {
         "alt": "How to Stabilize Your Baseline",
-        "url": "https://aether-resilience.vercel.app/blog/practical-path-01-stabilize-your-baseline/opengraph-image",
+        "url": "https://aether.ai-aarti.com/blog/practical-path-01-stabilize-your-baseline/opengraph-image",
       },
     ],
     "title": "How to Stabilize Your Baseline",
@@ -141,9 +141,9 @@ exports[`site metadata snapshots matches page metadata snapshot 1`] = `
 {
   "abstract": "Accessibility commitments and support resources.",
   "alternates": {
-    "canonical": "https://aether-resilience.vercel.app/accessibility",
+    "canonical": "https://aether.ai-aarti.com/accessibility",
     "languages": {
-      "en-US": "https://aether-resilience.vercel.app/accessibility",
+      "en-US": "https://aether.ai-aarti.com/accessibility",
     },
   },
   "authors": [
@@ -177,7 +177,7 @@ exports[`site metadata snapshots matches page metadata snapshot 1`] = `
       {
         "alt": "Accessibility",
         "height": 630,
-        "url": "https://aether-resilience.vercel.app/opengraph-image",
+        "url": "https://aether.ai-aarti.com/opengraph-image",
         "width": 1200,
       },
     ],
@@ -185,10 +185,10 @@ exports[`site metadata snapshots matches page metadata snapshot 1`] = `
     "siteName": "Aether",
     "title": "Accessibility",
     "type": "website",
-    "url": "https://aether-resilience.vercel.app/accessibility",
+    "url": "https://aether.ai-aarti.com/accessibility",
   },
   "other": {
-    "ai-canonical-url": "https://aether-resilience.vercel.app/accessibility",
+    "ai-canonical-url": "https://aether.ai-aarti.com/accessibility",
     "ai-content-type": "website",
     "audience": "students, campus wellbeing teams, mentors, researchers",
   },
@@ -211,7 +211,7 @@ exports[`site metadata snapshots matches page metadata snapshot 1`] = `
     "images": [
       {
         "alt": "Accessibility",
-        "url": "https://aether-resilience.vercel.app/opengraph-image",
+        "url": "https://aether.ai-aarti.com/opengraph-image",
       },
     ],
     "title": "Accessibility",
