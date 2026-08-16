@@ -22,6 +22,7 @@
     "test": "npm --workspace=apps/frontend run test && npm --workspace=apps/backend run test",
     "test:e2e": "playwright test",
     "test:ci": "npm --workspace=apps/frontend run test:ci",
+    "indexnow:submit": "node ./scripts/submit-indexnow.mjs",
     "check": "npm run lint && npm run typecheck && npm run test"
   },
   "devDependencies": {
