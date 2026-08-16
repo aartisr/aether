@@ -60,9 +60,18 @@ test.describe('Echo voice reflection flow', () => {
       }
 
       class MockSpeechRecognition {
+        static async available() {
+          return 'available' as const;
+        }
+
+        static async install() {
+          return true;
+        }
+
         continuous = false;
         interimResults = false;
         lang = 'en-US';
+        processLocally = false;
         onresult: MockRecognitionResultHandler = null;
         onerror: MockRecognitionErrorHandler = null;
         onend: (() => void) | null = null;
@@ -97,6 +106,9 @@ test.describe('Echo voice reflection flow', () => {
 
   test('records, populates transcript live, enables analysis before stop, and shows results', async ({ page }) => {
     await page.goto('/echo');
+
+    await expect(page.getByText(/your voice stays on your device/i)).toBeVisible();
+    await expect(page.getByText(/never switches to cloud speech recognition/i)).toBeVisible();
 
     await page.getByRole('button', { name: /start recording/i }).click();
 

@@ -25,9 +25,12 @@ class MockMediaRecorder {
 
 class MockSpeechRecognition {
   static instance: MockSpeechRecognition | null = null;
+  static available = jest.fn().mockResolvedValue('available');
+  static install = jest.fn().mockResolvedValue(true);
   continuous = false;
   interimResults = false;
   lang = 'en-US';
+  processLocally = false;
   onresult: ((event: unknown) => void) | null = null;
   onerror: ((event: { error: string }) => void) | null = null;
   onend: (() => void) | null = null;
@@ -67,6 +70,8 @@ describe('VoiceRecorder', () => {
     createObjectURL.mockClear();
     MockMediaRecorder.instance = null;
     MockSpeechRecognition.instance = null;
+    MockSpeechRecognition.available.mockResolvedValue('available');
+    MockSpeechRecognition.install.mockResolvedValue(true);
 
     Object.defineProperty(global.navigator, 'mediaDevices', {
       value: { getUserMedia },
@@ -406,8 +411,113 @@ describe('VoiceRecorder', () => {
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/live transcription is not available/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/private on-device dictation is not available/i);
     });
+  });
+
+  it('refuses browser speech recognition when private on-device support is unavailable', async () => {
+    Object.defineProperty(window, 'SpeechRecognition', {
+      value: class CloudOnlySpeechRecognition {
+        continuous = false;
+        interimResults = false;
+        lang = 'en-US';
+        processLocally = false;
+        onresult = null;
+        onerror = null;
+        onend = null;
+
+        start() { return undefined; }
+        stop() { return undefined; }
+        abort() { return undefined; }
+      },
+      configurable: true,
+    });
+
+    const { stream } = makeStream();
+    getUserMedia.mockResolvedValue(stream);
+
+    render(<VoiceRecorder />);
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('status')).toHaveTextContent(/never fall back to cloud/i);
+    });
+    expect(MockSpeechRecognition.instance).toBeNull();
+  });
+
+  it('downloads a local language pack before starting private dictation', async () => {
+    MockSpeechRecognition.available.mockResolvedValue('downloadable');
+    MockSpeechRecognition.install.mockResolvedValue(true);
+    const { stream } = makeStream();
+    getUserMedia.mockResolvedValue(stream);
+
+    render(<VoiceRecorder />);
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+
+    await waitFor(() => {
+      expect(MockSpeechRecognition.install).toHaveBeenCalledWith({
+        langs: ['en-US'],
+        processLocally: true,
+        quality: 'dictation',
+      });
+      expect(MockSpeechRecognition.instance?.processLocally).toBe(true);
+    });
+  });
+
+  it('explains when a private local language pack is unavailable', async () => {
+    MockSpeechRecognition.available.mockResolvedValue('unavailable');
+    const { stream } = makeStream();
+    getUserMedia.mockResolvedValue(stream);
+
+    render(<VoiceRecorder />);
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('status')).toHaveTextContent(/not available for english/i);
+    });
+  });
+
+  it('waits for a private language pack that is already downloading', async () => {
+    MockSpeechRecognition.available.mockResolvedValue('downloading');
+    const { stream } = makeStream();
+    getUserMedia.mockResolvedValue(stream);
+
+    render(<VoiceRecorder />);
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('status')).toHaveTextContent(/pack is downloading/i);
+    });
+    expect(MockSpeechRecognition.instance).toBeNull();
+  });
+
+  it('keeps recording local when the browser cannot check private dictation availability', async () => {
+    MockSpeechRecognition.available.mockRejectedValue(new Error('capability check failed'));
+    const { stream } = makeStream();
+    getUserMedia.mockResolvedValue(stream);
+
+    render(<VoiceRecorder />);
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('status')).toHaveTextContent(/could not confirm private on-device dictation/i);
+    });
+    expect(MockSpeechRecognition.instance).toBeNull();
+  });
+
+  it('keeps recording local when the private language pack installation fails', async () => {
+    MockSpeechRecognition.available.mockResolvedValue('downloadable');
+    MockSpeechRecognition.install.mockResolvedValue(false);
+    const { stream } = makeStream();
+    getUserMedia.mockResolvedValue(stream);
+
+    render(<VoiceRecorder />);
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+
+    await waitFor(() => {
+      expect(screen.getByRole('status')).toHaveTextContent(/could not be installed/i);
+    });
+    expect(MockSpeechRecognition.instance).toBeNull();
   });
 
   it('shows actionable notice for SpeechRecognition network error', async () => {
@@ -421,7 +531,7 @@ describe('VoiceRecorder', () => {
     act(() => { MockSpeechRecognition.instance?.onerror?.({ error: 'network' }); });
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/network connection/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/speech-recognition service/i);
     });
   });
 

@@ -74,7 +74,7 @@ describe('free RAG search', () => {
     });
 
     expect(answer.provider).toBe('extractive-free');
-    expect(answer.answer).toContain('indexed Aether content');
+    expect(answer.answer).toContain('relevant approved Aether information');
     expect(answer.citations.length).toBeGreaterThan(0);
   });
 });

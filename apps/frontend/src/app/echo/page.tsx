@@ -54,8 +54,15 @@ export default function EchoChamber() {
         <PageHero
           kicker="Private Reflection"
           title="Echo Chamber"
-          description="An anonymized, voice-enabled outlet for catharsis with on-device transcript, sentiment, and safety signal mapping."
+          description="A private space to put thoughts into words, notice patterns, and choose one calmer next step."
         />
+        <SurfaceCard className="border-emerald-200 bg-emerald-50/70">
+          <p className="theme-kicker">Privacy promise</p>
+          <h2 className="mt-2 text-xl font-black text-slate-950">Your voice stays on your device.</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-700">
+            Echo records, transcribes, and analyzes only in this browser. Live dictation starts only when the browser confirms on-device processing; Echo never switches to cloud speech recognition. Your browser may need a one-time language-pack download before private dictation is available.
+          </p>
+        </SurfaceCard>
         <SurfaceCard className="border-emerald-100 bg-emerald-50/50">
           <p className="theme-kicker">Quick flow</p>
           <div className="mt-3 grid gap-3 sm:grid-cols-3">
@@ -79,7 +86,7 @@ export default function EchoChamber() {
             transcriptSource={liveTranscriptSource}
           />
           <p className="mt-4 text-xs leading-6 text-slate-600">
-            Audio, transcript, and classifications remain on-device in this implementation.
+            Privacy-first by design: recording, dictation, and text analysis stay in this browser. On-device dictation may need a one-time local language-pack download; Echo never falls back to cloud speech recognition.
           </p>
           {!capture ? (
             <p className="mt-2 text-xs leading-6 text-slate-500">

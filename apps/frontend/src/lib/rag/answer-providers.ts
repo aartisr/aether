@@ -34,7 +34,7 @@ const extractiveFreeProvider: RagAnswerProvider = {
 
     if (request.results.length === 0) {
       return {
-        answer: `I could not find enough information in the indexed ${metadata.siteName} content to answer that confidently. Try asking about where to start, which page to open, privacy, mentors, or Peer Navigator.`,
+        answer: `I do not have an approved ${metadata.siteName} source that answers that directly yet. I would rather be clear than guess. If you share what you are trying to decide, I can help you choose a relevant Aether path.`,
         citations: [],
         provider: 'extractive-free',
         confidence: 'low',
@@ -44,18 +44,18 @@ const extractiveFreeProvider: RagAnswerProvider = {
 
     const topScore = request.results[0]?.score ?? 0;
     const confidence = topScore >= 8 ? 'high' : topScore >= 2.4 ? 'medium' : 'low';
-    const evidenceLines = request.results.slice(0, 4).map((result, index) => {
+    const evidenceLines = request.results.slice(0, 3).map((result) => {
       const label = result.chunk.heading || result.chunk.title;
-      return `${index + 1}. ${result.excerpt} (${label})`;
+      return `• ${result.excerpt}\n  Source: ${label}`;
     });
 
     return {
       answer: [
-        `I found this in the indexed ${metadata.siteName} content:`,
+        `Here is the most relevant approved ${metadata.siteName} information I found:`,
         '',
         ...evidenceLines,
         '',
-        'Best next step: open the most relevant source card below, then ask a narrower follow-up if you want me to compare details across documents.',
+        'Open the source below for the full context, or ask me to explain it in simpler words.',
       ].join('\n'),
       citations,
       provider: 'extractive-free',

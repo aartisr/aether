@@ -42,7 +42,7 @@ function getSpeechRecognitionNotice(errorCode: string): string | null {
     case 'audio-capture':
       return 'Microphone stopped responding during transcription. Recording continues — you can type notes below.';
     case 'network':
-      return 'Live transcription requires a network connection in this browser. Recording continues — you can type notes below.';
+      return 'Live dictation could not reach this browser\'s speech-recognition service. Your recording stays in this browser; you can reconnect, try Chrome or Edge, or type notes below.';
     case 'not-allowed':
     case 'service-not-allowed':
       return 'Microphone permission was revoked mid-session. Recording continues but live transcription is paused.';
@@ -73,6 +73,7 @@ function formatTime(seconds: number): string {
 const RECOGNITION_PERMISSION_GRACE_MS = 2500;
 const RECOGNITION_RETRY_DELAY_MS = 900;
 const RECOGNITION_MAX_STARTUP_RETRIES = 2;
+const LOCAL_RECOGNITION_LANGUAGE = 'en-US';
 
 function isStartupPermissionHandshake(errorCode: string, startedAt: number, hasTranscript: boolean): boolean {
   return (
@@ -124,6 +125,7 @@ export default function VoiceRecorder({
   const recognitionStartedAtRef = useRef(0);
   const recognitionStartupRetryCountRef = useRef(0);
   const recognitionRetryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const recognitionStartAttemptRef = useRef(0);
   const onTranscriptChangeRef = useRef(onTranscriptChange);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -145,6 +147,7 @@ export default function VoiceRecorder({
   }, []);
 
   const stopSpeechRecognition = useCallback(() => {
+    recognitionStartAttemptRef.current += 1;
     const current = recognitionRef.current;
     // Null out BEFORE calling stop() so that the onend handler won't restart it
     recognitionRef.current = null;
@@ -159,7 +162,7 @@ export default function VoiceRecorder({
     }
   }, []);
 
-  const startSpeechRecognition = useCallback(() => {
+  const startSpeechRecognition = useCallback(async () => {
     const Ctor =
       typeof window !== 'undefined'
         ? (window.SpeechRecognition ?? window.webkitSpeechRecognition)
@@ -168,16 +171,88 @@ export default function VoiceRecorder({
     if (!Ctor) {
       setLiveStatus('unavailable');
       setTranscriptionNotice(
-        'Live transcription is not available in this browser (try Chrome or Edge). ' +
+        'Private on-device dictation is not available in this browser (try Chrome or Edge). ' +
         'Recording continues — you can type notes in the text pad below.',
       );
       return;
     }
 
+    // Web Speech defaults to server-backed recognition in many browsers. Echo is
+    // deliberately local-only: never allow an implicit cloud fallback.
+    if (typeof Ctor.available !== 'function' || typeof Ctor.install !== 'function') {
+      setLiveStatus('unavailable');
+      setTranscriptionNotice(
+        'Private on-device dictation is not available in this browser yet. Your recording stays in this browser, and Echo will never fall back to cloud speech recognition; type notes below or use a browser with local speech support.',
+      );
+      return;
+    }
+
+    const attempt = ++recognitionStartAttemptRef.current;
+    setTranscriptionNotice('Checking private on-device dictation…');
+
+    let availability: SpeechRecognitionAvailability;
+    try {
+      availability = await Ctor.available({
+        langs: [LOCAL_RECOGNITION_LANGUAGE],
+        processLocally: true,
+        quality: 'dictation',
+      });
+    } catch {
+      setLiveStatus('unavailable');
+      setTranscriptionNotice(
+        'This browser could not confirm private on-device dictation. Your recording stays in this browser; type notes below or try a browser with local speech support.',
+      );
+      return;
+    }
+
+    if (!isRecordingRef.current || recognitionStartAttemptRef.current !== attempt) {
+      return;
+    }
+
+    if (availability === 'downloadable') {
+      setTranscriptionNotice('Downloading the one-time English pack for private on-device dictation…');
+      try {
+        const installed = await Ctor.install({
+          langs: [LOCAL_RECOGNITION_LANGUAGE],
+          processLocally: true,
+          quality: 'dictation',
+        });
+        if (!installed) {
+          throw new Error('Language pack installation failed.');
+        }
+      } catch {
+        setLiveStatus('unavailable');
+        setTranscriptionNotice(
+          'The private on-device dictation pack could not be installed. Your recording stays in this browser; type notes below and try again later.',
+        );
+        return;
+      }
+
+      if (!isRecordingRef.current || recognitionStartAttemptRef.current !== attempt) {
+        return;
+      }
+    } else if (availability === 'downloading') {
+      setLiveStatus('idle');
+      setTranscriptionNotice('The private on-device dictation pack is downloading. Keep this page open, then start recording again.');
+      return;
+    } else if (availability !== 'available') {
+      setLiveStatus('unavailable');
+      setTranscriptionNotice(
+        'Private on-device dictation is not available for English in this browser. Your recording stays in this browser; type notes below or try another supported browser.',
+      );
+      return;
+    }
+
+    if (!isRecordingRef.current || recognitionStartAttemptRef.current !== attempt) {
+      return;
+    }
+
+    setTranscriptionNotice(null);
     const recognition = new Ctor();
-    recognition.lang = 'en-US';
+    recognition.lang = LOCAL_RECOGNITION_LANGUAGE;
     recognition.continuous = true;
     recognition.interimResults = true;
+    recognition.processLocally = true;
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       let allFinal = '';
@@ -268,7 +343,7 @@ export default function VoiceRecorder({
     } catch {
       setLiveStatus('unavailable');
       setTranscriptionNotice(
-        'Could not start live transcription. Recording continues — you can type notes below.',
+        'Could not start private on-device dictation. Recording continues — you can type notes below.',
       );
     }
   }, []);
@@ -468,7 +543,7 @@ export default function VoiceRecorder({
       )}
 
       <p className="mt-1 text-center text-xs text-slate-500">
-        Your voice is never sent to a server. All processing happens locally on your device.
+        Privacy-first mode: recording, dictation, and text analysis stay in this browser. Echo will never fall back to cloud speech recognition.
       </p>
     </div>
   );
@@ -478,14 +553,29 @@ export default function VoiceRecorder({
 // Scoped to this file; extends the minimal built-in types for continuous recognition.
 declare global {
   interface Window {
-    SpeechRecognition?: { new (): SpeechRecognition };
-    webkitSpeechRecognition?: { new (): SpeechRecognition };
+    SpeechRecognition?: SpeechRecognitionConstructor;
+    webkitSpeechRecognition?: SpeechRecognitionConstructor;
   }
+
+  type SpeechRecognitionAvailability = 'available' | 'downloadable' | 'downloading' | 'unavailable';
+
+  type SpeechRecognitionConstructor = {
+    new (): SpeechRecognition;
+    available?: (options: SpeechRecognitionLanguagePackOptions) => Promise<SpeechRecognitionAvailability>;
+    install?: (options: SpeechRecognitionLanguagePackOptions) => Promise<boolean>;
+  };
+
+  type SpeechRecognitionLanguagePackOptions = {
+    langs: string[];
+    processLocally: boolean;
+    quality?: 'dictation';
+  };
 
   interface SpeechRecognition {
     continuous: boolean;
     interimResults: boolean;
     lang: string;
+    processLocally: boolean;
     onresult: ((event: SpeechRecognitionEvent) => void) | null;
     onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
     onend: (() => void) | null;

@@ -29,9 +29,12 @@ class MockMediaRecorder {
 
 class MockSpeechRecognition {
   static instance: MockSpeechRecognition | null = null;
+  static available = jest.fn().mockResolvedValue('available');
+  static install = jest.fn().mockResolvedValue(true);
   continuous = false;
   interimResults = false;
   lang = 'en-US';
+  processLocally = false;
   onresult: ((event: { results: ArrayLike<{ 0: { transcript: string } }> }) => void) | null = null;
   onerror: (() => void) | null = null;
   onend: (() => void) | null = null;
@@ -88,6 +91,8 @@ describe('Echo flow integration', () => {
     createObjectURL.mockClear();
     MockSpeechRecognition.instance = null;
     MockMediaRecorder.instance = null;
+    MockSpeechRecognition.available.mockResolvedValue('available');
+    MockSpeechRecognition.install.mockResolvedValue(true);
 
     Object.defineProperty(global.navigator, 'mediaDevices', {
       value: { getUserMedia },
