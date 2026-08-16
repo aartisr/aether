@@ -32,11 +32,14 @@ const nextConfig = {
     workerThreads: false,
   },
   webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve = config.resolve || {};
-      config.resolve.alias = config.resolve.alias || {};
-      config.resolve.alias['onnxruntime-node'] = false;
-    }
+    // Echo imports Transformers.js only from a client interaction. Prevent the
+    // server compilation pass from following its optional native ONNX backend;
+    // browser transcription uses the WebAssembly/WebGPU backend instead.
+    config.resolve = config.resolve || {};
+    config.resolve.alias = config.resolve.alias || {};
+    config.resolve.alias['onnxruntime-node'] = false;
+
+    void isServer;
 
     return config;
   },

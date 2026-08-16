@@ -4,7 +4,7 @@ export type LabelScore<TLabel extends string> = {
   matchedTerms: string[];
 };
 
-export type TranscriptSource = 'speech-recognition' | 'manual' | 'unavailable';
+export type TranscriptSource = 'speech-recognition' | 'on-device-model' | 'manual' | 'unavailable';
 
 export type VoiceCapture = {
   audio: Blob;

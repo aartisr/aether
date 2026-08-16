@@ -1,5 +1,10 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { transcribeAudioInBrowser } from '../../lib/browser-transcription';
 import VoiceRecorder from './VoiceRecorder';
+
+jest.mock('../../lib/browser-transcription', () => ({
+  transcribeAudioInBrowser: jest.fn(),
+}));
 
 // ─── Mock helpers ─────────────────────────────────────────────────────────────
 
@@ -57,6 +62,7 @@ function makeSpeechEvent(parts: Array<{ transcript: string; isFinal: boolean }>)
 describe('VoiceRecorder', () => {
   const getUserMedia = jest.fn();
   const createObjectURL = jest.fn(() => 'blob:mock-audio');
+  const transcribeAudioInBrowserMock = transcribeAudioInBrowser as jest.MockedFunction<typeof transcribeAudioInBrowser>;
 
   function makeStream(): { stream: MediaStream; track: MockTrack } {
     const track: MockTrack = { stop: jest.fn() };
@@ -68,6 +74,7 @@ describe('VoiceRecorder', () => {
     jest.useFakeTimers();
     getUserMedia.mockReset();
     createObjectURL.mockClear();
+    transcribeAudioInBrowserMock.mockReset();
     MockMediaRecorder.instance = null;
     MockSpeechRecognition.instance = null;
     MockSpeechRecognition.available.mockResolvedValue('available');
@@ -709,5 +716,50 @@ describe('VoiceRecorder', () => {
       expect(audio).toBeInTheDocument();
       expect(audio).toHaveAttribute('src', 'blob:mock-audio');
     });
+  });
+
+  it('offers explicit browser-only transcription after recording when no live transcript is available', async () => {
+    const { stream } = makeStream();
+    getUserMedia.mockResolvedValue(stream);
+    transcribeAudioInBrowserMock.mockImplementation(async (_audio, onProgress) => {
+      onProgress?.({ phase: 'loading-model', detail: 'Preparing the private transcription model…' });
+      onProgress?.({ phase: 'transcribing', detail: 'Transcribing on this device…' });
+      return 'I feel calmer after taking a break.';
+    });
+    const onTranscriptChange = jest.fn();
+
+    render(<VoiceRecorder onTranscriptChange={onTranscriptChange} />);
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+    await waitFor(() => screen.getByRole('button', { name: /stop recording/i }));
+    fireEvent.click(screen.getByRole('button', { name: /stop recording/i }));
+
+    const privateTranscription = await screen.findByRole('button', { name: /transcribe privately on this device/i });
+    fireEvent.click(privateTranscription);
+
+    await waitFor(() => {
+      expect(transcribeAudioInBrowserMock).toHaveBeenCalledTimes(1);
+      expect(screen.getByRole('textbox', { name: /voice transcript/i })).toHaveValue('I feel calmer after taking a break.');
+    });
+    expect(onTranscriptChange).toHaveBeenLastCalledWith('I feel calmer after taking a break.', 'on-device-model');
+  });
+
+  it('keeps the recording usable and offers a retry when private transcription fails', async () => {
+    const { stream } = makeStream();
+    getUserMedia.mockResolvedValue(stream);
+    transcribeAudioInBrowserMock.mockRejectedValue(new Error('model download failed'));
+
+    render(<VoiceRecorder />);
+    fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
+    await waitFor(() => screen.getByRole('button', { name: /stop recording/i }));
+    fireEvent.click(screen.getByRole('button', { name: /stop recording/i }));
+
+    const privateTranscription = await screen.findByRole('button', { name: /transcribe privately on this device/i });
+    fireEvent.click(privateTranscription);
+
+    await waitFor(() => {
+      expect(screen.getByRole('status')).toHaveTextContent(/could not start in this browser/i);
+    });
+    expect(screen.getByLabelText(/playback recorded audio/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /transcribe privately on this device/i })).toBeEnabled();
   });
 });

@@ -1,6 +1,7 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
+import { transcribeAudioInBrowser } from '../../lib/browser-transcription';
 import type { TranscriptSource, VoiceCapture } from '../../lib/local-ai';
 
 // ─── Error message helpers ────────────────────────────────────────────────────
@@ -111,6 +112,10 @@ export default function VoiceRecorder({
   const [transcript, setTranscript] = useState('');
   const [interimText, setInterimText] = useState('');
   const [liveStatus, setLiveStatus] = useState<LiveStatus>('idle');
+  const [recordedAudio, setRecordedAudio] = useState<Blob | null>(null);
+  const [isLocalTranscribing, setIsLocalTranscribing] = useState(false);
+  const [localTranscriptionDetail, setLocalTranscriptionDetail] = useState<string | null>(null);
+  const [localTranscriptionError, setLocalTranscriptionError] = useState<string | null>(null);
 
   /**
    * Refs are the synchronous source of truth for async callbacks.
@@ -352,6 +357,10 @@ export default function VoiceRecorder({
     setError(null);
     setTranscriptionNotice(null);
     setAudioURL(null);
+    setRecordedAudio(null);
+    setIsLocalTranscribing(false);
+    setLocalTranscriptionDetail(null);
+    setLocalTranscriptionError(null);
     setElapsed(0);
     setTranscript('');
     setInterimText('');
@@ -404,6 +413,7 @@ export default function VoiceRecorder({
         const effectiveMime = mediaRecorder.mimeType || 'audio/webm';
         const blob = new Blob(chunksRef.current, { type: effectiveMime });
         setAudioURL(URL.createObjectURL(blob));
+        setRecordedAudio(blob);
         onRecordingComplete?.(blob);
         onCaptureComplete?.({
           audio: blob,
@@ -446,6 +456,32 @@ export default function VoiceRecorder({
     transcriptSourceRef.current = value ? 'manual' : 'unavailable';
     setTranscript(value);
     onTranscriptChangeRef.current?.(value, value ? 'manual' : 'unavailable');
+  };
+
+  const transcribeRecordedAudioLocally = async () => {
+    if (!recordedAudio || isLocalTranscribing) return;
+
+    setIsLocalTranscribing(true);
+    setLocalTranscriptionError(null);
+    setLocalTranscriptionDetail('Preparing private on-device transcription…');
+
+    try {
+      const nextTranscript = await transcribeAudioInBrowser(recordedAudio, (progress) => {
+        setLocalTranscriptionDetail(progress.detail);
+      });
+      transcriptRef.current = nextTranscript;
+      transcriptSourceRef.current = 'on-device-model';
+      setTranscript(nextTranscript);
+      onTranscriptChangeRef.current?.(nextTranscript, 'on-device-model');
+      setLocalTranscriptionDetail('Private transcription is ready. Review it before analysis.');
+    } catch {
+      setLocalTranscriptionDetail(null);
+      setLocalTranscriptionError(
+        'Private transcription could not start in this browser. Your recording remains here; you can try again or type notes below.',
+      );
+    } finally {
+      setIsLocalTranscribing(false);
+    }
   };
 
   return (
@@ -529,6 +565,28 @@ export default function VoiceRecorder({
             className="w-full"
             aria-label="Playback recorded audio"
           />
+          {!transcript.trim() ? (
+            <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+              <p className="text-sm font-bold text-emerald-950">Private transcription, on this device</p>
+              <p className="mt-1 text-xs leading-5 text-emerald-900">
+                Download and cache the English transcription model once from Hugging Face, then process this recording in your browser. Hugging Face receives the model-download request; your audio and transcript never leave this device.
+              </p>
+              <button
+                type="button"
+                onClick={() => void transcribeRecordedAudioLocally()}
+                disabled={isLocalTranscribing}
+                className="mt-3 rounded-lg bg-emerald-800 px-3 py-2 text-sm font-bold text-white transition hover:bg-emerald-900 disabled:cursor-wait disabled:opacity-70"
+              >
+                {isLocalTranscribing ? 'Preparing private transcription…' : 'Transcribe privately on this device'}
+              </button>
+              {localTranscriptionDetail ? (
+                <p className="mt-2 text-xs font-medium text-emerald-800" aria-live="polite">{localTranscriptionDetail}</p>
+              ) : null}
+              {localTranscriptionError ? (
+                <p className="mt-2 text-xs font-medium text-rose-700" role="status">{localTranscriptionError}</p>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       )}
 

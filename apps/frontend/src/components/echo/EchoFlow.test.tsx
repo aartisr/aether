@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
-import type { VoiceCapture } from '../../lib/local-ai';
+import type { TranscriptSource, VoiceCapture } from '../../lib/local-ai';
 import SentimentMapping from './SentimentMapping';
 import VoiceRecorder from './VoiceRecorder';
 
@@ -55,7 +55,7 @@ class MockSpeechRecognition {
 function EchoFlowHarness() {
   const [capture, setCapture] = useState<VoiceCapture | null>(null);
   const [liveTranscript, setLiveTranscript] = useState('');
-  const [liveTranscriptSource, setLiveTranscriptSource] = useState<'speech-recognition' | 'manual' | 'unavailable'>('unavailable');
+  const [liveTranscriptSource, setLiveTranscriptSource] = useState<TranscriptSource>('unavailable');
 
   const handleCaptureComplete = (nextCapture: VoiceCapture) => {
     setCapture(nextCapture);
