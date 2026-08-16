@@ -37,7 +37,9 @@ export async function GET() {
           `Topics: ${post.tags.join(', ')}`,
           `Summary: ${post.excerpt}`,
           '',
-          'content' in post ? post.content.trim() : 'Full article content is available at the canonical URL.',
+          'content' in post && typeof post.content === 'string'
+            ? post.content.trim()
+            : 'Full article content is available at the canonical URL.',
           '',
         ])
       : ['No public editorial guides are currently published.', '']),

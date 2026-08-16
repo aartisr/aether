@@ -45,5 +45,7 @@ export function track(name: string, properties: AnalyticsProperties = {}) {
 export function subscribeToAnalytics(listener: AnalyticsListener) {
   listeners.add(listener);
   bufferedEvents.splice(0).forEach(listener);
-  return () => listeners.delete(listener);
+  return () => {
+    listeners.delete(listener);
+  };
 }

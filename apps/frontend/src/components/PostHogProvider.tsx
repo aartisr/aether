@@ -43,7 +43,7 @@ export default function PostHogProvider() {
   useEffect(() => {
     if (!enabled || !postHogKey) return;
 
-    let unsubscribe = () => undefined;
+    let unsubscribe: () => void = () => {};
     let disposed = false;
     const cancelIdleWork = runWhenIdle(() => {
       void import('posthog-js')
