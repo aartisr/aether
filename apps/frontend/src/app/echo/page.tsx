@@ -58,10 +58,11 @@ export default function EchoChamber() {
           <p className="theme-kicker">Start here</p>
           <h2 className="mt-2 text-xl font-black text-slate-950">How would you like to reflect?</h2>
           <p className="mt-2 text-sm leading-6 text-slate-700">There is no right way. Choose the one that feels easiest right now.</p>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2" role="group" aria-label="Reflection method">
             <button
               type="button"
               onClick={() => setEntryMode('voice')}
+              aria-pressed={entryMode === 'voice'}
               className={`rounded-2xl border p-4 text-left transition ${entryMode === 'voice' ? 'border-emerald-700 bg-emerald-800 text-white shadow-md' : 'border-emerald-200 bg-white text-slate-900 hover:border-emerald-400'}`}
             >
               <span className="block text-sm font-black">Speak out loud</span>
@@ -70,6 +71,7 @@ export default function EchoChamber() {
             <button
               type="button"
               onClick={() => setEntryMode('write')}
+              aria-pressed={entryMode === 'write'}
               className={`rounded-2xl border p-4 text-left transition ${entryMode === 'write' ? 'border-emerald-700 bg-emerald-800 text-white shadow-md' : 'border-emerald-200 bg-white text-slate-900 hover:border-emerald-400'}`}
             >
               <span className="block text-sm font-black">Write a few words</span>

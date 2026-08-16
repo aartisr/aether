@@ -131,4 +131,22 @@ test.describe('Echo voice reflection flow', () => {
     await expect(page.getByLabel(/playback recorded audio/i)).toHaveCount(0);
     await expect(page.getByRole('button', { name: /notice a pattern/i })).toHaveCount(0);
   });
+
+  test('announces and switches reflection methods without carrying over a prior reflection', async ({ page }) => {
+    await page.goto('/echo');
+
+    const speak = page.getByRole('button', { name: /speak out loud/i });
+    const write = page.getByRole('button', { name: /write a few words/i });
+    await expect(speak).toHaveAttribute('aria-pressed', 'true');
+    await expect(write).toHaveAttribute('aria-pressed', 'false');
+
+    await write.click();
+    await expect(write).toHaveAttribute('aria-pressed', 'true');
+    await expect(speak).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.getByRole('textbox', { name: /write what is on your mind/i })).toBeVisible();
+
+    await speak.click();
+    await expect(page.getByRole('button', { name: /start recording/i })).toBeVisible();
+    await expect(page.getByRole('textbox', { name: /write what is on your mind/i })).toHaveCount(0);
+  });
 });
