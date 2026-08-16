@@ -22,6 +22,7 @@ html {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -119,6 +120,31 @@ a {
 }
 a:hover, a:focus {
   color: var(--link-hover);
+}
+
+/* Keep rich product pages comfortable for keyboard, touch, and reduced-motion users. */
+:where(button, input, select, textarea, summary, a) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+summary:focus-visible {
+  outline: 3px solid rgba(15, 109, 177, 0.35);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 ::-webkit-scrollbar {

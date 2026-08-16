@@ -1,212 +1,46 @@
 {
-  "root": {
+  "root": { "props": { "title": "Home" } },
+  "content": [
     {
-      "root": {
-        "props": {
-          "title": "Home"
-        }
-      },
-      "content": [
-        {
-          "type": "HomeHeroBlock",
-          "props": {
-            "kicker": "Privacy-first student resilience",
-            "title": "Aether",
-            "description": "A calm resilience ecosystem for students who need a private place to reflect, find direction, and return to support that feels steady.",
-            "primaryAction": {
-              "href": "/echo",
-              "label": "Try Echo Chamber"
-            },
-            "secondaryAction": {
-              "href": "/resilience-pathway",
-              "label": "Open Resilience Hub"
-            },
-            "assistantAction": {
-              "href": "/ask",
-              "label": "Ask Aether"
-            },
-            "trustSignals": [
-              { "value": "Private by default" },
-              { "value": "Peer-aware" },
-              { "value": "Safety bounded" },
-              { "value": "AI-readable" }
-            ],
-            "proofPoints": [
-              {
-                "value": "Private",
-                "label": "Reflection patterns are designed around minimized exposure."
-              },
-              {
-                "value": "Guided",
-                "label": "The first action is always clearer than the surrounding stress."
-              },
-              {
-                "value": "Safe",
-                "label": "Boundaries, crisis notes, and trust cues stay visible."
-              }
-            ],
-            "id": "HomeHeroBlock-1782000000000-1"
-          }
-        },
-        {
-          "type": "HomeJourneyDockBlock",
-          "props": {
-            "items": [
-              {
-                "title": "A calm first step",
-                "description": "Aether starts with orientation, not pressure, so students can understand what support is available."
-              },
-              {
-                "title": "A reason to come back",
-                "description": "Reflection, peer connection, and guided pathways create a rhythm that grows with each visit."
-              },
-              {
-                "title": "Trust in plain sight",
-                "description": "Privacy, safety boundaries, and source-backed AI guidance stay visible across the experience."
-              }
-            ],
-            "id": "HomeJourneyDockBlock-1782000000000-2"
-          }
-        },
-        {
-          "type": "HomeStartOptionsBlock",
-          "props": {
-            "eyebrow": "Start where you are",
-            "title": "A first step should feel obvious.",
-            "description": "Aether keeps the first decision simple: get oriented, reflect privately, or understand the trust model before going deeper.",
-            "items": [
-              {
-                "title": "Echo Chamber",
-                "description": "Private voice reflection with on-device transcript and sentiment mapping.",
-                "href": "/echo"
-              },
-              {
-                "title": "Resilience Pathway",
-                "description": "Guided check-ins, safety planning, resource routing, peer circles, and habit support.",
-                "href": "/resilience-pathway"
-              },
-              {
-                "title": "About Aether",
-                "description": "Understand the trust model, product boundaries, and mission before going deeper.",
-                "href": "/about"
-              }
-            ],
-            "id": "HomeStartOptionsBlock-1782000000000-3"
-          }
-        },
-        {
-          "type": "HomeFeatureGridBlock",
-          "props": {
-            "eyebrow": "Why it feels worth returning to",
-            "title": "Support that has a rhythm.",
-            "description": "The strongest wellbeing tools give people an immediate path, a safe sense of progress, and visible trust markers. Aether brings those patterns into a quieter interface system.",
-            "items": [
-              {
-                "title": "A calmer entry point",
-                "description": "Students can orient themselves without being rushed into a decision before they understand the landscape.",
-                "eyebrow": "Reduce friction"
-              },
-              {
-                "title": "A clearer path forward",
-                "description": "Each surface turns reflection into a next step instead of leaving people inside abstraction.",
-                "eyebrow": "Turn insight into action"
-              },
-              {
-                "title": "Trust that stays visible",
-                "description": "Privacy, boundaries, and source-backed guidance remain visible instead of hiding in fine print.",
-                "eyebrow": "Make trust legible"
-              },
-              {
-                "title": "A return loop that makes sense",
-                "description": "Reflection, support routing, and peer connection work together so the system stays useful after the first visit.",
-                "eyebrow": "Encourage return"
-              }
-            ],
-            "id": "HomeFeatureGridBlock-1782000000000-4"
-          }
-        },
-        {
-          "type": "HomeReturnLoopBlock",
-          "props": {
-            "exploreKicker": "Explore Aether",
-            "exploreTitle": "Choose the path that matches the moment.",
-            "exploreDescription": "Privacy-first student resilience support with guided pathways, peer connection, and transparent AI. Navigation stays simple even when admins turn features on and off.",
-            "exploreItems": [
-              {
-                "title": "Resilience Hub",
-                "description": "Guided check-ins, safety planning, resource routing, peer circles, and habits.",
-                "href": "/resilience-pathway"
-              },
-              {
-                "title": "Echo Chamber",
-                "description": "Private reflection with on-device transcript and sentiment mapping.",
-                "href": "/echo"
-              },
-              {
-                "title": "Peer Navigator",
-                "description": "Privacy-aware peer matching with explainable fairness controls.",
-                "href": "/peer-navigator"
-              },
-              {
-                "title": "Aether Journal",
-                "description": "Practical, evidence-informed student resilience guides.",
-                "href": "/blog"
-              },
-              {
-                "title": "About Aether",
-                "description": "Mission, architecture, and product context.",
-                "href": "/about"
-              },
-              {
-                "title": "Feedback",
-                "description": "Report an issue, request a fix, or suggest what Aether should add next.",
-                "href": "/feedback"
-              }
-            ],
-            "retentionKicker": "Retention loop",
-            "retentionTitle": "Come back for clarity, not noise.",
-            "retentionItems": [
-              {
-                "title": "Reflect privately",
-                "description": "The system gives students a place to process before they decide what kind of support fits."
-              },
-              {
-                "title": "Move toward support",
-                "description": "Each return visit can route toward peers, pathways, or practical resources without restarting from zero."
-              },
-              {
-                "title": "Build a steadier rhythm",
-                "description": "Aether encourages repeat use by making progress feel calm, practical, and visible."
-              }
-            ],
-            "id": "HomeReturnLoopBlock-1782000000000-5"
-          }
-        },
-        {
-          "type": "HomeFaqBlock",
-          "props": {
-            "kicker": "Quick answers",
-            "title": "Frequently asked questions",
-            "items": [
-              {
-                "question": "What is Aether?",
-                "answer": "Aether is a student resilience ecosystem designed to help people reflect privately, understand available support, and move toward safer next steps."
-              },
-              {
-                "question": "Is Aether therapy or emergency care?",
-                "answer": "No. Aether is not therapy, diagnosis, or emergency care. It supports reflection, navigation, and clearer action."
-              },
-              {
-                "question": "Why emphasize privacy?",
-                "answer": "The platform is designed so reflection and exploration can happen with less exposure, clearer boundaries, and more understandable trust cues."
-              },
-              {
-                "question": "Where should I begin?",
-                "answer": "Start with the path that matches the moment: Echo for private reflection, the Resilience Hub for guided support, or About if you want context first."
-              }
-            ],
-            "id": "HomeFaqBlock-1782000000000-6"
-          }
-        }
-      ]
+      "type": "HomeHeroBlock",
+      "props": {
+        "kicker": "Private student support",
+        "title": "Aether",
+        "description": "A quieter place to pause, reflect, and find your next steady step.",
+        "primaryAction": { "href": "#first-step", "label": "Find one next step" },
+        "assistantAction": { "href": "/ask", "label": "I have a question" },
+        "trustSignals": [{ "value": "Private by default" }, { "value": "Safety-aware" }],
+        "proofPoints": [
+          { "value": "Private", "label": "Start without sharing more than you want to." },
+          { "value": "Grounded", "label": "Move toward one clear, practical next step." }
+        ],
+        "id": "HomeHeroBlock-calm-entry"
+      }
+    },
+    {
+      "type": "HomeStartOptionsBlock",
+      "props": {
+        "eyebrow": "A gentle place to begin",
+        "title": "What would help most right now?",
+        "description": "Choose the closest option. You can come back whenever you need to.",
+        "items": [
+          { "title": "I need a calmer moment", "description": "Reflect privately and choose one grounding cue without explaining everything first.", "href": "/echo" },
+          { "title": "I want one practical next step", "description": "Make a simple check-in, then choose a plan, resource, peer path, or habit.", "href": "/resilience-pathway" },
+          { "title": "I am not sure where to begin", "description": "Ask a short question and receive a source-grounded answer with a clear handoff.", "href": "/ask" }
+        ],
+        "id": "HomeStartOptionsBlock-calm-entry"
+      }
+    },
+    {
+      "type": "HomeJourneyDockBlock",
+      "props": {
+        "items": [
+          { "title": "Start small", "description": "One focused action is enough for today." },
+          { "title": "Stay in control", "description": "Choose what to share and where to go next." },
+          { "title": "Return anytime", "description": "Aether is here when another moment needs care." }
+        ],
+        "id": "HomeJourneyDockBlock-calm-entry"
+      }
     }
+  ]
+}

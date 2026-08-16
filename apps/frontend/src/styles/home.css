@@ -1,50 +1,80 @@
 .home-page {
   margin-inline: 0;
+  padding-top: clamp(0.35rem, 1vw, 0.75rem);
+}
+
+.home-page > *,
+.home-page :is(section, article, aside, div) {
+  min-width: 0;
+}
+
+.home-page :is(h1, h2, h3, p, a, span) {
+  overflow-wrap: anywhere;
 }
 
 .home-hero {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgb(216 230 223 / 0.82);
-  border-radius: clamp(1.35rem, 3vw, 2rem);
+  isolation: isolate;
+  border: 1px solid rgb(206 227 217 / 0.92);
+  border-radius: clamp(1.7rem, 3vw, 2.65rem);
   background:
-    radial-gradient(circle at 50% 20%, rgb(191 233 220 / 0.55), transparent 34rem),
-    linear-gradient(145deg, rgb(255 255 255 / 0.95), rgb(237 247 242 / 0.92) 54%, rgb(255 248 241 / 0.9)),
-    linear-gradient(90deg, rgb(var(--theme-primary-rgb) / 0.1), rgb(var(--theme-accent-rgb) / 0.1));
+    radial-gradient(circle at 85% 13%, rgb(191 233 220 / 0.76), transparent 23rem),
+    radial-gradient(circle at 8% 95%, rgb(232 226 255 / 0.48), transparent 27rem),
+    linear-gradient(135deg, rgb(255 255 255 / 0.98), rgb(243 250 247 / 0.98) 58%, rgb(250 251 247 / 0.96));
   box-shadow: var(--theme-shadow-lg);
 }
 
 .home-hero::before {
   position: absolute;
-  inset: 0;
+  z-index: -1;
+  width: 26rem;
+  height: 26rem;
+  right: -11rem;
+  bottom: -13rem;
   content: '';
-  background:
-    linear-gradient(115deg, transparent 0 44%, rgb(var(--theme-primary-rgb) / 0.08) 44% 45%, transparent 45% 100%),
-    linear-gradient(65deg, transparent 0 62%, rgb(var(--theme-accent-rgb) / 0.1) 62% 63%, transparent 63% 100%);
+  border: 1px solid rgb(var(--theme-primary-rgb) / 0.12);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2.5rem rgb(var(--theme-primary-rgb) / 0.04),
+    0 0 0 5.75rem rgb(var(--theme-primary-rgb) / 0.025);
   pointer-events: none;
 }
 
 .home-hero-inner {
   position: relative;
   display: grid;
-  gap: clamp(1rem, 2.5vw, 1.5rem);
-  min-height: clamp(34rem, calc(100svh - 13rem), 44rem);
+  gap: clamp(1.8rem, 5vw, 5rem);
+  min-height: clamp(32rem, calc(100svh - 15rem), 39rem);
   align-content: center;
-  padding: clamp(1.35rem, 4.5vw, 3.7rem) clamp(1rem, 4vw, 3.25rem) clamp(2rem, 6vw, 4rem);
+  padding: clamp(2rem, 5vw, 4.5rem) clamp(1.25rem, 5vw, 4.75rem);
   text-align: center;
+}
+
+@media (min-width: 900px) {
+  .home-hero-inner {
+    grid-template-columns: minmax(0, 1.08fr) minmax(17rem, 0.72fr);
+    text-align: left;
+  }
 }
 
 .home-hero-copy-block {
   position: relative;
   z-index: 1;
   display: grid;
-  gap: clamp(0.85rem, 2vw, 1.15rem);
+  gap: clamp(0.85rem, 2vw, 1.25rem);
   justify-items: center;
+}
+
+@media (min-width: 900px) {
+  .home-hero-copy-block {
+    justify-items: start;
+  }
 }
 
 .home-logo-mark {
   display: grid;
-  width: min(100%, 21rem);
+  width: min(100%, 17rem);
   margin-inline: auto;
   place-items: center;
   padding: 0;
@@ -60,22 +90,36 @@
 }
 
 .home-hero-title {
-  max-width: 62rem;
+  max-width: 48rem;
   margin-inline: auto;
   color: var(--theme-text);
   font-family: var(--font-display), 'Playfair Display', serif;
-  font-size: clamp(3rem, 8vw, 7rem);
+  font-size: clamp(3.75rem, 7.2vw, 6.9rem);
   font-weight: 950;
   letter-spacing: 0;
   line-height: 0.94;
 }
 
+@media (min-width: 900px) {
+  .home-hero-title,
+  .home-hero-copy {
+    margin-inline: 0;
+  }
+}
+
 .home-hero-copy {
-  max-width: 48rem;
-  margin-inline: auto;
+  max-width: 36rem;
   color: var(--theme-text-muted);
   font-size: clamp(1.02rem, 1.6vw, 1.28rem);
-  font-weight: 650;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.home-hero-reassurance {
+  max-width: 34rem;
+  color: var(--theme-text-muted);
+  font-size: 0.96rem;
+  font-weight: 600;
   line-height: 1.55;
 }
 
@@ -86,6 +130,23 @@
   flex-direction: column;
   justify-content: center;
   gap: 0.75rem;
+}
+
+.home-hero-actions > * {
+  flex: 1 1 12rem;
+}
+
+.home-hero-signals {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+@media (min-width: 900px) {
+  .home-hero-signals {
+    justify-content: flex-start;
+  }
 }
 
 @media (min-width: 640px) {
@@ -100,28 +161,30 @@
   position: relative;
   z-index: 1;
   display: grid;
-  gap: 1rem;
+  gap: 1.35rem;
   justify-items: center;
 }
 
 .home-proof-grid {
   display: grid;
-  width: min(100%, 58rem);
-  gap: 0.75rem;
+  width: min(100%, 22rem);
+  gap: 0.6rem;
 }
 
-@media (min-width: 720px) {
+@media (min-width: 640px) and (max-width: 899px) {
   .home-proof-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: min(100%, 46rem);
   }
 }
 
 .home-proof-card {
   min-width: 0;
-  border: 1px solid rgb(216 230 223 / 0.82);
-  border-radius: var(--theme-radius-md);
+  border: 1px solid rgb(216 230 223 / 0.75);
+  border-radius: 1rem;
   background: rgb(255 255 255 / 0.68);
-  padding: 0.9rem;
+  backdrop-filter: blur(10px);
+  padding: 0.85rem 1rem;
   text-align: left;
   box-shadow: var(--theme-shadow-sm);
 }
@@ -142,20 +205,9 @@
   line-height: 1.45;
 }
 
-.home-hero-share {
-  display: flex;
-  justify-content: center;
-}
-
-@media (max-width: 639px) {
-  .home-hero-share {
-    display: none;
-  }
-}
-
 .home-journey-dock {
   position: relative;
-  margin-top: -2.6rem;
+  margin-top: -1.6rem;
   padding-inline: clamp(0.75rem, 4vw, 2rem);
   z-index: 1;
 }
@@ -172,8 +224,9 @@
 }
 
 .home-journey-card {
-  min-height: 8.5rem;
-  padding: 1rem;
+  min-height: 7.5rem;
+  padding: 1.1rem 1.15rem;
+  background: rgb(255 255 255 / 0.86);
 }
 
 .home-journey-card strong {
@@ -192,7 +245,216 @@
 }
 
 .home-section-heading {
-  max-width: 48rem;
+  max-width: 42rem;
+}
+
+.home-first-step-grid {
+  gap: 1rem;
+}
+
+.home-first-step-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 15rem;
+  padding: 1.35rem !important;
+  border-color: rgb(206 227 217 / 0.96);
+  background: linear-gradient(145deg, rgb(255 255 255 / 0.98), rgb(242 249 246 / 0.88));
+  box-shadow: var(--theme-shadow-sm);
+}
+
+.home-first-step-card::after {
+  position: absolute;
+  top: 0;
+  left: 1.35rem;
+  width: 2.5rem;
+  height: 3px;
+  content: '';
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--theme-primary), rgb(191 233 220));
+}
+
+.home-first-step-card h3 {
+  margin-top: 0.5rem;
+  font-size: 1.16rem;
+}
+
+.home-first-step-card a {
+  font-weight: 800;
+  text-underline-offset: 0.22em;
+}
+
+/* The first decision is the visual centre of the page: generous, quiet, and unmistakably actionable. */
+#first-step .theme-card-interactive,
+#first-step .home-first-step-card {
+  min-height: 15.5rem;
+  padding: clamp(1.3rem, 2.5vw, 1.8rem) !important;
+  border-color: rgb(203 226 215 / 0.95);
+  border-radius: 1.55rem;
+  background:
+    radial-gradient(circle at 100% 0%, rgb(191 233 220 / 0.38), transparent 12rem),
+    linear-gradient(145deg, rgb(255 255 255 / 0.98), rgb(241 249 245 / 0.9));
+  box-shadow: 0 22px 55px -42px rgb(19 57 48 / 0.42);
+}
+
+#first-step .theme-card-interactive::before {
+  display: block;
+  width: 2.75rem;
+  height: 0.22rem;
+  margin-bottom: 1.15rem;
+  content: '';
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--theme-primary), rgb(191 233 220));
+}
+
+#first-step .theme-card-interactive h3 {
+  font-family: var(--font-display), 'Playfair Display', serif;
+  font-size: 1.35rem;
+  line-height: 1.12;
+}
+
+#first-step .theme-card-interactive p {
+  margin-top: 0.8rem;
+  font-size: 0.94rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 639px) {
+  .home-page {
+    padding-inline: 0.75rem;
+    padding-bottom: 2.75rem;
+  }
+
+  .home-hero {
+    border-radius: 1.35rem;
+  }
+
+  .home-hero::before {
+    width: 17rem;
+    height: 17rem;
+    right: -8rem;
+    bottom: -9rem;
+    box-shadow:
+      0 0 0 1.75rem rgb(var(--theme-primary-rgb) / 0.04),
+      0 0 0 3.75rem rgb(var(--theme-primary-rgb) / 0.025);
+  }
+
+  .home-hero-inner {
+    min-height: auto;
+    gap: 1.75rem;
+    padding: 2.25rem 1.1rem 1.75rem;
+  }
+
+  .home-hero-title {
+    font-size: clamp(3rem, 16vw, 4.3rem);
+  }
+
+  .home-hero-copy {
+    font-size: 1rem;
+  }
+
+  .home-hero-actions,
+  .home-hero-actions > * {
+    width: 100%;
+  }
+
+  .home-hero-actions > * {
+    min-height: 3.1rem;
+  }
+
+  .home-hero-signals {
+    gap: 0.4rem;
+  }
+
+  .home-hero-signals .theme-pill {
+    font-size: 0.7rem;
+    padding-inline: 0.6rem;
+  }
+
+  .home-logo-mark {
+    width: min(100%, 13rem);
+  }
+
+  .home-proof-grid {
+    width: 100%;
+  }
+
+  .home-proof-card {
+    padding: 0.8rem 0.9rem;
+  }
+
+  .home-journey-dock {
+    margin-top: -0.75rem;
+    padding-inline: 0;
+  }
+
+  .home-journey-grid {
+    gap: 0.65rem;
+  }
+
+  .home-journey-card {
+    min-height: 0;
+    padding: 1rem;
+  }
+
+  .home-section-heading h2 {
+    font-size: clamp(1.9rem, 9vw, 2.5rem);
+    line-height: 1.08;
+  }
+
+  .home-section-heading p {
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+
+  .home-first-step-grid {
+    gap: 0.75rem;
+  }
+
+  .home-first-step-card {
+    min-height: 0;
+    padding: 1.15rem !important;
+  }
+
+  #first-step .theme-card-interactive,
+  #first-step .home-first-step-card {
+    min-height: 0;
+  }
+
+  .home-first-step-card::after {
+    left: 1.15rem;
+  }
+
+  .home-return-panel {
+    padding: 1.15rem;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 899px) {
+  .home-hero-inner {
+    min-height: auto;
+    padding-block: 3rem 2.5rem;
+  }
+
+  .home-hero-compass {
+    grid-template-columns: minmax(10rem, 0.6fr) minmax(0, 1.4fr);
+    width: min(100%, 46rem);
+    margin-inline: auto;
+    align-items: center;
+  }
+
+  .home-logo-mark {
+    width: min(100%, 14rem);
+  }
+}
+
+@media (min-width: 1440px) {
+  .home-page {
+    padding-inline: 0;
+  }
+
+  .home-hero-inner {
+    padding-inline: 5.5rem;
+  }
 }
 
 .home-section-heading h2 {
@@ -252,4 +514,21 @@
   font-size: 0.84rem;
   line-height: 1.5;
   margin-top: 0.35rem;
+}
+
+/* Keep the compact phone rhythm after the shared heading and panel rules above. */
+@media (max-width: 639px) {
+  .home-section-heading h2 {
+    font-size: clamp(1.9rem, 9vw, 2.5rem);
+    line-height: 1.08;
+  }
+
+  .home-section-heading p {
+    font-size: 0.96rem;
+    line-height: 1.6;
+  }
+
+  .home-return-panel {
+    padding: 1.15rem;
+  }
 }

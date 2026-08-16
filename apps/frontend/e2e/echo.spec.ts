@@ -6,11 +6,11 @@ test.describe('Echo voice reflection flow', () => {
       {
         name: 'aether_page_flags',
         value: JSON.stringify({ enabled: ['echo'] }),
-        url: 'http://localhost:3000',
+        url: 'http://127.0.0.1:3100',
       },
     ]);
 
-    await context.grantPermissions(['microphone'], { origin: 'http://localhost:3000' });
+    await context.grantPermissions(['microphone'], { origin: 'http://127.0.0.1:3100' });
 
     await page.addInitScript(() => {
       const mediaStream = {

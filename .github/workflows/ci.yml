@@ -19,9 +19,10 @@ jobs:
         with:
           node-version: 22.19.0
           cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install dependencies
-        run: npm install --include=dev --package-lock=false
+        run: NPM_CONFIG_USERCONFIG=.npmrc npm ci --include=dev --no-audit
 
       - name: Lint
         run: npm run lint
@@ -32,8 +33,14 @@ jobs:
       - name: Test
         run: npm run test:ci
 
+      - name: Install Chromium for end-to-end tests
+        run: npx playwright install --with-deps chromium
+
       - name: Build
         run: npm run build
+
+      - name: End-to-end tests
+        run: npm run test:e2e
 
       - name: Performance Budget
         run: npm --workspace=apps/frontend run perf:smoke

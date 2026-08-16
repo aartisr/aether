@@ -10,21 +10,25 @@ export default defineConfig({
   retries: 0,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://127.0.0.1:3100',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:3000',
-    reuseExistingServer: true,
+    command: 'npm --workspace=apps/frontend run dev -- -H 127.0.0.1 -p 3100',
+    url: 'http://127.0.0.1:3100',
+    reuseExistingServer: false,
     timeout: 120_000,
   },
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'mobile-chromium',
+      use: { ...devices['Pixel 5'] },
     },
   ],
 });

@@ -1,9 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import SocialShareLinks from '../components/SocialShareLinks';
 import AetherLogoLockup from '../components/brand/AetherLogoLockup';
-import { CardGrid, JsonLd, LinkCardGrid, SurfaceCard } from '../components/page/PagePrimitives';
-import { homeFaqs, homeFeatureHighlights, homeStartOptions, homeValueCards } from '../lib/home-page';
+import { CardGrid, JsonLd } from '../components/page/PagePrimitives';
 import {
   authorName,
   authorUrl,
@@ -12,14 +10,12 @@ import {
   createWebPageJsonLd,
   entityTopics,
   getPrimarySiteSectionsForRequest,
-  shareTagline,
   siteDescription,
   siteName,
   siteTitle,
   socialProfiles,
   toAbsoluteUrl,
 } from '../lib/site';
-import { getEnabledPagesForRequest } from '../lib/page-flags';
 
 export const metadata = createPageMetadata({
   title: siteTitle,
@@ -36,62 +32,6 @@ export const metadata = createPageMetadata({
 
 export default function Home() {
   const visibleSections = getPrimarySiteSectionsForRequest();
-  const visibleSectionPaths = new Set(visibleSections.map((section) => section.path));
-  const visibleStartOptions = homeStartOptions.filter((option) => visibleSectionPaths.has(option.href));
-  const startCards =
-    visibleStartOptions.length > 0
-      ? visibleStartOptions.map((option) => ({
-          title: option.title,
-          href: option.href,
-          description: option.description,
-        }))
-      : visibleSections
-          .filter((section) => section.path !== '/' && section.path !== '/feedback')
-          .slice(0, 3)
-          .map((section) => ({
-            title: section.name,
-            href: section.path,
-            description: section.description,
-          }));
-
-  const homepageCallToActions = getEnabledPagesForRequest(['echo', 'resilience-pathway', 'about']).map((page) => {
-    if (page.id === 'echo') {
-      return {
-        href: page.path,
-        label: 'Try Echo Chamber',
-        className: 'theme-button theme-button-accent w-full px-6 py-3 sm:w-auto',
-      };
-    }
-
-    if (page.id === 'resilience-pathway') {
-      return {
-        href: page.path,
-        label: 'Open Resilience Hub',
-        className: 'theme-button theme-button-primary w-full px-6 py-3 sm:w-auto',
-      };
-    }
-
-    return {
-      href: page.path,
-      label: 'Start with Aether',
-      className: 'theme-button theme-button-primary w-full px-6 py-3 sm:w-auto',
-    };
-  });
-
-  const returnLoopSignals = [
-    {
-      title: 'A calm first step',
-      description: 'Aether starts with orientation, not pressure, so students can understand what support is available.',
-    },
-    {
-      title: 'A reason to come back',
-      description: 'Reflection, peer connection, and guided pathways create a rhythm that grows with each visit.',
-    },
-    {
-      title: 'Trust in plain sight',
-      description: 'Privacy, safety boundaries, and source-backed AI guidance stay visible across the experience.',
-    },
-  ];
 
   const proofPoints = [
     { value: 'Private', label: 'Reflection patterns are designed around minimized exposure.' },
@@ -100,24 +40,27 @@ export default function Home() {
   ];
   const firstVisitActions = [
     {
-      title: 'Need calm now',
-      description: 'Use Echo Chamber for private voice reflection and immediate grounding cues.',
+      title: 'I need a calmer moment',
+      description: 'Reflect privately and choose one grounding cue without explaining everything first.',
       href: '/echo',
-      label: 'Open Echo Chamber',
+      label: 'Start a private reflection',
     },
     {
-      title: 'Need a plan',
-      description: 'Use the Resilience Hub to check in, create a safety plan, and pick one habit.',
+      title: 'I want one practical next step',
+      description: 'Make a simple check-in, then choose a plan, resource, peer path, or habit.',
       href: '/resilience-pathway',
-      label: 'Open Resilience Hub',
+      label: 'Choose a next step',
     },
     {
-      title: 'Need orientation',
-      description: 'Use Ask Aether for source-grounded answers before you decide where to go next.',
+      title: 'I am not sure where to begin',
+      description: 'Ask a short question and receive a source-grounded answer with a clear handoff.',
       href: '/ask',
-      label: 'Open Ask Aether',
+      label: 'Ask a question',
     },
   ];
+  const availableFirstVisitActions = firstVisitActions.filter(
+    (action) => action.href === '/ask' || visibleSections.some((section) => section.path === action.href),
+  );
 
   const organizationJsonLd = {
     '@context': 'https://schema.org',
@@ -193,24 +136,12 @@ export default function Home() {
     ),
   };
 
-  const faqJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: homeFaqs.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  };
 
   return (
     <>
       <JsonLd
         idPrefix="home-jsonld"
-        data={[organizationJsonLd, webPageJsonLd, softwareApplicationJsonLd, itemListJsonLd, faqJsonLd]}
+        data={[organizationJsonLd, webPageJsonLd, softwareApplicationJsonLd, itemListJsonLd]}
       />
       <section className="home-page space-y-10 overflow-hidden px-3 pb-12 sm:px-4 md:space-y-12 md:px-6">
       <section className="home-hero">
@@ -219,21 +150,19 @@ export default function Home() {
             <p className="theme-kicker">Privacy-first student resilience</p>
             <h1 className="home-hero-title">Aether</h1>
             <p className="home-hero-copy">
-              A calm resilience ecosystem for students who need a private place to reflect, find direction, and return
-              to support that feels steady.
+              A quieter place to pause, reflect, and find your next steady step.
             </p>
+            <p className="home-hero-reassurance">There is no perfect way to begin. Take this one moment at a time.</p>
             <div className="home-hero-actions">
-              {homepageCallToActions.map((callToAction) => (
-                <Link key={callToAction.href} href={callToAction.href} className={callToAction.className}>
-                  {callToAction.label}
-                </Link>
-              ))}
+              <Link href="#first-step" className="theme-button theme-button-primary w-full px-6 py-3 sm:w-auto">
+                Find one next step
+              </Link>
               <Link href="/ask" className="theme-button theme-button-secondary w-full px-6 py-3 sm:w-auto">
-                Ask Aether
+                I have a question
               </Link>
             </div>
-            <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
-              {['Private by default', 'Peer-aware', 'Safety bounded', 'AI-readable'].map((signal) => (
+            <div className="home-hero-signals">
+              {['Private by default', 'Peer-aware', 'Safety bounded'].map((signal) => (
                 <span key={signal} className="theme-pill">
                   {signal}
                 </span>
@@ -254,116 +183,31 @@ export default function Home() {
               ))}
             </div>
           </aside>
-
-          <div className="home-hero-share">
-            <SocialShareLinks path="/" title={siteTitle} />
-          </div>
         </div>
       </section>
 
-      <section className="home-journey-dock">
-        <div className="home-journey-grid theme-shell">
-          {returnLoopSignals.map((signal) => (
-            <article key={signal.title} className="home-journey-card theme-card">
-              <strong>{signal.title}</strong>
-              <span>{signal.description}</span>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="theme-shell space-y-6">
+      <section id="first-step" className="theme-shell scroll-mt-24 space-y-6">
         <div className="home-section-heading">
-          <p className="theme-kicker">First visit guide</p>
-          <h2>Start with one clear intention.</h2>
+          <p className="theme-kicker">A gentle place to begin</p>
+          <h2>What would help most right now?</h2>
           <p>
-            Skip exploration overload. Pick the lane that matches your current state and take one focused step.
+            You do not need to name everything perfectly. Choose the closest option, take one focused step, and come
+            back whenever you need to.
           </p>
         </div>
         <CardGrid
-          items={firstVisitActions.map((action) => ({
+          items={availableFirstVisitActions.map((action) => ({
             title: action.title,
             description: action.description,
             href: action.href,
             hrefLabel: action.label,
           }))}
           columns="three"
-          className="text-left"
+          className="home-first-step-grid text-left"
+          itemClassName="home-first-step-card"
         />
       </section>
 
-      <section className="theme-shell space-y-6">
-        <div className="home-section-heading">
-          <p className="theme-kicker">Start where you are</p>
-          <h2>A first step should feel obvious.</h2>
-          <p>
-            Aether keeps the first decision simple: get oriented, reflect privately, or understand the trust model
-            before going deeper.
-          </p>
-        </div>
-        <LinkCardGrid items={startCards} />
-      </section>
-
-      <section className="theme-shell space-y-6">
-        <div className="home-section-heading">
-          <p className="theme-kicker">Why it feels worth returning to</p>
-          <h2>Support that has a rhythm.</h2>
-          <p>
-            The strongest wellbeing tools give people an immediate path, a safe sense of progress, and visible trust
-            markers. Aether brings those patterns into a quieter interface system.
-          </p>
-        </div>
-        <CardGrid items={homeFeatureHighlights} columns="four" titleLevel="h2" className="text-left" />
-      </section>
-
-      <section className="theme-shell home-return-loop">
-        <SurfaceCard className="home-return-panel">
-          <p className="theme-kicker">Explore Aether</p>
-          <h2 className="mt-2 text-3xl font-extrabold text-[color:var(--theme-text)] md:text-4xl">
-            Choose the path that matches the moment.
-          </h2>
-          <p className="mt-4 leading-7 text-[color:var(--theme-text-muted)]">
-            {shareTagline} Navigation stays simple even when admins turn features on and off.
-          </p>
-          <LinkCardGrid
-            className="mt-6"
-            items={visibleSections.slice(1).map((section) => ({
-              title: section.name,
-              href: section.path,
-              description: section.description,
-            }))}
-          />
-        </SurfaceCard>
-
-        <SurfaceCard className="home-return-panel">
-          <p className="theme-kicker">Retention loop</p>
-          <h2 className="mt-2 text-3xl font-extrabold text-[color:var(--theme-text)] md:text-4xl">
-            Come back for clarity, not noise.
-          </h2>
-          <div className="home-signal-list mt-6">
-            {homeValueCards.map((card) => (
-              <article key={card.title} className="home-signal-item">
-                <strong>{card.title}</strong>
-                <span>{card.description}</span>
-              </article>
-            ))}
-          </div>
-        </SurfaceCard>
-      </section>
-
-      <section className="theme-shell">
-        <SurfaceCard className="home-return-panel">
-          <div className="home-section-heading">
-            <p className="theme-kicker">Quick answers</p>
-            <h2>Frequently asked questions</h2>
-          </div>
-          <CardGrid
-            items={homeFaqs.map((faq) => ({ title: faq.question, description: faq.answer }))}
-            columns="two"
-            className="mt-6"
-          />
-        </SurfaceCard>
-      </section>
       </section>
     </>
   );

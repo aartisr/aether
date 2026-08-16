@@ -106,7 +106,18 @@ export default function ResiliencePathway() {
           </div>
         </header>
 
-        <SurfaceCard className="border-emerald-100 bg-white">
+        <details className="group rounded-2xl border border-emerald-100 bg-white">
+          <summary className="cursor-pointer list-none p-5 sm:p-6">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-emerald-700">Optional orientation</p>
+            <div className="mt-2 flex items-center justify-between gap-3">
+              <h2 className="text-xl font-black text-slate-950 sm:text-2xl">See how the full pathway fits together</h2>
+              <span className="rounded-full border border-emerald-200 px-3 py-1 text-xs font-black uppercase tracking-[0.08em] text-emerald-800 group-open:hidden">Expand</span>
+              <span className="hidden rounded-full border border-emerald-200 px-3 py-1 text-xs font-black uppercase tracking-[0.08em] text-emerald-800 group-open:inline">Close</span>
+            </div>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-700">Start with the check-in below when you want action. Open this only for the five-module map, shortcuts, and design rationale.</p>
+          </summary>
+          <div className="space-y-5 border-t border-emerald-100 p-5 sm:p-6">
+        <SurfaceCard className="border-emerald-100 bg-white p-0 shadow-none">
           <div className="max-w-3xl">
             <p className="text-xs font-black uppercase tracking-[0.16em] text-emerald-700">Intervention architecture</p>
             <h2 className="mt-2 text-2xl font-black text-slate-950 sm:text-3xl">From first signal to sustained recovery</h2>
@@ -160,6 +171,8 @@ export default function ResiliencePathway() {
             ))}
           </div>
         </SurfaceCard>
+          </div>
+        </details>
 
         <WellbeingCheckIn />
         <SafetyPlanBuilder />

@@ -137,38 +137,6 @@ type GlobalFooterBlockProps = {
   }>;
 };
 
-function HomeHeroShareLinks({ title }: { title: string }) {
-  const fallbackUrl = '/';
-  const absoluteUrl = typeof window === 'undefined' ? fallbackUrl : new URL('/', window.location.origin).toString();
-  const encodedUrl = encodeURIComponent(absoluteUrl);
-  const encodedTitle = encodeURIComponent(title);
-  const encodedText = encodeURIComponent(`${title} - Privacy-first student resilience support`);
-  const links = [
-    { key: 'x', label: 'X', href: `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}` },
-    { key: 'linkedin', label: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
-    { key: 'facebook', label: 'Facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}` },
-    { key: 'whatsapp', label: 'WhatsApp', href: `https://wa.me/?text=${encodedText}%20${encodedUrl}` },
-    { key: 'email', label: 'Email', href: `mailto:?subject=${encodedTitle}&body=${encodedText}%0A%0A${encodedUrl}` },
-  ];
-
-  return (
-    <nav aria-label={`Share ${title}`} className="social-share">
-      <span className="social-share-label">Share</span>
-      {links.map((link) => (
-        <a
-          key={link.key}
-          href={link.href}
-          target={link.key === 'email' ? undefined : '_blank'}
-          rel={link.key === 'email' ? undefined : 'noopener noreferrer'}
-          className="social-share-link"
-        >
-          {link.label}
-        </a>
-      ))}
-    </nav>
-  );
-}
-
 type InfoLikeConfig = {
   kicker?: string;
   title: string;
@@ -531,7 +499,7 @@ function HomeHeroBlock(props: HomeHeroBlockProps) {
     ? props.trustSignals.map((item) => item.value).filter((item) => item.length > 0)
     : [];
   const proofPoints = Array.isArray(props.proofPoints) ? props.proofPoints : [];
-  const actions = [props.primaryAction, props.secondaryAction].filter(
+  const actions = [props.primaryAction].filter(
     (action): action is LinkAction => Boolean(action?.href && action?.label),
   );
 
@@ -542,6 +510,7 @@ function HomeHeroBlock(props: HomeHeroBlockProps) {
           {props.kicker ? <p className="theme-kicker">{props.kicker}</p> : null}
           <h1 className="home-hero-title">{props.title}</h1>
           <p className="home-hero-copy">{props.description}</p>
+          <p className="home-hero-reassurance">There is no perfect way to begin. Take this one moment at a time.</p>
           <div className="home-hero-actions">
             {actions.map((action, index) => {
               const className =
@@ -564,7 +533,7 @@ function HomeHeroBlock(props: HomeHeroBlockProps) {
               </Link>
             ) : null}
           </div>
-          <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
+          <div className="home-hero-signals">
             {trustSignals.map((signal) => (
               <span key={signal} className="theme-pill">
                 {signal}
@@ -586,10 +555,6 @@ function HomeHeroBlock(props: HomeHeroBlockProps) {
             ))}
           </div>
         </aside>
-
-        <div className="home-hero-share">
-          <HomeHeroShareLinks title={props.title} />
-        </div>
       </div>
     </section>
   );
@@ -616,7 +581,7 @@ function HomeStartOptionsBlock(props: HomeStartOptionsBlockProps) {
   const items = Array.isArray(props.items) ? props.items : [];
 
   return (
-    <section className="theme-shell space-y-6">
+    <section id="first-step" className="theme-shell scroll-mt-24 space-y-6">
       <div className="home-section-heading">
         {props.eyebrow ? <p className="theme-kicker">{props.eyebrow}</p> : null}
         <h2>{props.title}</h2>

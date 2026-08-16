@@ -88,8 +88,13 @@ export default function AskAetherPage() {
             <StarterPromptList prompts={askStarters} />
           </section>
 
-          <section className="theme-card p-5">
-            <p className="theme-kicker">Retrieval behavior</p>
+          <details className="theme-card p-5">
+            <summary className="cursor-pointer text-sm font-extrabold text-[color:var(--theme-text)]">
+              How this assistant responds
+            </summary>
+            <p className="mt-2 text-sm leading-6 text-[color:var(--theme-text-muted)]">
+              Expand this only when you want to understand the assistant’s retrieval and safety boundaries.
+            </p>
             <div className="mt-4 grid gap-3">
               {retrievalModes.map((mode) => (
                 <article key={mode.label} className="ask-mode">
@@ -98,10 +103,12 @@ export default function AskAetherPage() {
                 </article>
               ))}
             </div>
-          </section>
+          </details>
 
-          <section className="theme-card p-5">
-            <p className="theme-kicker">Enabled surfaces</p>
+          <details className="theme-card p-5">
+            <summary className="cursor-pointer text-sm font-extrabold text-[color:var(--theme-text)]">
+              Browse available Aether topics
+            </summary>
             <div className="mt-4 flex flex-wrap gap-2">
               {enabledSections.map((section) => (
                 <span key={section.path} className="theme-pill min-h-0 rounded-[var(--theme-radius-sm)] px-2 py-1 text-[0.68rem]">
@@ -109,7 +116,7 @@ export default function AskAetherPage() {
                 </span>
               ))}
             </div>
-          </section>
+          </details>
 
           <section className="theme-card border-[rgba(232,111,87,0.32)] bg-[rgb(255_248_241/0.86)] p-5">
             <p className="theme-kicker">Safety boundary</p>

@@ -124,11 +124,16 @@ export default function VoiceRecorder({
   const recognitionStartedAtRef = useRef(0);
   const recognitionStartupRetryCountRef = useRef(0);
   const recognitionRetryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const onTranscriptChangeRef = useRef(onTranscriptChange);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+
+  useEffect(() => {
+    onTranscriptChangeRef.current = onTranscriptChange;
+  }, [onTranscriptChange]);
 
   // Cleanup on unmount (prevent timer and mic stream leaks)
   useEffect(() => {
@@ -197,7 +202,7 @@ export default function VoiceRecorder({
           transcriptRef.current = next;
           transcriptSourceRef.current = 'speech-recognition';
           setTranscript(next);
-          onTranscriptChange?.(next, 'speech-recognition');
+          onTranscriptChangeRef.current?.(next, 'speech-recognition');
           recognitionFinalRef.current = allFinal;
         }
       }
@@ -285,7 +290,7 @@ export default function VoiceRecorder({
       clearTimeout(recognitionRetryTimeoutRef.current);
       recognitionRetryTimeoutRef.current = null;
     }
-    onTranscriptChange?.('', 'unavailable');
+    onTranscriptChangeRef.current?.('', 'unavailable');
 
     // Guard: getUserMedia requires HTTPS (or localhost) and a supported browser
     if (!navigator.mediaDevices?.getUserMedia) {
@@ -365,7 +370,7 @@ export default function VoiceRecorder({
     transcriptRef.current = value;
     transcriptSourceRef.current = value ? 'manual' : 'unavailable';
     setTranscript(value);
-    onTranscriptChange?.(value, value ? 'manual' : 'unavailable');
+    onTranscriptChangeRef.current?.(value, value ? 'manual' : 'unavailable');
   };
 
   return (

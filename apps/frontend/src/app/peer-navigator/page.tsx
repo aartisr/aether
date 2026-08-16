@@ -161,15 +161,20 @@ export default function PeerNavigator() {
               </HubAction>
             </form>
 
-            <div className="mt-6 grid gap-3">
-              {matchingSteps.map((step, index) => (
-                <article key={step.title} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-xs font-black uppercase tracking-[0.1em] text-emerald-800">Step {index + 1}</p>
-                  <h3 className="mt-1 text-base font-black text-slate-950">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-700">{step.description}</p>
-                </article>
-              ))}
-            </div>
+            <details className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <summary className="cursor-pointer text-xs font-black uppercase tracking-[0.08em] text-emerald-800">
+                See how matching works
+              </summary>
+              <div className="mt-3 grid gap-3">
+                {matchingSteps.map((step, index) => (
+                  <article key={step.title} className="rounded-xl border border-slate-200 bg-white p-4">
+                    <p className="text-xs font-black uppercase tracking-[0.1em] text-emerald-800">Step {index + 1}</p>
+                    <h3 className="mt-1 text-base font-black text-slate-950">{step.title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-700">{step.description}</p>
+                  </article>
+                ))}
+              </div>
+            </details>
 
             <details className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
               <summary className="cursor-pointer text-xs font-black uppercase tracking-[0.08em] text-emerald-800">

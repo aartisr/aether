@@ -144,13 +144,23 @@ export async function listFeedbackSubmissions(limit = 100): Promise<FeedbackReco
 
   try {
     const raw = await fs.readFile(storePath, 'utf8');
-    return raw
+    const records = raw
       .split('\n')
       .map((line) => line.trim())
       .filter(Boolean)
-      .map((line) => JSON.parse(line) as FeedbackRecord)
-      .sort((left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime())
-      .slice(0, limit);
+      .map((line) => JSON.parse(line) as FeedbackRecord);
+
+    // Two submissions can share a millisecond timestamp. File order is then the
+    // reliable creation order, so reverse ties to keep the most recently appended
+    // submission first instead of relying on a runtime-specific sort outcome.
+    return records
+      .map((record, index) => ({ record, index }))
+      .sort((left, right) => {
+        const timeDifference = new Date(right.record.createdAt).getTime() - new Date(left.record.createdAt).getTime();
+        return timeDifference !== 0 ? timeDifference : right.index - left.index;
+      })
+      .slice(0, limit)
+      .map(({ record }) => record);
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
       return [];
