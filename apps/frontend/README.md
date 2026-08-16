@@ -21,8 +21,8 @@ npm run test       # run unit tests via root jest config
 npm run test:ci    # run unit tests with coverage
 npm run build      # production build
 npm run start      # serve production build
-npm run perf:smoke # run perf smoke checks against a local prod server
-npm run perf:budget # build + perf smoke checks
+npm run perf:smoke # builds if needed, then runs perf smoke checks against a local prod server
+npm run perf:budget # explicit build + perf smoke checks
 ```
 
 ## Key Routes

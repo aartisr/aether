@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 
 import { spawn } from 'node:child_process';
+import { access } from 'node:fs/promises';
+import { constants } from 'node:fs';
+import { resolve } from 'node:path';
 import process from 'node:process';
 
 const port = Number(process.env.PERF_PORT ?? '4010');
@@ -23,6 +26,35 @@ const p95BudgetMs = Number(process.env.PERF_BUDGET_P95_MS ?? '900');
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function runCommand(command, args) {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, args, {
+      stdio: 'inherit',
+      env: process.env,
+    });
+
+    child.once('error', reject);
+    child.once('close', (code) => {
+      if (code === 0) {
+        resolve();
+        return;
+      }
+      reject(new Error(`${command} ${args.join(' ')} exited with code ${code ?? 'unknown'}.`));
+    });
+  });
+}
+
+async function ensureProductionBuild() {
+  const buildIdPath = resolve(process.cwd(), '.next', 'BUILD_ID');
+
+  try {
+    await access(buildIdPath, constants.R_OK);
+  } catch {
+    console.log('No production build found; creating one before the performance smoke check.');
+    await runCommand('npm', ['run', 'build']);
+  }
 }
 
 async function fetchWithTiming(url) {
@@ -100,6 +132,15 @@ function printSummary(results) {
 }
 
 async function run() {
+  try {
+    await ensureProductionBuild();
+  } catch (error) {
+    console.error('Performance smoke check could not create a production build.');
+    console.error(error instanceof Error ? error.message : String(error));
+    process.exitCode = 1;
+    return;
+  }
+
   const nextProcess = spawn('npm', ['run', 'start', '--', '-p', String(port), '-H', host], {
     stdio: ['ignore', 'pipe', 'pipe'],
     env: {
