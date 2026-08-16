@@ -35,7 +35,7 @@ type SectionColumns = 'two' | 'three' | 'four';
 type MetricItem = { label: string; value: string; description: string };
 type CardItem = { eyebrow?: string; title: string; description: string; href?: string; hrefLabel?: string };
 
-type HeroBlockProps = { kicker?: string; title: string; description: string };
+type HeroBlockProps = { kicker?: string; title: string; description: string; variant?: 'default' | 'ask' };
 type MarkdownBlockProps = { eyebrow?: string; title?: string; body: string };
 type ActionBlockProps = { primaryAction?: LinkAction; secondaryAction?: LinkAction };
 type MetricsBlockProps = { title?: string; items: MetricItem[] };
@@ -284,7 +284,7 @@ function MarkdownBody({ body }: { body?: string }) {
 
 function HeroBlock(props: HeroBlockProps) {
   return (
-    <section className="rounded-xl border border-emerald-200 bg-white p-6">
+    <section className={props.variant === 'ask' ? 'ask-cms-hero' : 'rounded-xl border border-emerald-200 bg-white p-6'}>
       {props.kicker ? <p className="text-xs font-bold uppercase tracking-[0.14em] text-emerald-700">{props.kicker}</p> : null}
       <h1 className="mt-2 text-3xl font-black text-slate-950 sm:text-4xl">{props.title}</h1>
       <p className="mt-3 text-base leading-7 text-slate-700">{props.description}</p>
@@ -398,10 +398,10 @@ function NoticeBlock(props: NoticeBlockProps) {
 
 function AskAssistantBlock(props: AskAssistantBlockProps) {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-6">
-      {props.kicker ? <p className="text-xs font-bold uppercase tracking-[0.14em] text-emerald-700">{props.kicker}</p> : null}
-      <h2 className="mt-2 text-2xl font-black text-slate-950">{props.title}</h2>
-      {props.description ? <p className="mt-2 text-sm leading-7 text-slate-700">{props.description}</p> : null}
+    <section className="ask-cms-assistant">
+      {props.kicker ? <p className="theme-kicker">{props.kicker}</p> : null}
+      <h2>{props.title}</h2>
+      {props.description ? <p>{props.description}</p> : null}
       <div className="mt-4"><AetherAssistant variant="page" starterPrompts={props.starterPrompts ?? []} /></div>
     </section>
   );
@@ -812,7 +812,7 @@ function GlobalFooterBlock(props: GlobalFooterBlockProps) {
 export const cmsPuckConfig: Config = {
   components: {
     HeroBlock: {
-      fields: { kicker: { type: 'text' }, title: { type: 'text' }, description: { type: 'textarea' } },
+      fields: { kicker: { type: 'text' }, title: { type: 'text' }, description: { type: 'textarea' }, variant: { type: 'select', options: [{ label: 'Default', value: 'default' }, { label: 'Ask Aether', value: 'ask' }] } },
       defaultProps: { title: 'Page title', description: 'Page description' },
       render: (data) => <HeroBlock {...(data as unknown as HeroBlockProps)} />,
     },
@@ -1592,38 +1592,25 @@ function createHomeDefaults(page: CmsPageDefinition): Data {
 
 function createAskDefaults(page: CmsPageDefinition): Data {
   const askStarters = [
-    'Where should I start if I feel overwhelmed?',
-    'Compare privacy, Echo, and the Resilience Hub.',
-    'What sources support Peer Navigator?',
+    'I feel overwhelmed. Where can I begin?',
     'Explain Aether in simple words.',
-  ];
-  const retrievalModes = [
-    { title: 'Grounded', description: 'Answers come from indexed Aether content and source cards.' },
-    { title: 'Flexible', description: 'The assistant works across enabled pages and knowledge-base documents.' },
-    { title: 'Bounded', description: 'Safety, crisis, and privacy boundaries override normal guidance.' },
+    'How does Aether protect privacy?',
   ];
 
   return ensureContentIds({
     root: { props: { title: page.name } },
     content: [
       withBlock('HeroBlock', {
-        kicker: 'Grounded resilience copilot',
+        kicker: 'A quieter way to find your next step',
         title: 'Ask Aether',
-        description: 'Ask across the Aether product, journal, and design knowledge base. The assistant retrieves approved content and turns answers into safe next steps.',
+        description: 'Start with what is on your mind. Aether keeps answers clear, shows the material it used, and offers one useful next move.',
+        variant: 'ask',
       }),
       withBlock('AskAssistantBlock', {
-        kicker: 'Interactive assistant',
-        title: 'Ask Aether assistant',
-        description: 'Use natural language prompts to explore Aether routes and knowledge.',
+        kicker: 'One question at a time',
+        title: 'What would feel most helpful right now?',
+        description: 'Choose a starting point or ask in your own words. Sources are available whenever you want to check them.',
         starterPrompts: askStarters,
-      }),
-      withBlock('CardGridBlock', { eyebrow: 'Retrieval behavior', title: 'How responses are generated', columns: 'three', items: retrievalModes }),
-      withBlock('NoticeBlock', {
-        kicker: 'Safety boundary',
-        title: 'Not crisis care',
-        description:
-          'This assistant is informational. It is not emergency support, therapy, diagnosis, legal advice, or crisis care. In the United States, call or text 988 for urgent mental health crisis support.',
-        link: { href: 'https://988lifeline.org/', label: 'Visit 988 Lifeline' },
       }),
     ],
   });

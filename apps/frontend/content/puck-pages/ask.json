@@ -8,61 +8,25 @@
     {
       "type": "HeroBlock",
       "props": {
-        "kicker": "Grounded resilience copilot",
+        "kicker": "A quieter way to find your next step",
         "title": "Ask Aether",
-        "description": "Ask across the Aether product, journal, and design knowledge base. The assistant retrieves approved content and turns answers into safe next steps.",
+        "description": "Start with what is on your mind. Aether keeps answers clear, shows the material it used, and offers one useful next move.",
+        "variant": "ask",
         "id": "HeroBlock-1781950713299-21"
       }
     },
     {
       "type": "AskAssistantBlock",
       "props": {
-        "kicker": "Interactive assistant",
-        "title": "Ask Aether assistant",
-        "description": "Use natural language prompts to explore Aether routes and knowledge.",
+        "kicker": "One question at a time",
+        "title": "What would feel most helpful right now?",
+        "description": "Choose a starting point or ask in your own words. Sources are available whenever you want to check them.",
         "starterPrompts": [
-          "Where should I start if I feel overwhelmed?",
-          "Compare privacy, Echo, and the Resilience Hub.",
-          "What sources support Peer Navigator?",
-          "Explain Aether in simple words."
+          "I feel overwhelmed. Where can I begin?",
+          "Explain Aether in simple words.",
+          "How does Aether protect privacy?"
         ],
         "id": "AskAssistantBlock-1781950713299-22"
-      }
-    },
-    {
-      "type": "CardGridBlock",
-      "props": {
-        "eyebrow": "Retrieval behavior",
-        "title": "How responses are generated",
-        "columns": "three",
-        "items": [
-          {
-            "title": "Grounded",
-            "description": "Answers come from indexed Aether content and source cards."
-          },
-          {
-            "title": "Flexible",
-            "description": "The assistant works across enabled pages and knowledge-base documents."
-          },
-          {
-            "title": "Bounded",
-            "description": "Safety, crisis, and privacy boundaries override normal guidance."
-          }
-        ],
-        "id": "CardGridBlock-1781950713299-23"
-      }
-    },
-    {
-      "type": "NoticeBlock",
-      "props": {
-        "kicker": "Safety boundary",
-        "title": "Not crisis care",
-        "description": "This assistant is informational. It is not emergency support, therapy, diagnosis, legal advice, or crisis care. In the United States, call or text 988 for urgent mental health crisis support.",
-        "link": {
-          "href": "https://988lifeline.org/",
-          "label": "Visit 988 Lifeline"
-        },
-        "id": "NoticeBlock-1781950713299-24"
       }
     }
   ]

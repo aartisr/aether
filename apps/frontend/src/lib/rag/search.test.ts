@@ -40,6 +40,29 @@ describe('free RAG search', () => {
     expect(reply.sources.every((source) => source.href !== '/feedback')).toBe(true);
   });
 
+  it('keeps a clear support question out of raw repository retrieval', () => {
+    const reply = createFreeRagAssistantReply({
+      message: 'Where should I start?',
+      contextPath: '/ask',
+      enabledPageIds: ['home', 'resilience-pathway', 'echo', 'peer-navigator', 'about'],
+    });
+
+    expect(reply.answer).toContain('Start small');
+    expect(reply.answer).not.toContain('Context note');
+    expect(reply.answer).not.toContain('indexed Aether content');
+    expect(reply.answer).not.toContain('Recruitment Funnel');
+    expect(reply.actions[0]?.href).toBe('/resilience-pathway');
+  });
+
+  it('does not search knowledge-base content for a public assistant request by default', () => {
+    const reply = createFreeRagAssistantReply({
+      message: 'Tell me something not covered by a named Aether pathway',
+      enabledPageIds: ['home', 'about', 'mentors'],
+    });
+
+    expect(reply.sources.every((source) => !source.href.includes('/docs/'))).toBe(true);
+  });
+
   it('creates a free extractive answer from search results', () => {
     const results = searchRagIndex('What is Aether?', {
       enabledPageIds: ['home', 'about', 'mentors'],

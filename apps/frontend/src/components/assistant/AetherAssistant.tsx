@@ -183,7 +183,7 @@ function AssistantMessageBubble({
   controlledPaths: string[];
 }) {
   const isUser = message.role === 'user';
-  const visibleActions = message.actions?.slice(0, 3) ?? [];
+  const visibleActions = message.actions?.slice(0, 1) ?? [];
 
   return (
     <div className={cx('flex', isUser ? 'justify-end' : 'justify-start')}>
@@ -197,7 +197,7 @@ function AssistantMessageBubble({
         {!isUser && visibleActions.length > 0 ? (
           <div className="mt-4 grid gap-2">
             <p className="text-[0.7rem] font-extrabold uppercase tracking-[0.14em] text-[color:var(--theme-text-soft)]">
-              Copilot next steps
+              A good next step
             </p>
             {visibleActions.map((action) => (
               <ActionLink
@@ -210,16 +210,19 @@ function AssistantMessageBubble({
           </div>
         ) : null}
         {!isUser && message.sources && message.sources.length > 0 ? (
-          <div className="mt-3 grid gap-2">
-            {message.sources.slice(0, 2).map((source) => (
-              <SourceLink
-                key={`${message.id}-${source.href}`}
-                source={source}
-                enabledPathSet={enabledPathSet}
-                controlledPaths={controlledPaths}
-              />
-            ))}
-          </div>
+          <details className="assistant-sources mt-3">
+            <summary>Sources used ({Math.min(message.sources.length, 2)})</summary>
+            <div className="mt-2 grid gap-2">
+              {message.sources.slice(0, 2).map((source) => (
+                <SourceLink
+                  key={`${message.id}-${source.href}`}
+                  source={source}
+                  enabledPathSet={enabledPathSet}
+                  controlledPaths={controlledPaths}
+                />
+              ))}
+            </div>
+          </details>
         ) : null}
       </div>
     </div>
@@ -293,6 +296,11 @@ export default function AetherAssistant({
     messageCounter.current += 1;
     return `${prefix}-${messageCounter.current}`;
   }, []);
+
+  const resetConversation = useCallback(() => {
+    setInput('');
+    setMessages([createWelcomeMessage(pathname)]);
+  }, [pathname]);
 
   const sendMessage = useCallback(
     async (messageText: string) => {
@@ -400,10 +408,10 @@ export default function AetherAssistant({
       <header className="assistant-header px-4 py-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-emerald-100">Aether Copilot</p>
-            <h2 className="mt-1 text-lg font-extrabold text-white">Guided next step</h2>
+            <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-emerald-100">Aether guide</p>
+            <h2 className="mt-1 text-lg font-extrabold text-white">{isFullPage ? 'One clear next step' : 'Guided next step'}</h2>
             <p className="mt-1 text-xs leading-5 text-emerald-50">
-              Driving from: <span className="font-bold text-white">{contextProfile.label}</span>
+              Context: <span className="font-bold text-white">{contextProfile.label}</span>
             </p>
           </div>
           {!isFullPage ? (
@@ -416,15 +424,27 @@ export default function AetherAssistant({
               X
             </button>
           ) : null}
+          {isFullPage && messages.length > 1 ? (
+            <button
+              type="button"
+              onClick={resetConversation}
+              className="rounded-full border border-white/20 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-white/10"
+            >
+              Start fresh
+            </button>
+          ) : null}
         </div>
       </header>
 
       <div ref={transcriptRef} className="assistant-transcript min-h-0 min-w-0 flex-1 space-y-4 overflow-y-auto p-4">
         {isFullPage && starterPrompts.length > 0 && messages.length === 1 ? (
           <section className="assistant-starter-panel">
-            <p className="theme-kicker">Start with a useful question</p>
+            <p className="theme-kicker">Choose one place to begin</p>
+            <p className="mt-2 text-sm leading-6 text-[color:var(--theme-text-muted)]">
+              You can also write your question in your own words below.
+            </p>
             <div className="mt-3 grid gap-2 sm:grid-cols-2">
-              {starterPrompts.slice(0, 4).map((prompt) => (
+              {starterPrompts.slice(0, 3).map((prompt) => (
                 <button
                   key={prompt}
                   type="button"
@@ -447,8 +467,11 @@ export default function AetherAssistant({
         ))}
         {isSending ? (
           <div className="flex justify-start">
-            <div className="theme-card rounded-2xl px-4 py-3 text-sm font-semibold text-[color:var(--theme-text-muted)]">
-              Choosing the next useful step...
+            <div
+              className="assistant-thinking rounded-2xl px-4 py-3 text-sm font-semibold text-[color:var(--theme-text-muted)]"
+              aria-live="polite"
+            >
+              Finding the clearest answer...
             </div>
           </div>
         ) : null}
@@ -457,7 +480,7 @@ export default function AetherAssistant({
       <div className="assistant-composer min-w-0 p-4">
         {latestAssistantSuggestions && latestAssistantSuggestions.length > 0 ? (
           <div className="mb-3 flex min-w-0 gap-2 overflow-x-auto pb-1">
-            {latestAssistantSuggestions.slice(0, 3).map((suggestion) => (
+            {latestAssistantSuggestions.slice(0, 2).map((suggestion) => (
               <button
                 key={suggestion}
                 type="button"
@@ -480,12 +503,12 @@ export default function AetherAssistant({
             onChange={(event) => setInput(event.target.value)}
             onKeyDown={handleInputKeyDown}
             rows={isFullPage ? 3 : 2}
-            placeholder="Ask where to start, what this page means, or which Aether path fits you..."
+            placeholder="What would feel most helpful right now?"
             className="assistant-input max-h-36 min-h-[4.5rem] w-full resize-none rounded-2xl px-4 py-3 text-sm leading-6 shadow-inner outline-none transition placeholder:text-slate-400"
           />
           <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="min-w-0 text-[0.72rem] leading-5 text-[color:var(--theme-text-soft)]">
-              Informational only. Not emergency, clinical, legal, or crisis care.
+              Grounded in Aether content. Press Enter to send.
             </p>
             <button
               type="submit"

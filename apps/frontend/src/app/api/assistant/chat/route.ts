@@ -7,7 +7,6 @@ type ChatRequestBody = {
   message?: unknown;
   contextPath?: unknown;
   history?: unknown;
-  includeKnowledgeBase?: unknown;
   maxResults?: unknown;
   minScore?: unknown;
 };
@@ -43,7 +42,9 @@ export async function POST(request: Request) {
     contextPath: typeof body.contextPath === 'string' ? body.contextPath : '/',
     history,
     enabledPageIds,
-    includeKnowledgeBase: typeof body.includeKnowledgeBase === 'boolean' ? body.includeKnowledgeBase : undefined,
+    // This is a public endpoint. Repository knowledge-base material is for an
+    // internal research surface, not for a visitor-facing support conversation.
+    includeKnowledgeBase: false,
     maxResults,
     minScore,
   });

@@ -176,6 +176,24 @@ const actionLibrary = {
     description: 'Review privacy, data minimization, and trust boundaries.',
     priority: 'secondary',
   },
+  resilience: {
+    label: 'Begin with the resilience pathway',
+    href: '/resilience-pathway',
+    description: 'Take one small, guided step toward steadier support and routines.',
+    priority: 'primary',
+  },
+  echo: {
+    label: 'Try private reflection with Echo',
+    href: '/echo',
+    description: 'Put thoughts into words privately, at your own pace.',
+    priority: 'secondary',
+  },
+  peerNavigator: {
+    label: 'Explore Peer Navigator',
+    href: '/peer-navigator',
+    description: 'Learn about consent-led peer connection and support.',
+    priority: 'secondary',
+  },
   crisis: {
     label: 'Call or text 988',
     href: sourceLibrary.crisis.href,
@@ -302,13 +320,11 @@ const topics: AssistantTopic[] = [
       'available pages',
       'start',
     ],
-    sources: [sourceLibrary.home, sourceLibrary.about, sourceLibrary.mentors],
-    actions: [],
-    suggestions: ['Explain this page', 'What pages are available right now?', 'How should I use Aether?'],
-    answer: (context) => {
-      const firstAction = context.actions[0]?.label ?? 'Open full copilot';
-      return `Best next move from ${context.label}: use the first action card below, ${firstAction}, then ask one focused follow-up. I will keep you oriented with source cards and avoid sending you to pages that are currently turned off.`;
-    },
+    sources: [sourceLibrary.resilience, sourceLibrary.echo, sourceLibrary.peerNavigator],
+    actions: [actionLibrary.resilience, actionLibrary.echo, actionLibrary.peerNavigator],
+    suggestions: ['Help me choose the right path', 'What is the resilience pathway?', 'How does Peer Navigator work?'],
+    answer: () =>
+      'Start small—you do not need to solve everything at once. If you feel overwhelmed or want a steadier routine, begin with the Resilience Pathway. For a private moment to reflect, try Echo. If connection with a peer feels most useful, explore Peer Navigator. If you are simply getting to know Aether, the About page is a good first read.',
   },
   {
     id: 'peer',
@@ -428,7 +444,7 @@ export function createAssistantReply(request: AssistantRequest): AssistantReply 
   }
 
   const topic = selectTopic(message, context);
-  const sources = dedupeSources([context.source, ...topic.sources]).slice(0, 4);
+  const sources = dedupeSources([...topic.sources, context.source]).slice(0, 4);
   const actions = dedupeActions([...topic.actions, ...context.actions]).slice(0, 3);
   const answer = buildContextualAnswer(topic, context, message);
 
@@ -449,6 +465,10 @@ function buildContextualAnswer(topic: AssistantTopic, context: AssistantContextP
   }
 
   if (topic.id === 'crisis') {
+    return topic.answer(context);
+  }
+
+  if (context.path === '/ask') {
     return topic.answer(context);
   }
 

@@ -28,9 +28,18 @@ export function createFreeRagAssistantReply(request: FreeRagAssistantRequest): A
     return baseReply;
   }
 
+  // The guided responder owns questions it understands. This keeps simple,
+  // high-stakes, or wayfinding questions from being replaced by keyword-matched
+  // repository excerpts (for example, matching "start" in an engineering plan).
+  if (baseReply.confidence === 'high') {
+    return baseReply;
+  }
+
   const results = searchRagIndex(request.message, {
     enabledPageIds: request.enabledPageIds,
-    includeKnowledgeBase: request.includeKnowledgeBase ?? true,
+    // Public conversations search only approved public pages by default.
+    // Callers building an internal research experience can opt in explicitly.
+    includeKnowledgeBase: request.includeKnowledgeBase ?? false,
     maxResults: request.maxResults ?? 6,
     minScore: request.minScore,
   });
@@ -47,7 +56,7 @@ export function createFreeRagAssistantReply(request: FreeRagAssistantRequest): A
       sources: filterReachableSources(dedupeSources([...baseReply.sources]), request.enabledPageIds),
       actions: filterReachableActions(baseReply.actions, request.enabledPageIds),
       suggestions: ragAnswer.suggestions,
-      confidence: baseReply.confidence === 'high' ? 'medium' : baseReply.confidence,
+      confidence: baseReply.confidence,
     };
   }
 
