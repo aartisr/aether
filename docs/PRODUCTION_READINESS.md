@@ -7,7 +7,7 @@ Owner: product and engineering
 
 Every pull request and change to `main` must pass:
 
-1. Locked, reproducible dependency install through the configured corporate registry.
+1. Locked, reproducible dependency install through the public npm registry.
 2. Lint, TypeScript validation, unit tests, and enforced coverage floors.
 3. Production build.
 4. Chromium end-to-end coverage for desktop and mobile critical flows.
@@ -21,7 +21,7 @@ Before enabling a public deployment:
 
 - Confirm the health endpoint responds at `/api/health` and configure an external uptime monitor.
 - Configure error monitoring with alert routing to an on-call owner; do not send reflection, transcript, or user-entered support content to telemetry.
-- Validate the corporate registry is reachable from both GitHub Actions and Vercel.
+- Validate public npm registry access from both GitHub Actions and Vercel.
 - Keep `NEXT_PUBLIC_POSTHOG_PERSISTENCE=memory` unless a documented consent decision explicitly permits persistent analytics.
 - Test the emergency and crisis routes without authentication and with JavaScript disabled where practical.
 - Review feature flags so disabled pages are not linked by homepage, navigation, sitemap, or CMS content.
