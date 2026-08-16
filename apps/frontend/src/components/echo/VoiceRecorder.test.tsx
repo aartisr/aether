@@ -1,8 +1,9 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { transcribeAudioInBrowser } from '../../lib/browser-transcription';
+import { prepareBrowserTranscription, transcribeAudioInBrowser } from '../../lib/browser-transcription';
 import VoiceRecorder from './VoiceRecorder';
 
 jest.mock('../../lib/browser-transcription', () => ({
+  prepareBrowserTranscription: jest.fn(),
   transcribeAudioInBrowser: jest.fn(),
 }));
 
@@ -62,6 +63,7 @@ function makeSpeechEvent(parts: Array<{ transcript: string; isFinal: boolean }>)
 describe('VoiceRecorder', () => {
   const getUserMedia = jest.fn();
   const createObjectURL = jest.fn(() => 'blob:mock-audio');
+  const prepareBrowserTranscriptionMock = prepareBrowserTranscription as jest.MockedFunction<typeof prepareBrowserTranscription>;
   const transcribeAudioInBrowserMock = transcribeAudioInBrowser as jest.MockedFunction<typeof transcribeAudioInBrowser>;
 
   function makeStream(): { stream: MediaStream; track: MockTrack } {
@@ -75,6 +77,8 @@ describe('VoiceRecorder', () => {
     getUserMedia.mockReset();
     createObjectURL.mockClear();
     transcribeAudioInBrowserMock.mockReset();
+    prepareBrowserTranscriptionMock.mockReset();
+    prepareBrowserTranscriptionMock.mockResolvedValue(undefined);
     MockMediaRecorder.instance = null;
     MockSpeechRecognition.instance = null;
     MockSpeechRecognition.available.mockResolvedValue('available');
@@ -110,13 +114,26 @@ describe('VoiceRecorder', () => {
 
   it('renders record button and no text pad before recording', () => {
     render(<VoiceRecorder />);
-    expect(screen.getByRole('button')).toHaveTextContent(/start recording/i);
+    expect(screen.getByRole('button', { name: /start recording/i })).toBeInTheDocument();
     expect(screen.queryByRole('textbox')).toBeNull();
   });
 
   it('respects custom button labels', () => {
     render(<VoiceRecorder recordButtonLabel="Begin" stopButtonLabel="Finish" />);
-    expect(screen.getByRole('button')).toHaveTextContent('Begin');
+    expect(screen.getByRole('button', { name: 'Begin' })).toBeInTheDocument();
+  });
+
+  it('offers an explicit, desktop-oriented private rolling-caption opt-in', async () => {
+    render(<VoiceRecorder />);
+
+    expect(screen.getByText(/want captions while you speak/i)).toBeInTheDocument();
+    expect(screen.getByText(/optional for desktop/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /enable private rolling captions/i }));
+
+    await waitFor(() => {
+      expect(prepareBrowserTranscriptionMock).toHaveBeenCalledTimes(1);
+      expect(screen.getByText(/private rolling captions are ready/i)).toBeInTheDocument();
+    });
   });
 
   // ── Recording lifecycle ─────────────────────────────────────────────────────
@@ -418,7 +435,7 @@ describe('VoiceRecorder', () => {
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/live captions are not available/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/this browser can record privately/i);
     });
   });
 
@@ -447,7 +464,7 @@ describe('VoiceRecorder', () => {
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/recording stays private/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/this browser can record privately/i);
     });
     expect(MockSpeechRecognition.instance).toBeNull();
   });
@@ -480,7 +497,7 @@ describe('VoiceRecorder', () => {
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/live captions are not available/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/this browser can record privately/i);
     });
   });
 
@@ -507,7 +524,7 @@ describe('VoiceRecorder', () => {
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/live captions could not start/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/this browser can record privately/i);
     });
     expect(MockSpeechRecognition.instance).toBeNull();
   });
@@ -522,7 +539,7 @@ describe('VoiceRecorder', () => {
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/could not be prepared/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/this browser can record privately/i);
     });
     expect(MockSpeechRecognition.instance).toBeNull();
   });

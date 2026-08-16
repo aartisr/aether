@@ -92,6 +92,7 @@ export default function SentimentMapping({
   description = 'This is a gentle reflection aid, not a diagnosis.',
   showTranscriptEditor = true,
   showReadyPrompt = true,
+  onTranscriptChange,
   className = '',
   analyzeSentiment = defaultAnalyzeSentiment,
 }: {
@@ -103,6 +104,7 @@ export default function SentimentMapping({
   description?: string;
   showTranscriptEditor?: boolean;
   showReadyPrompt?: boolean;
+  onTranscriptChange?: (transcript: string) => void;
   className?: string;
   analyzeSentiment?: (input: { audio: Blob | null; transcript: string }) => Promise<LocalEchoAnalysis>;
 }) {
@@ -228,7 +230,11 @@ export default function SentimentMapping({
             id="echo-transcript"
             className="min-h-32 w-full max-w-xl rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
             value={editableTranscript}
-            onChange={(event) => setEditableTranscript(event.target.value)}
+            onChange={(event) => {
+              const nextTranscript = event.target.value;
+              setEditableTranscript(nextTranscript);
+              onTranscriptChange?.(nextTranscript);
+            }}
             placeholder="A few honest words are enough. You can edit them anytime."
           />
         </>

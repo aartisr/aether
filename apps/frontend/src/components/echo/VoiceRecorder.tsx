@@ -1,7 +1,8 @@
 "use client";
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { transcribeAudioInBrowser } from '../../lib/browser-transcription';
+import { prepareBrowserTranscription, transcribeAudioInBrowser } from '../../lib/browser-transcription';
+import { createRollingCaptionSession, type RollingCaptionSession } from '../../lib/rolling-browser-transcription';
 import type { TranscriptSource, VoiceCapture } from '../../lib/local-ai';
 
 // ─── Error message helpers ────────────────────────────────────────────────────
@@ -75,6 +76,9 @@ const RECOGNITION_PERMISSION_GRACE_MS = 2500;
 const RECOGNITION_RETRY_DELAY_MS = 900;
 const RECOGNITION_MAX_STARTUP_RETRIES = 2;
 const LOCAL_RECOGNITION_LANGUAGE = 'en-US';
+const ROLLING_CAPTION_SLICE_MS = 5000;
+const LIVE_CAPTIONS_UNAVAILABLE_NOTICE =
+  'This browser can record privately, but can’t show words as you speak. Finish your recording, then choose Transcribe privately on this device.';
 
 function isStartupPermissionHandshake(errorCode: string, startedAt: number, hasTranscript: boolean): boolean {
   return (
@@ -116,6 +120,9 @@ export default function VoiceRecorder({
   const [isLocalTranscribing, setIsLocalTranscribing] = useState(false);
   const [localTranscriptionDetail, setLocalTranscriptionDetail] = useState<string | null>(null);
   const [localTranscriptionError, setLocalTranscriptionError] = useState<string | null>(null);
+  const [rollingCaptionsEnabled, setRollingCaptionsEnabled] = useState(false);
+  const [preparingRollingCaptions, setPreparingRollingCaptions] = useState(false);
+  const [rollingCaptionNotice, setRollingCaptionNotice] = useState<string | null>(null);
 
   /**
    * Refs are the synchronous source of truth for async callbacks.
@@ -137,6 +144,7 @@ export default function VoiceRecorder({
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+  const rollingSessionRef = useRef<RollingCaptionSession | null>(null);
 
   useEffect(() => {
     onTranscriptChangeRef.current = onTranscriptChange;
@@ -150,6 +158,14 @@ export default function VoiceRecorder({
       try { recognitionRef.current?.stop(); } catch { /* ignore */ }
     };
   }, []);
+
+  useEffect(() => {
+    return () => {
+      if (audioURL && typeof URL.revokeObjectURL === 'function') {
+        URL.revokeObjectURL(audioURL);
+      }
+    };
+  }, [audioURL]);
 
   const stopSpeechRecognition = useCallback(() => {
     recognitionStartAttemptRef.current += 1;
@@ -175,9 +191,7 @@ export default function VoiceRecorder({
 
     if (!Ctor) {
       setLiveStatus('unavailable');
-      setTranscriptionNotice(
-        'Live captions are not available here, but your recording is still private. When you finish, choose “Transcribe privately on this device” below—or type a few words instead.',
-      );
+      setTranscriptionNotice(LIVE_CAPTIONS_UNAVAILABLE_NOTICE);
       return;
     }
 
@@ -185,9 +199,7 @@ export default function VoiceRecorder({
     // deliberately local-only: never allow an implicit cloud fallback.
     if (typeof Ctor.available !== 'function' || typeof Ctor.install !== 'function') {
       setLiveStatus('unavailable');
-      setTranscriptionNotice(
-        'Live captions are not ready in this browser. Your recording stays private; when you finish, choose “Transcribe privately on this device” below or type a few words instead.',
-      );
+      setTranscriptionNotice(LIVE_CAPTIONS_UNAVAILABLE_NOTICE);
       return;
     }
 
@@ -203,9 +215,7 @@ export default function VoiceRecorder({
       });
     } catch {
       setLiveStatus('unavailable');
-      setTranscriptionNotice(
-        'Live captions could not start, but your recording stays private. Finish when you are ready, then choose “Transcribe privately on this device” below.',
-      );
+      setTranscriptionNotice(LIVE_CAPTIONS_UNAVAILABLE_NOTICE);
       return;
     }
 
@@ -226,9 +236,7 @@ export default function VoiceRecorder({
         }
       } catch {
         setLiveStatus('unavailable');
-        setTranscriptionNotice(
-          'Private live captions could not be prepared. Your recording stays here; you can type a few words instead and try again later.',
-        );
+        setTranscriptionNotice(LIVE_CAPTIONS_UNAVAILABLE_NOTICE);
         return;
       }
 
@@ -241,9 +249,7 @@ export default function VoiceRecorder({
       return;
     } else if (availability !== 'available') {
       setLiveStatus('unavailable');
-      setTranscriptionNotice(
-        'Live captions are not available in this browser, but your recording stays private. When you finish, choose “Transcribe privately on this device” below—or type a few words instead.',
-      );
+      setTranscriptionNotice(LIVE_CAPTIONS_UNAVAILABLE_NOTICE);
       return;
     }
 
@@ -346,9 +352,7 @@ export default function VoiceRecorder({
       setLiveStatus('active');
     } catch {
       setLiveStatus('unavailable');
-      setTranscriptionNotice(
-        'Live captions could not start. Your recording continues privately, and you can type a few words instead.',
-      );
+      setTranscriptionNotice(LIVE_CAPTIONS_UNAVAILABLE_NOTICE);
     }
   }, []);
 
@@ -374,6 +378,7 @@ export default function VoiceRecorder({
       recognitionRetryTimeoutRef.current = null;
     }
     onTranscriptChangeRef.current?.('', 'unavailable');
+    rollingSessionRef.current?.reset();
 
     // Guard: getUserMedia requires HTTPS (or localhost) and a supported browser
     if (!navigator.mediaDevices?.getUserMedia) {
@@ -405,7 +410,12 @@ export default function VoiceRecorder({
       chunksRef.current = [];
 
       mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) chunksRef.current.push(e.data);
+        if (e.data.size > 0) {
+          chunksRef.current.push(e.data);
+          if (rollingCaptionsEnabled && isRecordingRef.current && transcriptSourceRef.current !== 'speech-recognition') {
+            rollingSessionRef.current?.addAudioChunk(e.data);
+          }
+        }
       };
 
       mediaRecorder.onstop = () => {
@@ -423,13 +433,37 @@ export default function VoiceRecorder({
         stream.getTracks().forEach((track) => track.stop());
       };
 
-      mediaRecorder.start();
       isRecordingRef.current = true;
+      mediaRecorder.start(rollingCaptionsEnabled ? ROLLING_CAPTION_SLICE_MS : undefined);
       setRecording(true);
       timerRef.current = setInterval(() => setElapsed((t) => t + 1), 1000);
       startSpeechRecognition();
     } catch (err) {
       setError(getMicrophoneErrorMessage(err));
+    }
+  };
+
+  const enableRollingCaptions = async () => {
+    if (preparingRollingCaptions || recording) return;
+    setPreparingRollingCaptions(true);
+    setRollingCaptionNotice('Preparing private captions for the first time…');
+    try {
+      await prepareBrowserTranscription((progress) => setRollingCaptionNotice(progress.detail));
+      rollingSessionRef.current = createRollingCaptionSession({
+        onTranscript: (nextTranscript) => {
+          transcriptRef.current = nextTranscript;
+          transcriptSourceRef.current = 'on-device-model';
+          setTranscript(nextTranscript);
+          onTranscriptChangeRef.current?.(nextTranscript, 'on-device-model');
+        },
+        onStatus: setRollingCaptionNotice,
+      });
+      setRollingCaptionsEnabled(true);
+      setRollingCaptionNotice('Private rolling captions are ready. They may appear a few seconds after you speak.');
+    } catch {
+      setRollingCaptionNotice('Private rolling captions could not be prepared. You can still record and transcribe when you finish.');
+    } finally {
+      setPreparingRollingCaptions(false);
     }
   };
 
@@ -511,6 +545,17 @@ export default function VoiceRecorder({
           </span>
         )}
       </div>
+
+      {!recording && !rollingCaptionsEnabled ? (
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+          <p className="text-sm font-bold text-slate-900">Want captions while you speak?</p>
+          <p className="mt-1 text-xs leading-5 text-slate-600">Optional for desktop: downloads and caches a private model in this browser. Captions arrive with a short delay and may use more battery.</p>
+          <button type="button" onClick={() => void enableRollingCaptions()} disabled={preparingRollingCaptions} className="mt-3 rounded-lg border border-emerald-300 bg-white px-3 py-2 text-sm font-bold text-emerald-900 disabled:opacity-60">
+            {preparingRollingCaptions ? 'Preparing private captions…' : 'Enable private rolling captions'}
+          </button>
+        </div>
+      ) : null}
+      {rollingCaptionNotice ? <p className="text-xs text-slate-600" aria-live="polite">{rollingCaptionNotice}</p> : null}
 
       {/* ── Transcription / permission notice ── */}
       {transcriptionNotice && (

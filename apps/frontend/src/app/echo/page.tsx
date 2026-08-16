@@ -22,6 +22,8 @@ export default function EchoChamber() {
   const [capture, setCapture] = useState<VoiceCapture | null>(null);
   const [liveTranscript, setLiveTranscript] = useState('');
   const [liveTranscriptSource, setLiveTranscriptSource] = useState<TranscriptSource>('unavailable');
+  const [writtenTranscript, setWrittenTranscript] = useState('');
+  const [reflectionKey, setReflectionKey] = useState(0);
 
   const handleCaptureComplete = (nextCapture: VoiceCapture) => {
     setCapture(nextCapture);
@@ -33,6 +35,16 @@ export default function EchoChamber() {
     setLiveTranscript(nextTranscript);
     setLiveTranscriptSource(nextSource);
   };
+
+  const handleClearReflection = () => {
+    setCapture(null);
+    setLiveTranscript('');
+    setLiveTranscriptSource('unavailable');
+    setWrittenTranscript('');
+    setReflectionKey((currentKey) => currentKey + 1);
+  };
+
+  const hasReflection = Boolean(capture || liveTranscript.trim() || writtenTranscript.trim());
 
   return (
     <PageBackdrop>
@@ -75,12 +87,14 @@ export default function EchoChamber() {
             <p className="mt-1 text-sm leading-6 text-slate-600">You can stop at any time, edit the transcript, or switch to writing.</p>
             <div className="mt-5">
               <VoiceRecorder
+                key={`voice-${reflectionKey}`}
                 onCaptureComplete={handleCaptureComplete}
                 onTranscriptChange={handleTranscriptChange}
               />
             </div>
             {liveTranscript.trim() ? (
               <SentimentMapping
+                key={`voice-analysis-${reflectionKey}`}
                 audio={capture?.audio ?? null}
                 transcript={liveTranscript}
                 transcriptSource={liveTranscriptSource}
@@ -95,7 +109,10 @@ export default function EchoChamber() {
         ) : (
           <SurfaceCard>
             <SentimentMapping
+              key={`written-analysis-${reflectionKey}`}
               audio={null}
+              transcript={writtenTranscript}
+              onTranscriptChange={setWrittenTranscript}
               showReadyPrompt={false}
               title="Put a few words somewhere safe"
               description="Write naturally. Nothing is saved or sent from this page."
@@ -103,6 +120,18 @@ export default function EchoChamber() {
             />
           </SurfaceCard>
         )}
+        {hasReflection ? (
+          <div className="flex flex-col items-center gap-1 pb-2 text-center">
+            <button
+              type="button"
+              onClick={handleClearReflection}
+              className="rounded-lg px-3 py-2 text-sm font-bold text-slate-600 underline decoration-slate-300 underline-offset-4 transition hover:text-slate-950 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+            >
+              Clear reflection
+            </button>
+            <p className="text-xs text-slate-500">Clears this reflection from this page.</p>
+          </div>
+        ) : null}
       </PageContainer>
     </PageBackdrop>
   );

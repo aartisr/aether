@@ -126,5 +126,9 @@ test.describe('Echo voice reflection flow', () => {
 
     await page.getByRole('button', { name: /stop recording/i }).click();
     await expect(page.getByLabel(/playback recorded audio/i)).toBeVisible();
+
+    await page.getByRole('button', { name: /clear reflection/i }).click();
+    await expect(page.getByLabel(/playback recorded audio/i)).toHaveCount(0);
+    await expect(page.getByRole('button', { name: /notice a pattern/i })).toHaveCount(0);
   });
 });

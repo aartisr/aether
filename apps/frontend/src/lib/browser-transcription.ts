@@ -15,6 +15,16 @@ type Transcriber = (audio: string) => Promise<unknown>;
 
 let transcriberPromise: Promise<Transcriber> | undefined;
 
+/** Preloads the local model so an opt-in rolling-caption session can start promptly. */
+export async function prepareBrowserTranscription(
+  onProgress?: (progress: BrowserTranscriptionProgress) => void,
+): Promise<void> {
+  if (typeof window === 'undefined') {
+    throw new Error('Private transcription is available only in a browser.');
+  }
+  await getTranscriber(onProgress);
+}
+
 export async function transcribeAudioInBrowser(
   audio: Blob,
   onProgress?: (progress: BrowserTranscriptionProgress) => void,
