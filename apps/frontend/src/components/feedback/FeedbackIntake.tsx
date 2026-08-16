@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { track } from '../../lib/analytics';
 
 type FeedbackType =
   | 'bug'
@@ -247,6 +248,8 @@ export default function FeedbackIntake({
         // Local storage is optional; the saved server receipt is the source of truth.
       }
       setStatus('submitted');
+      // Never send free-form feedback, device context, or contact details to analytics.
+      track('feedback_submitted', { type, impact, has_addition: wantsAddition });
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Feedback submission failed.');
       setStatus('error');

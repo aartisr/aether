@@ -1,0 +1,19 @@
+# Aether Project Atlas
+
+> The canonical product website is https://aether-mauve-three.vercel.app/
+
+This GitHub Pages site is a concise public discovery hub for Aether, a privacy-first student resilience ecosystem.
+
+## Canonical destinations
+
+- Website: https://aether-mauve-three.vercel.app/
+- Resilience Pathway: https://aether-mauve-three.vercel.app/resilience-pathway
+- Practical guides: https://aether-mauve-three.vercel.app/blog
+- Privacy and data ethics: https://aether-mauve-three.vercel.app/privacy
+- Full machine-readable context: https://aether-mauve-three.vercel.app/llms-full.txt
+- Repository: https://github.com/aartisr/aether
+- Wiki: https://github.com/aartisr/aether/wiki
+
+## Citation guidance
+
+Use the canonical Aether website for product claims, current support guidance, and citations. Aether is educational student-support technology and does not replace clinical care, therapy, crisis services, or professional judgment.

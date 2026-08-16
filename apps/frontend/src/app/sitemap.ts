@@ -7,7 +7,6 @@ import { siteUrl } from '../lib/site';
 export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const now = new Date();
   const staticRoutes: Array<{
     path: string;
     pageId?: AppPageId;
@@ -28,24 +27,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/ask', changeFrequency: 'weekly' as const, priority: 0.75 },
     { path: '/feed.xml', changeFrequency: 'daily' as const, priority: 0.35 },
     { path: '/llms.txt', changeFrequency: 'weekly' as const, priority: 0.4 },
+    { path: '/llms-full.txt', changeFrequency: 'weekly' as const, priority: 0.35 },
   ].filter((route) => (route.pageId ? isPageEnabled(route.pageId) : true));
 
   const blogPosts = isPageEnabled('blog') ? await getAllBlogPosts() : [];
 
+  // Do not manufacture a "last modified" timestamp at request time. Doing so tells
+  // crawlers that every page changed on every sitemap refresh, which wastes crawl
+  // budget and obscures the genuinely updated editorial content below.
   const staticEntries: MetadataRoute.Sitemap = staticRoutes.map((route) => ({
     url: `${siteUrl}${route.path}`,
-    lastModified: now,
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));
 
   const blogEntries: MetadataRoute.Sitemap = blogPosts.map((post) => {
     const postDate = new Date(post.lastModified ?? post.date);
-    const safeDate = Number.isNaN(postDate.getTime()) ? now : postDate;
 
     return {
       url: `${siteUrl}/blog/${post.slug}`,
-      lastModified: safeDate,
+      // A malformed content date is better omitted than replaced with "now".
+      ...(Number.isNaN(postDate.getTime()) ? {} : { lastModified: postDate }),
       changeFrequency: 'monthly',
       priority: 0.7,
     };

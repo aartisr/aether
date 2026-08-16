@@ -61,6 +61,7 @@ export async function GET() {
     '',
     '## Machine-Readable Endpoints',
     `- LLMs: ${siteUrl}/llms.txt`,
+    `- Full LLM context: ${siteUrl}/llms-full.txt`,
     `- Sitemap: ${siteUrl}/sitemap.xml`,
     `- Image Sitemap: ${siteUrl}/image-sitemap.xml`,
     `- RSS: ${siteUrl}/feed.xml`,

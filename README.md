@@ -1,5 +1,7 @@
 # Aether
 
+**Live website:** [aether-mauve-three.vercel.app](https://aether-mauve-three.vercel.app/) · **Project Wiki:** [GitHub Wiki](https://github.com/aartisr/aether/wiki) · **Source:** [aartisr/aether](https://github.com/aartisr/aether)
+
 Aether is a privacy-first student resilience platform designed as a serious, research-grounded operating system for early support, reflection, and peer connection.
 
 It is written with ambition, but it should be read with clarity: Aether does not claim to replace therapy, clinical care, crisis services, or the human judgment required in high-stakes support. Its purpose is to make earlier, safer, more compassionate support more accessible and more operationally trustworthy.
@@ -165,6 +167,10 @@ Key design and research artifacts include:
 
 The goal is not to present Aether as magically complete or clinically authoritative. The goal is to show a product that takes evidence, privacy, peer operations, and system design seriously enough to encode them into the implementation.
 
+## Search, GEO, and AI Discovery
+
+Aether ships with a serious public-discovery layer: canonical page metadata, Open Graph previews, structured data, XML and image sitemaps, RSS, crawler policy, and citation-ready AI retrieval files at [`/llms.txt`](apps/frontend/src/app/llms.txt/route.ts) and [`/llms-full.txt`](apps/frontend/src/app/llms-full.txt/route.ts). The full launch and editorial checklist is in [docs/SEARCH_DISCOVERY.md](docs/SEARCH_DISCOVERY.md).
+
 ## Repository Layout
 
 - `apps/frontend`: Next.js 14 App Router web application
@@ -241,6 +247,15 @@ Frontend-specific operational scripts:
 Core:
 
 - `NEXT_PUBLIC_SITE_URL`: canonical base URL for metadata, sitemap, and robots
+
+PostHog (optional, privacy-first defaults):
+
+- `NEXT_PUBLIC_POSTHOG_KEY`: public PostHog project key. When absent, the SDK is not requested or initialized.
+- `NEXT_PUBLIC_POSTHOG_HOST`: ingestion host; defaults to `https://us.i.posthog.com`.
+- `NEXT_PUBLIC_POSTHOG_ENABLED`: set to `false` to hard-disable analytics even when a key exists.
+- `NEXT_PUBLIC_POSTHOG_PERSISTENCE`: defaults to in-memory session storage. Set to `localStorage` only after an appropriate consent decision.
+
+The integration disables autocapture and session recording, captures only deliberate product events, and rejects common free-form/PII property names. Use `track('event_name', { safe_property: 'value' })` from `src/lib/analytics.ts`; never include user text, contact data, transcripts, audio, or safety information.
 
 Echo runtime:
 

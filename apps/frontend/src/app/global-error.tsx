@@ -1,8 +1,14 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { track } from '../lib/analytics';
 
-export default function GlobalError({ reset }: { reset: () => void }) {
+export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  useEffect(() => {
+    track('application_error', { digest: error.digest ?? 'unknown' });
+  }, [error.digest]);
+
   return (
     <html lang="en">
       <body className="min-h-screen flex items-center justify-center bg-[color:var(--theme-bg-soft)] text-slate-950 px-4">
