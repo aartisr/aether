@@ -176,8 +176,7 @@ export default function VoiceRecorder({
     if (!Ctor) {
       setLiveStatus('unavailable');
       setTranscriptionNotice(
-        'Private on-device dictation is not available in this browser (try Chrome or Edge). ' +
-        'Recording continues — you can type notes in the text pad below.',
+        'Live captions are not available here, but your recording is still private. When you finish, choose “Transcribe privately on this device” below—or type a few words instead.',
       );
       return;
     }
@@ -187,13 +186,13 @@ export default function VoiceRecorder({
     if (typeof Ctor.available !== 'function' || typeof Ctor.install !== 'function') {
       setLiveStatus('unavailable');
       setTranscriptionNotice(
-        'Private on-device dictation is not available in this browser yet. Your recording stays in this browser, and Echo will never fall back to cloud speech recognition; type notes below or use a browser with local speech support.',
+        'Live captions are not ready in this browser. Your recording stays private; when you finish, choose “Transcribe privately on this device” below or type a few words instead.',
       );
       return;
     }
 
     const attempt = ++recognitionStartAttemptRef.current;
-    setTranscriptionNotice('Checking private on-device dictation…');
+    setTranscriptionNotice('Preparing private live captions…');
 
     let availability: SpeechRecognitionAvailability;
     try {
@@ -205,7 +204,7 @@ export default function VoiceRecorder({
     } catch {
       setLiveStatus('unavailable');
       setTranscriptionNotice(
-        'This browser could not confirm private on-device dictation. Your recording stays in this browser; type notes below or try a browser with local speech support.',
+        'Live captions could not start, but your recording stays private. Finish when you are ready, then choose “Transcribe privately on this device” below.',
       );
       return;
     }
@@ -215,7 +214,7 @@ export default function VoiceRecorder({
     }
 
     if (availability === 'downloadable') {
-      setTranscriptionNotice('Downloading the one-time English pack for private on-device dictation…');
+      setTranscriptionNotice('Preparing private live captions for the first time…');
       try {
         const installed = await Ctor.install({
           langs: [LOCAL_RECOGNITION_LANGUAGE],
@@ -228,7 +227,7 @@ export default function VoiceRecorder({
       } catch {
         setLiveStatus('unavailable');
         setTranscriptionNotice(
-          'The private on-device dictation pack could not be installed. Your recording stays in this browser; type notes below and try again later.',
+          'Private live captions could not be prepared. Your recording stays here; you can type a few words instead and try again later.',
         );
         return;
       }
@@ -238,12 +237,12 @@ export default function VoiceRecorder({
       }
     } else if (availability === 'downloading') {
       setLiveStatus('idle');
-      setTranscriptionNotice('The private on-device dictation pack is downloading. Keep this page open, then start recording again.');
+      setTranscriptionNotice('Private live captions are still preparing. You can keep recording, then use “Transcribe privately on this device” when you finish.');
       return;
     } else if (availability !== 'available') {
       setLiveStatus('unavailable');
       setTranscriptionNotice(
-        'Private on-device dictation is not available for English in this browser. Your recording stays in this browser; type notes below or try another supported browser.',
+        'Live captions are not available in this browser, but your recording stays private. When you finish, choose “Transcribe privately on this device” below—or type a few words instead.',
       );
       return;
     }
@@ -348,7 +347,7 @@ export default function VoiceRecorder({
     } catch {
       setLiveStatus('unavailable');
       setTranscriptionNotice(
-        'Could not start private on-device dictation. Recording continues — you can type notes below.',
+        'Live captions could not start. Your recording continues privately, and you can type a few words instead.',
       );
     }
   }, []);
@@ -567,9 +566,9 @@ export default function VoiceRecorder({
           />
           {!transcript.trim() ? (
             <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3">
-              <p className="text-sm font-bold text-emerald-950">Private transcription, on this device</p>
+              <p className="text-sm font-bold text-emerald-950">Turn this recording into text, privately</p>
               <p className="mt-1 text-xs leading-5 text-emerald-900">
-                Download and cache the English transcription model once from Hugging Face, then process this recording in your browser. Hugging Face receives the model-download request; your audio and transcript never leave this device.
+                The first use downloads a small English language model from Hugging Face, then keeps it in this browser. Hugging Face sees that download request; your recording and words never leave your device.
               </p>
               <button
                 type="button"
@@ -601,7 +600,7 @@ export default function VoiceRecorder({
       )}
 
       <p className="mt-1 text-center text-xs text-slate-500">
-        Privacy-first mode: recording, dictation, and text analysis stay in this browser. Echo will never fall back to cloud speech recognition.
+        Your recording, words, and reflection stay in this browser. Nothing is sent to Aether.
       </p>
     </div>
   );

@@ -148,7 +148,7 @@ describe('Echo flow integration', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByLabelText(/transcript for local analysis/i)).toHaveValue('I feel steady today');
+      expect(screen.getByLabelText(/write what is on your mind/i)).toHaveValue('I feel steady today');
       expect(screen.getByText(/transcript ready. you can analyze this check-in./i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /analyze check-in/i })).toBeEnabled();
     });

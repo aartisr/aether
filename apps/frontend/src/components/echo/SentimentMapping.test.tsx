@@ -276,7 +276,7 @@ describe('SentimentMapping', () => {
   it('supports manual transcript edits before analysis', async () => {
     render(<SentimentMapping audio={null} transcript="I feel okay" />);
 
-    fireEvent.change(screen.getByLabelText(/transcript for local analysis/i), {
+    fireEvent.change(screen.getByLabelText(/write what is on your mind/i), {
       target: { value: 'I feel overwhelmed and hopeless' },
     });
     fireEvent.click(screen.getByRole('button', { name: /analyze check-in/i }));

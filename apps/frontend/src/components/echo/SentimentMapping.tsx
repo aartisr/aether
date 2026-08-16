@@ -88,6 +88,10 @@ export default function SentimentMapping({
   transcript = '',
   transcriptSource = 'unavailable',
   analyzeLabel = 'Analyze Check-In',
+  title = 'Notice a pattern',
+  description = 'This is a gentle reflection aid, not a diagnosis.',
+  showTranscriptEditor = true,
+  showReadyPrompt = true,
   className = '',
   analyzeSentiment = defaultAnalyzeSentiment,
 }: {
@@ -95,6 +99,10 @@ export default function SentimentMapping({
   transcript?: string;
   transcriptSource?: TranscriptSource;
   analyzeLabel?: string;
+  title?: string;
+  description?: string;
+  showTranscriptEditor?: boolean;
+  showReadyPrompt?: boolean;
   className?: string;
   analyzeSentiment?: (input: { audio: Blob | null; transcript: string }) => Promise<LocalEchoAnalysis>;
 }) {
@@ -206,19 +214,28 @@ export default function SentimentMapping({
 
   return (
     <div ref={transcriptPanelRef} className={`mt-6 flex flex-col items-center gap-2 ${className}`}>
-      <label className="w-full max-w-xl text-left text-sm font-medium text-slate-700" htmlFor="echo-transcript">
-        Transcript for local analysis
-      </label>
-      <textarea
-        id="echo-transcript"
-        className="min-h-32 w-full max-w-xl rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
-        value={editableTranscript}
-        onChange={(event) => setEditableTranscript(event.target.value)}
-        placeholder="Your local transcript will appear here. You can also type or edit it manually."
-      />
+      <div className="w-full max-w-xl text-left">
+        <p className="theme-kicker">Step 2 · Notice</p>
+        <h2 className="mt-1 text-xl font-black text-slate-950">{title}</h2>
+        <p className="mt-1 text-sm leading-6 text-slate-600">{description}</p>
+      </div>
+      {showTranscriptEditor ? (
+        <>
+          <label className="w-full max-w-xl text-left text-sm font-bold text-slate-700" htmlFor="echo-transcript">
+            Write what is on your mind
+          </label>
+          <textarea
+            id="echo-transcript"
+            className="min-h-32 w-full max-w-xl rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            value={editableTranscript}
+            onChange={(event) => setEditableTranscript(event.target.value)}
+            placeholder="A few honest words are enough. You can edit them anytime."
+          />
+        </>
+      ) : null}
       <button
         ref={analyzeButtonRef}
-        className="px-4 py-2 bg-emerald-800 text-white rounded shadow hover:bg-emerald-900 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-emerald-300 transition"
+        className="w-full max-w-xl rounded-xl bg-emerald-800 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-900 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-emerald-300"
         onClick={handleAnalyze}
         disabled={!canAnalyze || loading}
         aria-label={analyzeLabel}
@@ -232,7 +249,7 @@ export default function SentimentMapping({
       <p className="w-full max-w-xl text-left text-xs text-slate-500" aria-live="polite">
         {loading ? (showWarmupHint ? 'Model warming up locally...' : 'Analyzing check-in locally...') : transcriptStatus}
       </p>
-      {canAnalyze && !loading && !result && (
+      {showReadyPrompt && canAnalyze && !loading && !result && (
         <div className="w-full max-w-xl rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-left">
           <p className="text-sm font-semibold text-emerald-900">Your transcript is ready.</p>
           <p className="mt-1 text-xs leading-6 text-emerald-800">

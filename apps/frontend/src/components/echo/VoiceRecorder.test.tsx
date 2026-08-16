@@ -418,7 +418,7 @@ describe('VoiceRecorder', () => {
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/private on-device dictation is not available/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/live captions are not available/i);
     });
   });
 
@@ -447,7 +447,7 @@ describe('VoiceRecorder', () => {
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/never fall back to cloud/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/recording stays private/i);
     });
     expect(MockSpeechRecognition.instance).toBeNull();
   });
@@ -480,7 +480,7 @@ describe('VoiceRecorder', () => {
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/not available for english/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/live captions are not available/i);
     });
   });
 
@@ -493,7 +493,7 @@ describe('VoiceRecorder', () => {
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/pack is downloading/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/private live captions are still preparing/i);
     });
     expect(MockSpeechRecognition.instance).toBeNull();
   });
@@ -507,7 +507,7 @@ describe('VoiceRecorder', () => {
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/could not confirm private on-device dictation/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/live captions could not start/i);
     });
     expect(MockSpeechRecognition.instance).toBeNull();
   });
@@ -522,7 +522,7 @@ describe('VoiceRecorder', () => {
     fireEvent.click(screen.getByRole('button', { name: /start recording/i }));
 
     await waitFor(() => {
-      expect(screen.getByRole('status')).toHaveTextContent(/could not be installed/i);
+      expect(screen.getByRole('status')).toHaveTextContent(/could not be prepared/i);
     });
     expect(MockSpeechRecognition.instance).toBeNull();
   });

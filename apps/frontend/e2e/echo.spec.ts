@@ -107,22 +107,19 @@ test.describe('Echo voice reflection flow', () => {
   test('records, populates transcript live, enables analysis before stop, and shows results', async ({ page }) => {
     await page.goto('/echo');
 
-    await expect(page.getByText(/your voice stays on your device/i)).toBeVisible();
-    await expect(page.getByText(/never switches to cloud speech recognition/i)).toBeVisible();
+    await expect(page.getByRole('heading', { name: /how would you like to reflect/i })).toBeVisible();
+    await expect(page.getByText(/never sends your voice or reflection to a server/i)).toBeVisible();
 
     await page.getByRole('button', { name: /start recording/i }).click();
 
     const recorderPad = page.getByRole('textbox', { name: /voice transcript/i });
-    const analysisPad = page.getByRole('textbox', { name: /transcript for local analysis/i });
     await expect(recorderPad).toBeVisible();
     await expect(recorderPad).toHaveValue('I feel steady today');
-    await expect(analysisPad).toHaveValue('I feel steady today');
+    await expect(page.getByRole('textbox', { name: /transcript for local analysis/i })).toHaveCount(0);
 
     await expect(page.getByText(/transcript ready\. you can analyze this check-in\./i)).toBeVisible();
-    await expect(page.getByRole('button', { name: /analyze check-in/i })).toBeEnabled();
-    await expect(page.getByRole('button', { name: /analyze now/i })).toBeVisible();
-
-    await page.getByRole('button', { name: /analyze now/i }).click();
+    await expect(page.getByRole('button', { name: /notice a pattern/i })).toBeEnabled();
+    await page.getByRole('button', { name: /notice a pattern/i }).click();
 
     await expect(page.getByTestId('sentiment-rail')).toBeVisible();
     await expect(page.getByText(/safety signal:/i)).toBeVisible();
