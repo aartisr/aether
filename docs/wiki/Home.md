@@ -1,6 +1,6 @@
 # Aether Wiki
 
-> The canonical Aether product experience is [ai-aarti.com](https://aether.ai-aarti.com/).
+> The canonical Aether product experience is [aether.ai-aarti.com](https://aether.ai-aarti.com/).
 
 Aether is a privacy-first student resilience ecosystem for reflection, practical support pathways, and responsible peer connection. This wiki explains the project and its operating choices; current product guidance belongs on the main website.
 

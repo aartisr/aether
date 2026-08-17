@@ -1,6 +1,6 @@
 # Start Here
 
-> The canonical Aether website is [ai-aarti.com](https://aether.ai-aarti.com/).
+> The canonical Aether website is [aether.ai-aarti.com](https://aether.ai-aarti.com/).
 
 Aether is a privacy-first student resilience ecosystem. It is designed to help students find a calmer next step through reflection, practical support pathways, and governed peer connection.
 

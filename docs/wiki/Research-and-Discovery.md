@@ -1,6 +1,6 @@
 # Research and Discovery
 
-> For citeable, current Aether content, begin at [ai-aarti.com](https://aether.ai-aarti.com/).
+> For citeable, current Aether content, begin at [aether.ai-aarti.com](https://aether.ai-aarti.com/).
 
 ## Human-readable sources
 
