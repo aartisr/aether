@@ -10,4 +10,4 @@
 
 ---
 
-[Visit the canonical Aether website](https://aether-mauve-three.vercel.app/)
+[Visit the canonical Aether website](https://aether.ai-aarti.com/)

@@ -1,6 +1,6 @@
 # Contributing
 
-> The product, documentation, and project context all begin at the [main Aether website](https://aether-mauve-three.vercel.app/).
+> The product, documentation, and project context all begin at the [main Aether website](https://aether.ai-aarti.com/).
 
 Contributions are welcome when they improve clarity, safety, accessibility, evidence quality, or the practical usefulness of student support.
 
@@ -11,4 +11,4 @@ Contributions are welcome when they improve clarity, safety, accessibility, evid
 3. Open an issue or proposal with enough context to reproduce, evaluate, or discuss the change.
 4. Avoid including personal, clinical, or sensitive student information in public issues, pull requests, or analytics.
 
-For a live understanding of the product before contributing, use the [canonical Aether website](https://aether-mauve-three.vercel.app/).
+For a live understanding of the product before contributing, use the [canonical Aether website](https://aether.ai-aarti.com/).

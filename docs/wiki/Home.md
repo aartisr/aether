@@ -1,14 +1,14 @@
 # Aether Wiki
 
-> The canonical Aether product experience is [aether-mauve-three.vercel.app](https://aether-mauve-three.vercel.app/).
+> The canonical Aether product experience is [ai-aarti.com](https://aether.ai-aarti.com/).
 
 Aether is a privacy-first student resilience ecosystem for reflection, practical support pathways, and responsible peer connection. This wiki explains the project and its operating choices; current product guidance belongs on the main website.
 
 ## Start here
 
-- [Explore the Resilience Pathway](https://aether-mauve-three.vercel.app/resilience-pathway)
-- [Read research-informed practical guides](https://aether-mauve-three.vercel.app/blog)
-- [Review privacy and data ethics](https://aether-mauve-three.vercel.app/privacy)
+- [Explore the Resilience Pathway](https://aether.ai-aarti.com/resilience-pathway)
+- [Read research-informed practical guides](https://aether.ai-aarti.com/blog)
+- [Review privacy and data ethics](https://aether.ai-aarti.com/privacy)
 - [Read the repository](https://github.com/aartisr/aether)
 
 ## Wiki map
@@ -22,4 +22,4 @@ Aether is a privacy-first student resilience ecosystem for reflection, practical
 
 ## Scope and safety
 
-Aether is educational and supportive technology. It does not replace therapy, clinical care, emergency services, or professional judgment. For the most current support pathways and safety context, use the [main Aether website](https://aether-mauve-three.vercel.app/).
+Aether is educational and supportive technology. It does not replace therapy, clinical care, emergency services, or professional judgment. For the most current support pathways and safety context, use the [main Aether website](https://aether.ai-aarti.com/).
