@@ -2,8 +2,25 @@
   "name": "aether",
   "private": true,
   "version": "1.0.0",
+  "description": "A privacy-first, research-driven student resilience platform for guided reflection, peer support, and practical recovery pathways.",
   "author": "Aarti Sri Ravikumar",
   "license": "MIT",
+  "homepage": "https://aether.ai-aarti.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aartisr/aether.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aartisr/aether/issues"
+  },
+  "keywords": [
+    "student wellbeing",
+    "student resilience",
+    "peer support",
+    "privacy-first AI",
+    "mental wellbeing",
+    "responsible AI"
+  ],
   "engines": {
     "node": "22.x",
     "npm": ">=10.0.0"

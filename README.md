@@ -1,8 +1,14 @@
 # Aether
 
-**Live website:** [aether-mauve-three.vercel.app](https://aether-mauve-three.vercel.app/) · **Project Wiki:** [GitHub Wiki](https://github.com/aartisr/aether/wiki) · **Source:** [aartisr/aether](https://github.com/aartisr/aether)
+**Live website:** [aether.ai-aarti.com](https://aether.ai-aarti.com/) · **Project Wiki:** [GitHub Wiki](https://github.com/aartisr/aether/wiki) · **Source:** [aartisr/aether](https://github.com/aartisr/aether)
 
 Aether is a privacy-first student resilience platform designed as a serious, research-grounded operating system for early support, reflection, and peer connection.
+
+## Hosted instance and open-source participation
+
+An instance of Aether is hosted at [aether.ai-aarti.com](https://aether.ai-aarti.com/). This is an open-source project, and we warmly welcome people who want to help make student support more humane, private, accessible, and accountable. Whether you contribute code, research, accessibility insight, documentation, design, safety review, or thoughtful feedback, your participation can help strengthen a project built to serve people with care and dignity. Please begin with the [contribution guide](CONTRIBUTING.md) and [code of conduct](CODE_OF_CONDUCT.md).
+
+For research and reuse, please cite the project using [CITATION.cff](CITATION.cff); GitHub will surface a ready-to-use citation after it is merged into the default branch.
 
 It is written with ambition, but it should be read with clarity: Aether does not claim to replace therapy, clinical care, crisis services, or the human judgment required in high-stakes support. Its purpose is to make earlier, safer, more compassionate support more accessible and more operationally trustworthy.
 

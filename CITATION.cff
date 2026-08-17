@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use Aether in research, teaching, or product work, please cite it using this record."
+title: "Aether: Student Resiliency Ecosystem"
+type: software
+authors:
+  - family-names: "Ravikumar"
+    given-names: "Aarti Sri"
+    website: "https://aartisr.foreverlotus.com"
+version: "1.0.0"
+date-released: 2026-08-17
+license: "MIT"
+url: "https://aether.ai-aarti.com/"
+repository-code: "https://github.com/aartisr/aether"
+abstract: "A privacy-first, research-driven student resilience platform for guided reflection, peer support, and practical recovery pathways."
+keywords:
+  - "student wellbeing"
+  - "student resilience"
+  - "peer support"
+  - "privacy-first AI"

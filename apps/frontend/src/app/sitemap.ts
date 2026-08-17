@@ -25,9 +25,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/blog', pageId: 'blog' as const, changeFrequency: 'daily' as const, priority: 0.9 },
     { path: '/feedback', pageId: 'feedback' as const, changeFrequency: 'monthly' as const, priority: 0.45 },
     { path: '/ask', changeFrequency: 'weekly' as const, priority: 0.75 },
-    { path: '/feed.xml', changeFrequency: 'daily' as const, priority: 0.35 },
-    { path: '/llms.txt', changeFrequency: 'weekly' as const, priority: 0.4 },
-    { path: '/llms-full.txt', changeFrequency: 'weekly' as const, priority: 0.35 },
   ].filter((route) => (route.pageId ? isPageEnabled(route.pageId) : true));
 
   const blogPosts = isPageEnabled('blog') ? await getAllBlogPosts() : [];

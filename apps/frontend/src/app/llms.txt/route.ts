@@ -68,15 +68,13 @@ export async function GET() {
     `- Robots: ${siteUrl}/robots.txt`,
     `- Ask Aether: ${siteUrl}/ask`,
     `- Feedback: ${siteUrl}/feedback`,
-    '',
-    `## Last Updated`,
-    `- ${new Date().toISOString()}`,
   ].join('\n');
 
   return new Response(body, {
     headers: {
       'Content-Type': 'text/plain; charset=utf-8',
       'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+      'X-Robots-Tag': 'noindex, follow',
     },
   });
 }
