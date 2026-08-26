@@ -18,7 +18,7 @@ function FooterLink({
   external?: boolean;
 }) {
   const className =
-    'text-sm text-[color:var(--theme-text-muted)] no-underline transition hover:text-[color:var(--theme-primary-strong)] hover:underline';
+    'inline-flex min-h-11 items-center rounded-lg px-2 text-sm text-[color:var(--theme-text-muted)] no-underline transition hover:text-[color:var(--theme-primary-strong)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--theme-primary)] md:min-h-0 md:px-0';
 
   if (external || href.startsWith('http://') || href.startsWith('https://')) {
     return (
@@ -135,11 +135,26 @@ export default function SiteFooter({
 
   return (
     <footer className={footerSurfaceClasses[resolvedSurfaceVariant]} role="contentinfo">
-      <div className="mx-auto grid min-w-0 max-w-7xl gap-8 px-4 py-10 md:grid-cols-[1.2fr_2fr] md:px-6 lg:py-12">
+      <div className="mx-auto grid min-w-0 max-w-7xl gap-8 px-4 py-8 md:grid-cols-[1.2fr_2fr] md:px-6 md:py-10 lg:py-12">
         <section aria-label="Aether summary" className="space-y-5">
           <div>
-            <p className="font-display text-3xl font-extrabold text-[color:var(--theme-text)]">{siteName}</p>
+            <div className="flex items-center gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-[color:var(--theme-border)] bg-white p-1.5 shadow-sm lg:hidden">
+                <Image src="/aether-logo-icon.svg" alt="" width={44} height={44} className="h-full w-full" />
+              </span>
+              <p className="font-display text-3xl font-extrabold text-[color:var(--theme-text)]">{siteName}</p>
+            </div>
             <p className="mt-3 max-w-md text-sm leading-6 text-[color:var(--theme-text-muted)]">{resolvedSummaryText}</p>
+          </div>
+          <div className="rounded-[var(--theme-radius-lg)] border border-[color:var(--theme-border)] bg-[color:var(--theme-bg-soft)] p-4 shadow-[var(--theme-shadow-sm)] lg:hidden">
+            <p className="theme-kicker">A calm next step</p>
+            <p className="mt-2 text-sm leading-6 text-[color:var(--theme-text-muted)]">A private space to reflect, find guidance, or make a plan for today.</p>
+            <Link
+              href="/ask"
+              className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-[color:var(--theme-bg-strong)] px-4 py-2.5 text-sm font-extrabold text-white no-underline shadow-sm transition hover:-translate-y-0.5 hover:bg-[color:var(--theme-primary-strong)] hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--theme-primary)]"
+            >
+              Ask Aether <span aria-hidden="true" className="ml-2">→</span>
+            </Link>
           </div>
           <div className="theme-card p-4">
             <p className="theme-kicker">{resolvedSafetyTitle}</p>
@@ -151,7 +166,7 @@ export default function SiteFooter({
           <InstallAether />
         </section>
 
-        <nav aria-label="Footer navigation" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <nav aria-label="Footer navigation" className="hidden gap-6 sm:grid-cols-2 lg:grid">
           {resolvedFooterNavigation.map((group) => (
             <section key={group.title}>
               <h2 className="text-sm font-extrabold uppercase tracking-[0.12em] text-[color:var(--theme-text)]">{group.title}</h2>
@@ -165,12 +180,35 @@ export default function SiteFooter({
             </section>
           ))}
         </nav>
+
+        <nav aria-label="Footer navigation" className="space-y-2 lg:hidden">
+          <p className="px-1 pb-1 text-xs font-extrabold uppercase tracking-[0.14em] text-[color:var(--theme-text-muted)]">Explore Aether</p>
+          {resolvedFooterNavigation.map((group, index) => (
+            <details
+              key={group.title}
+              open={index === 0}
+              className="group overflow-hidden rounded-[var(--theme-radius-lg)] border border-[color:var(--theme-border)] bg-white shadow-[var(--theme-shadow-sm)]"
+            >
+              <summary className="flex min-h-14 list-none items-center justify-between gap-4 px-4 py-3 text-sm font-extrabold text-[color:var(--theme-text)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[color:var(--theme-primary)]">
+                {group.title}
+                <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full border border-[color:var(--theme-border)] text-lg font-medium leading-none transition group-open:rotate-45 group-open:border-[color:var(--theme-primary)] group-open:text-[color:var(--theme-primary-strong)]">+</span>
+              </summary>
+              <ul className="grid gap-1 border-t border-[color:var(--theme-border)] bg-[color:var(--theme-bg-soft)] px-2 py-2">
+                {group.links.map((link) => (
+                  <li key={`${group.title}-${link.href}`}>
+                    <FooterLink href={link.href} label={link.label} external={link.external} />
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ))}
+        </nav>
       </div>
 
       <div className={footerAccentClasses[resolvedAccentVariant]}>
         <div aria-hidden="true" className={accentGlowClasses[resolvedAccentVariant]} />
-        <div className="relative mx-auto grid min-w-0 max-w-7xl gap-5 px-4 py-5 text-xs md:grid-cols-[minmax(0,1.4fr)_auto] md:items-center md:px-6">
-          <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-center">
+        <div className="relative mx-auto grid min-w-0 max-w-7xl gap-5 px-4 py-6 text-xs md:grid-cols-[minmax(0,1.4fr)_auto] md:items-center md:px-6 md:py-5">
+          <div className="flex min-w-0 flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:text-left">
             <a
               href={resolvedBadgeHref}
               target="_blank"
@@ -203,8 +241,8 @@ export default function SiteFooter({
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 md:items-end">
-            <div className="flex flex-wrap gap-2 md:justify-end">
+          <div className="flex flex-col items-center gap-3 text-center md:items-end md:text-right">
+            <div className="flex flex-wrap justify-center gap-2 md:justify-end">
               {resolvedTrustSignals.map((signal) => (
                 <span key={`footer-${signal}`} className="rounded-full border border-white/15 bg-white/5 px-2.5 py-1 font-bold text-emerald-50">
                   {signal}

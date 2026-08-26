@@ -157,8 +157,11 @@ export default function GenericInfoPage({ config }: { config: InfoPageConfig }) 
                     ) : null}
                     <div className="mt-2 flex items-center justify-between gap-3">
                       <h2 className="text-2xl font-black text-slate-950">{section.title}</h2>
-                      <span className="rounded-full border border-slate-300 px-3 py-1 text-xs font-black uppercase tracking-[0.08em] text-slate-700">
-                        Expand
+                      <span className="rounded-full border border-slate-300 px-3 py-1 text-xs font-black uppercase tracking-[0.08em] text-slate-700 group-open:hidden">
+                        Show details
+                      </span>
+                      <span className="hidden rounded-full border border-emerald-300 px-3 py-1 text-xs font-black uppercase tracking-[0.08em] text-emerald-800 group-open:inline">
+                        Hide details
                       </span>
                     </div>
                     {section.description ? (

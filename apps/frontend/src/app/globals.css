@@ -46,6 +46,7 @@ h2,
 h3 {
   font-family: var(--font-display), 'Playfair Display', 'Iowan Old Style', serif;
   letter-spacing: 0;
+  text-wrap: balance;
 }
 
 summary {
@@ -97,9 +98,17 @@ summary::-webkit-details-marker {
 }
 
 
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
   border-radius: 1.25rem;
   transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Keep authored controls easy to activate without forcing a larger reading density. */
+:where(button, input:not([type='checkbox']):not([type='radio']), select) {
+  min-height: 44px;
 }
 
 
