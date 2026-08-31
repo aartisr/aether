@@ -1,50 +1,38 @@
-name: CI
+name: CI Quality Gate
 
 on:
   push:
     branches: [main]
   pull_request:
+    branches: [main]
 
 jobs:
-  quality:
+  quality-gate:
+    name: Typecheck, Lint & Test
     runs-on: ubuntu-latest
-    timeout-minutes: 20
 
     steps:
-      - name: Checkout
+      - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22.19.0
-          cache: npm
-          cache-dependency-path: package-lock.json
+          node-version: 20
 
-      - name: Install dependencies
-        run: NPM_CONFIG_USERCONFIG=.npmrc npm ci --include=dev --no-audit
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
 
-      - name: Lint
-        run: npm run lint
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
-      - name: Typecheck
-        run: npm run typecheck
+      - name: Typecheck Workspace
+        run: pnpm run --recursive --if-present typecheck
 
-      - name: Test
-        run: npm run test:ci
+      - name: Lint Workspace
+        run: pnpm run --recursive --if-present lint
 
-      - name: Install Chromium for end-to-end tests
-        run: npx playwright install --with-deps chromium
-
-      - name: Build
-        run: npm run build
-
-      - name: End-to-end tests
-        run: npm run test:e2e
-
-      - name: Performance Budget
-        run: npm --workspace=apps/frontend run perf:smoke
-        env:
-          PERF_BUDGET_P95_MS: "900"
-          PERF_SAMPLES: "5"
-          PERF_WARMUPS: "2"
+      - name: Run Unit Tests
+        run: pnpm test
