@@ -212,6 +212,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       style={
         {
           '--font-body': '"Manrope", "Avenir Next", "Segoe UI", sans-serif',
@@ -219,7 +220,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         } as React.CSSProperties
       }
     >
-      <body className="min-h-screen font-sans antialiased">
+      <body className="min-h-screen font-sans antialiased" suppressHydrationWarning>
         <JsonLd data={[websiteJsonLd, organizationJsonLd, navigationJsonLd]} idPrefix="root-layout-jsonld" />
         <a href="#main-content" className="sr-only focus:not-sr-only absolute top-2 left-2 bg-emerald-800 text-white px-4 py-2 rounded z-50">Skip to main content</a>
         <SiteHeader
