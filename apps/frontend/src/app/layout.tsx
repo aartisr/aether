@@ -10,7 +10,12 @@ import PwaProvider from '../components/pwa/PwaProvider';
 import SiteFooter from '../components/layout/SiteFooter';
 import SiteHeader from '../components/layout/SiteHeader';
 import SiteReturnLoop from '../components/layout/SiteReturnLoop';
-import CmsRouteOverride from '../components/cms/CmsRouteOverride';
+import nextDynamic from 'next/dynamic';
+
+const CmsRouteOverride = nextDynamic(() => import('../components/cms/CmsRouteOverride'), {
+  ssr: false,
+});
+
 import { JsonLd } from '../components/page/PagePrimitives';
 import { getGlobalShellSettings } from '../lib/cms/global-shell';
 import { readCmsPageData } from '../lib/cms/storage';

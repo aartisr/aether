@@ -1,5 +1,10 @@
 import { notFound, redirect } from 'next/navigation';
-import AdminCmsEditor from '../../../components/admin/AdminCmsEditor';
+import dynamic from 'next/dynamic';
+
+const AdminCmsEditor = dynamic(() => import('../../../components/admin/AdminCmsEditor'), {
+  ssr: false,
+});
+
 import { createPageMetadata } from '../../../lib/site';
 import { createDefaultCmsPageData, migrateCmsDataIfNeeded } from '../../../lib/cms/puck-config';
 import { CMS_EDITABLE_PAGES, getCmsEditablePageById } from '../../../lib/cms/page-registry';
